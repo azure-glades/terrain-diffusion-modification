@@ -1,0 +1,249 @@
+python profile_terrain.py --sweep --repo terrain-diffusion/
+
+#### fp32 batch=1
+[env] {'cuda': True, 'device': 'cuda', 'torch': '2.15.0+cu132', 'gpu': 'NVIDIA GeForce RTX 3050 6GB Laptop GPU'}  dtype=fp32 batch=1 compile=False tf32=False
+/home/azureglades/Coding/PyProjects/terrain_explorer_milestone/.venv/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py:205: UserWarning: The `local_dir_use_symlinks` argument is deprecated and ignored in `hf_hub_download`. Downloading to a local directory does not use symlinks anymore.
+  warnings.warn(
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Synthetic map stats cache hit.
+[bind] pipeline bound via bind()
+[load] pipeline ready in 2.9s
+[run] first request done (12850 ms); measuring...
+
+== cold request latency vs size ==
+size     wall ms  GPU model ms  overhead ms  overhead  ms / Mpx
+-------  -------  ------------  -----------  --------  --------
+256x256    10394         10234          159        2%    158593
+512x512    14205         13974          230        2%     54187
+
+== per-stage breakdown at 512x512 ==
+stage    calls  avg batch  input (C,H,W)  GPU ms  share of model time
+-------  -----  ---------  -------------  ------  -------------------
+coarse      40        1.0   (11, 64, 64)     341                   2%
+base       107        1.0    (5, 64, 64)    9723                  70%
+decoder      9        1.0  (5, 512, 512)    3910                  28%
+
+first request (warm-up / compile): 12850 ms
+warm (cached) 512x512 request:     2 ms
+peak GPU memory:                   2173 MB
+
+== explorer access pattern: 12 chunks of 128px walking east ==
+strategy             total ms  ms / chunk
+-------------------  --------  ----------
+1 request per chunk     17499        1458
+blocks of 4 chunks      16054        1338
+one long strip          19489        1624
+per-chunk: first 9291 ms, median of rest 1 ms
+
+== diagnosis ==
+ * Biggest GPU stage: base (70% of model time).
+ *   -> Latent stage dominates: fewer/lighter steps, onestep_latent, smaller or int8 network, bigger batches.
+ * Overhead is only 2% of wall time: the GPU is the bottleneck, so model-level changes pay off.
+ * coarse: average batch 1.0 over 40 calls -> try --batch 1,4,8 (GPU underfed).
+ * base: average batch 1.0 over 107 calls -> try --batch 1,4,8 (GPU underfed).
+ * Running fp32: try --dtype bf16 (or --tf32) -- usually the cheapest 1.5-3x.
+ * torch.compile is off: try --compile (Linux; first request will be slow).
+
+[done] wrote /tmp/tmpp_66i1ql.json
+
+#### fp32+tf32 batch=1
+[env] {'cuda': True, 'device': 'cuda', 'torch': '2.15.0+cu132', 'gpu': 'NVIDIA GeForce RTX 3050 6GB Laptop GPU'}  dtype=fp32 batch=1 compile=False tf32=True
+/home/azureglades/Coding/PyProjects/terrain_explorer_milestone/.venv/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py:205: UserWarning: The `local_dir_use_symlinks` argument is deprecated and ignored in `hf_hub_download`. Downloading to a local directory does not use symlinks anymore.
+  warnings.warn(
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Synthetic map stats cache hit.
+[bind] pipeline bound via bind()
+[load] pipeline ready in 3.1s
+[run] first request done (12937 ms); measuring...
+
+== cold request latency vs size ==
+size     wall ms  GPU model ms  overhead ms  overhead  ms / Mpx
+-------  -------  ------------  -----------  --------  --------
+256x256    10404         10252          152        1%    158759
+512x512    14202         13986          217        2%     54178
+
+== per-stage breakdown at 512x512 ==
+stage    calls  avg batch  input (C,H,W)  GPU ms  share of model time
+-------  -----  ---------  -------------  ------  -------------------
+coarse      40        1.0   (11, 64, 64)     342                   2%
+base       107        1.0    (5, 64, 64)    9731                  70%
+decoder      9        1.0  (5, 512, 512)    3913                  28%
+
+first request (warm-up / compile): 12937 ms
+warm (cached) 512x512 request:     2 ms
+peak GPU memory:                   2173 MB
+
+== explorer access pattern: 12 chunks of 128px walking east ==
+strategy             total ms  ms / chunk
+-------------------  --------  ----------
+1 request per chunk     17506        1459
+blocks of 4 chunks      16050        1337
+one long strip          19491        1624
+per-chunk: first 9294 ms, median of rest 1 ms
+
+== diagnosis ==
+ * Biggest GPU stage: base (70% of model time).
+ *   -> Latent stage dominates: fewer/lighter steps, onestep_latent, smaller or int8 network, bigger batches.
+ * Overhead is only 2% of wall time: the GPU is the bottleneck, so model-level changes pay off.
+ * coarse: average batch 1.0 over 40 calls -> try --batch 1,4,8 (GPU underfed).
+ * base: average batch 1.0 over 107 calls -> try --batch 1,4,8 (GPU underfed).
+ * Running fp32: try --dtype bf16 (or --tf32) -- usually the cheapest 1.5-3x.
+ * torch.compile is off: try --compile (Linux; first request will be slow).
+
+[done] wrote /tmp/tmpb2azoxma.json
+
+#### bf16 batch=1
+[env] {'cuda': True, 'device': 'cuda', 'torch': '2.15.0+cu132', 'gpu': 'NVIDIA GeForce RTX 3050 6GB Laptop GPU'}  dtype=bf16 batch=1 compile=False tf32=False
+/home/azureglades/Coding/PyProjects/terrain_explorer_milestone/.venv/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py:205: UserWarning: The `local_dir_use_symlinks` argument is deprecated and ignored in `hf_hub_download`. Downloading to a local directory does not use symlinks anymore.
+  warnings.warn(
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Converting models to bf16...
+There are modules in EDMUnet2D that should be kept in float32: []. Casting directly with `to()` can lead to inconsistent results; set `torch_dtype` in `from_pretrained()` instead to keep these modules in float32.
+There are modules in EDMUnet2D that should be kept in float32: []. Casting directly with `to()` can lead to inconsistent results; set `torch_dtype` in `from_pretrained()` instead to keep these modules in float32.
+There are modules in EDMUnet2D that should be kept in float32: []. Casting directly with `to()` can lead to inconsistent results; set `torch_dtype` in `from_pretrained()` instead to keep these modules in float32.
+Synthetic map stats cache hit.
+[bind] pipeline bound via bind()
+[load] pipeline ready in 3.4s
+[run] first request done (11107 ms); measuring...
+
+== cold request latency vs size ==
+size     wall ms  GPU model ms  overhead ms  overhead  ms / Mpx
+-------  -------  ------------  -----------  --------  --------
+256x256     8988          8835          153        2%    137149
+512x512    11892         11675          217        2%     45364
+
+== per-stage breakdown at 512x512 ==
+stage    calls  avg batch  input (C,H,W)  GPU ms  share of model time
+-------  -----  ---------  -------------  ------  -------------------
+coarse      40        1.0   (11, 64, 64)     222                   2%
+base       107        1.0    (5, 64, 64)    9274                  79%
+decoder      9        1.0  (5, 512, 512)    2179                  19%
+
+first request (warm-up / compile): 11107 ms
+warm (cached) 512x512 request:     2 ms
+peak GPU memory:                   1093 MB
+
+== explorer access pattern: 12 chunks of 128px walking east ==
+strategy             total ms  ms / chunk
+-------------------  --------  ----------
+1 request per chunk     14784        1232
+blocks of 4 chunks      13493        1124
+one long strip          16322        1360
+per-chunk: first 7987 ms, median of rest 1 ms
+
+== diagnosis ==
+ * Biggest GPU stage: base (79% of model time).
+ *   -> Latent stage dominates: fewer/lighter steps, onestep_latent, smaller or int8 network, bigger batches.
+ * Overhead is only 2% of wall time: the GPU is the bottleneck, so model-level changes pay off.
+ * coarse: average batch 1.0 over 40 calls -> try --batch 1,4,8 (GPU underfed).
+ * base: average batch 1.0 over 107 calls -> try --batch 1,4,8 (GPU underfed).
+ * torch.compile is off: try --compile (Linux; first request will be slow).
+
+[done] wrote /tmp/tmpjefv13gu.json
+
+#### fp16 batch=1
+[env] {'cuda': True, 'device': 'cuda', 'torch': '2.15.0+cu132', 'gpu': 'NVIDIA GeForce RTX 3050 6GB Laptop GPU'}  dtype=fp16 batch=1 compile=False tf32=False
+/home/azureglades/Coding/PyProjects/terrain_explorer_milestone/.venv/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py:205: UserWarning: The `local_dir_use_symlinks` argument is deprecated and ignored in `hf_hub_download`. Downloading to a local directory does not use symlinks anymore.
+  warnings.warn(
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Converting models to fp16...
+There are modules in EDMUnet2D that should be kept in float32: []. Casting directly with `to()` can lead to inconsistent results; set `torch_dtype` in `from_pretrained()` instead to keep these modules in float32.
+There are modules in EDMUnet2D that should be kept in float32: []. Casting directly with `to()` can lead to inconsistent results; set `torch_dtype` in `from_pretrained()` instead to keep these modules in float32.
+There are modules in EDMUnet2D that should be kept in float32: []. Casting directly with `to()` can lead to inconsistent results; set `torch_dtype` in `from_pretrained()` instead to keep these modules in float32.
+Synthetic map stats cache hit.
+[bind] pipeline bound via bind()
+[load] pipeline ready in 2.7s
+[run] first request done (11107 ms); measuring...
+
+== cold request latency vs size ==
+size     wall ms  GPU model ms  overhead ms  overhead  ms / Mpx
+-------  -------  ------------  -----------  --------  --------
+256x256     8953          8801          152        2%    136616
+512x512    11870         11656          215        2%     45282
+
+== per-stage breakdown at 512x512 ==
+stage    calls  avg batch  input (C,H,W)  GPU ms  share of model time
+-------  -----  ---------  -------------  ------  -------------------
+coarse      40        1.0   (11, 64, 64)     219                   2%
+base       107        1.0    (5, 64, 64)    9251                  79%
+decoder      9        1.0  (5, 512, 512)    2186                  19%
+
+first request (warm-up / compile): 11107 ms
+warm (cached) 512x512 request:     2 ms
+peak GPU memory:                   1093 MB
+
+== explorer access pattern: 12 chunks of 128px walking east ==
+strategy             total ms  ms / chunk
+-------------------  --------  ----------
+1 request per chunk     14776        1231
+blocks of 4 chunks      13467        1122
+one long strip          16288        1357
+per-chunk: first 7977 ms, median of rest 1 ms
+
+== diagnosis ==
+ * Biggest GPU stage: base (79% of model time).
+ *   -> Latent stage dominates: fewer/lighter steps, onestep_latent, smaller or int8 network, bigger batches.
+ * Overhead is only 2% of wall time: the GPU is the bottleneck, so model-level changes pay off.
+ * coarse: average batch 1.0 over 40 calls -> try --batch 1,4,8 (GPU underfed).
+ * base: average batch 1.0 over 107 calls -> try --batch 1,4,8 (GPU underfed).
+ * torch.compile is off: try --compile (Linux; first request will be slow).
+
+[done] wrote /tmp/tmpl4sse_pj.json
+
+#### bf16 batch=1,4,8
+[env] {'cuda': True, 'device': 'cuda', 'torch': '2.15.0+cu132', 'gpu': 'NVIDIA GeForce RTX 3050 6GB Laptop GPU'}  dtype=bf16 batch=1,4,8 compile=False tf32=False
+/home/azureglades/Coding/PyProjects/terrain_explorer_milestone/.venv/lib/python3.12/site-packages/huggingface_hub/utils/_validators.py:205: UserWarning: The `local_dir_use_symlinks` argument is deprecated and ignored in `hf_hub_download`. Downloading to a local directory does not use symlinks anymore.
+  warnings.warn(
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Converting models to bf16...
+There are modules in EDMUnet2D that should be kept in float32: []. Casting directly with `to()` can lead to inconsistent results; set `torch_dtype` in `from_pretrained()` instead to keep these modules in float32.
+There are modules in EDMUnet2D that should be kept in float32: []. Casting directly with `to()` can lead to inconsistent results; set `torch_dtype` in `from_pretrained()` instead to keep these modules in float32.
+There are modules in EDMUnet2D that should be kept in float32: []. Casting directly with `to()` can lead to inconsistent results; set `torch_dtype` in `from_pretrained()` instead to keep these modules in float32.
+Synthetic map stats cache hit.
+[bind] pipeline bound via bind()
+[load] pipeline ready in 2.9s
+[run] first request done (5197 ms); measuring...
+
+== cold request latency vs size ==
+size     wall ms  GPU model ms  overhead ms  overhead  ms / Mpx
+-------  -------  ------------  -----------  --------  --------
+256x256     3866          3743          123        3%     58987
+512x512     5471          5292          178        3%     20870
+
+== per-stage breakdown at 512x512 ==
+stage    calls  avg batch  input (C,H,W)  GPU ms  share of model time
+-------  -----  ---------  -------------  ------  -------------------
+coarse      40        1.0   (11, 64, 64)     220                   4%
+base        14        7.6    (5, 64, 64)    2890                  55%
+decoder      9        1.0  (5, 512, 512)    2183                  41%
+
+first request (warm-up / compile): 5197 ms
+warm (cached) 512x512 request:     3 ms
+peak GPU memory:                   1093 MB
+
+== explorer access pattern: 12 chunks of 128px walking east ==
+strategy             total ms  ms / chunk
+-------------------  --------  ----------
+1 request per chunk      6983         582
+blocks of 4 chunks       6281         523
+one long strip           7553         629
+per-chunk: first 3639 ms, median of rest 1 ms
+
+== diagnosis ==
+ * Biggest GPU stage: base (55% of model time).
+ *   -> Latent stage dominates: fewer/lighter steps, onestep_latent, smaller or int8 network, bigger batches.
+ * Overhead is only 3% of wall time: the GPU is the bottleneck, so model-level changes pay off.
+ * coarse: average batch 1.0 over 40 calls -> try --batch 1,4,8 (GPU underfed).
+ * torch.compile is off: try --compile (Linux; first request will be slow).
+
+[done] wrote /tmp/tmpf258bczx.json
+
+================ sweep summary ================
+config             first req ms  cold wall ms (largest)  ms / Mpx  ms / chunk (walk)  peak MB
+-----------------  ------------  ----------------------  --------  -----------------  -------
+fp32 batch=1              12850                   14205     54187               1458     2173
+fp32+tf32 batch=1         12937                   14202     54178               1459     2173
+bf16 batch=1              11107                   11892     45364               1232     1093
+fp16 batch=1              11107                   11870     45282               1231     1093
+bf16 batch=1,4,8           5197                    5471     20870                582     1093
+

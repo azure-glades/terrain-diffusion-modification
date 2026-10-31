@@ -1,0 +1,202 @@
+{
+ "config": {
+  "dtype": "fp32",
+  "batch": "1",
+  "compile": false,
+  "tf32": false,
+  "onestep_latent": true
+ },
+ "hw": {
+  "cuda": true,
+  "device": "cuda",
+  "torch": "2.15.0+cu132",
+  "gpu": "NVIDIA GeForce RTX 3050 6GB Laptop GPU"
+ },
+ "first_request_ms": 6846.108174002438,
+ "sizes": {
+  "128": {
+   "wall": 4428.684177000832,
+   "model": 4358.863972663879,
+   "overhead": 69.82020433695288,
+   "stages": {
+    "coarse": {
+     "ms": 341.56467151641846,
+     "calls": 40,
+     "avg_batch": 1.0,
+     "elems": 163840,
+     "shape": [
+      11,
+      64,
+      64
+     ]
+    },
+    "base": {
+     "ms": 2278.0016326904297,
+     "calls": 25,
+     "avg_batch": 1.0,
+     "elems": 102400,
+     "shape": [
+      5,
+      64,
+      64
+     ]
+    },
+    "decoder": {
+     "ms": 1738.4825134277344,
+     "calls": 4,
+     "avg_batch": 1.0,
+     "elems": 1048576,
+     "shape": [
+      5,
+      512,
+      512
+     ]
+    }
+   },
+   "ms_per_mpx": 270305.4307251485
+  },
+  "256": {
+   "wall": 4789.546665000671,
+   "model": 4702.927321434021,
+   "overhead": 88.69258801115211,
+   "stages": {
+    "coarse": {
+     "ms": 683.1067171096802,
+     "calls": 80,
+     "avg_batch": 1.0,
+     "elems": 327680,
+     "shape": [
+      11,
+      64,
+      64
+     ]
+    },
+    "base": {
+     "ms": 2279.4252853393555,
+     "calls": 25,
+     "avg_batch": 1.0,
+     "elems": 102400,
+     "shape": [
+      5,
+      64,
+      64
+     ]
+    },
+    "decoder": {
+     "ms": 1740.6868896484375,
+     "calls": 4,
+     "avg_batch": 1.0,
+     "elems": 1048576,
+     "shape": [
+      5,
+      512,
+      512
+     ]
+    }
+   },
+   "ms_per_mpx": 73082.6822662456
+  },
+  "512": {
+   "wall": 6280.039536002732,
+   "model": 6162.326730728149,
+   "overhead": 128.28409052238567,
+   "stages": {
+    "coarse": {
+     "ms": 346.5459842681885,
+     "calls": 40,
+     "avg_batch": 1.0,
+     "elems": 163840,
+     "shape": [
+      11,
+      64,
+      64
+     ]
+    },
+    "base": {
+     "ms": 3194.4993743896484,
+     "calls": 35,
+     "avg_batch": 1.0,
+     "elems": 143360,
+     "shape": [
+      5,
+      64,
+      64
+     ]
+    },
+    "decoder": {
+     "ms": 2621.2813720703125,
+     "calls": 6,
+     "avg_batch": 1.0,
+     "elems": 1572864,
+     "shape": [
+      5,
+      512,
+      512
+     ]
+    }
+   },
+   "ms_per_mpx": 23956.449646006517
+  },
+  "1024": {
+   "wall": 13382.00604099984,
+   "model": 13166.172574043274,
+   "overhead": 216.74944994214457,
+   "stages": {
+    "coarse": {
+     "ms": 176.3120632171631,
+     "calls": 20,
+     "avg_batch": 1.0,
+     "elems": 81920,
+     "shape": [
+      11,
+      64,
+      64
+     ]
+    },
+    "base": {
+     "ms": 5854.095390319824,
+     "calls": 64,
+     "avg_batch": 1.0,
+     "elems": 262144,
+     "shape": [
+      5,
+      64,
+      64
+     ]
+    },
+    "decoder": {
+     "ms": 6973.091400146484,
+     "calls": 16,
+     "avg_batch": 1.0,
+     "elems": 4194304,
+     "shape": [
+      5,
+      512,
+      512
+     ]
+    }
+   },
+   "ms_per_mpx": 12762.075463294832
+  }
+ },
+ "warm_ms": 2.0734819991048425,
+ "walk": {
+  "per_chunk_first_ms": 4802.380160996108,
+  "per_chunk_median_ms": 1.7808080010581762,
+  "per_chunk_total_ms": 17505.03613098408,
+  "block4_total_ms": 17122.216160998505,
+  "strip_total_ms": 16141.65683700412,
+  "steps": 24,
+  "chunk": 128
+ },
+ "peak_mem_mb": 2172.64208984375,
+ "diagnosis": [
+  "Biggest GPU stage: decoder (53% of model time).",
+  "  -> Direction 6 (lighter decoder / distil decoder) and decoder_tile_stride are the levers.",
+  "Overhead is only 2% of wall time: the GPU is the bottleneck, so model-level changes pay off.",
+  "coarse: average batch 1.0 over 20 calls -> try --batch 1,4,8 (GPU underfed).",
+  "base: average batch 1.0 over 64 calls -> try --batch 1,4,8 (GPU underfed).",
+  "Running fp32: try --dtype bf16 (or --tf32) -- usually the cheapest 1.5-3x.",
+  "torch.compile is off: try --compile (Linux; first request will be slow)."
+ ]
+}
