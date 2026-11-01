@@ -69,6 +69,9 @@ def parse():
     ap.add_argument("--val-n", type=int, default=32)
     ap.add_argument("--log-every", type=int, default=100)
     ap.add_argument("--save-every", type=int, default=2000)
+    ap.add_argument("--max-minutes", type=float, default=0.0,
+                    help="stop gracefully (state saved, resumable) after this many minutes of training; 0 = no limit "
+                         "(for time-limited hosts such as Kaggle)")
     ap.add_argument("--snapshot-every", type=int, default=0,
                     help="also keep numbered EMA snapshots snap_<step>.pt every N steps (0 = off). Use for GAN runs: "
                          "best.pt is chosen by MAE, which favours the smoothest checkpoint")
@@ -335,12 +338,17 @@ def main():
         if a.snapshot_every and (step + 1) % a.snapshot_every == 0:
             sm.save_student(os.path.join(out, f"snap_{step + 1:06d}.pt"), ema, cfg)
 
-        if (step + 1) % a.save_every == 0 or step + 1 == a.steps:
+        stop = bool(a.max_minutes) and (time.time() - t0) / 60.0 >= a.max_minutes
+        if (step + 1) % a.save_every == 0 or step + 1 == a.steps or stop:
             sm.save_student(os.path.join(out, "last.pt"), ema, cfg)
             torch.save(dict(G=G.state_dict(), ema=ema.state_dict(), opt=opt.state_dict(),
                             D=D.state_dict() if D is not None else None,
                             optD=optD.state_dict() if optD is not None else None,
                             step=step + 1, best=best, cfg=cfg), state_path)
+        if stop and step + 1 < a.steps:
+            print(f"[time limit] stopped at step {step + 1}/{a.steps} after {a.max_minutes:.0f} min; "
+                  f"state saved in {out} -- run the same command again to resume", flush=True)
+            return
 
     print(f"[done] best val MAE {best:.2f} m. Checkpoints in {out} (best.pt, last.pt).")
 
