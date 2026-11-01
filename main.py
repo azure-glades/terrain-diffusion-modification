@@ -1,6 +1,8 @@
 """Terrain Diffusion explorer.
 
   python main.py --demo                                   # no model, procedural stand-in
+  python main.py --student runs/l1/best.pt,runs/l2/best.pt,runs/l3/best.pt,runs/l4/best.pt   # student cascade, no server
+  python main.py --student ... --student-l0 teacher --student-start 2 --spawn-server ...     # hybrid: teacher coarse, students detail
   python main.py --spawn-server --repo ~/terrain-diffusion --seed 42    # starts the model server for you
   python main.py --seed 42                                 # connect to a server you started yourself:
       python -m terrain_diffusion api xandergos/terrain-diffusion-30m --seed 42
@@ -28,6 +30,18 @@ def parse():
                     help="one-step latent sampling (faster, lower quality). With --spawn-server it is passed to the "
                          "server as `--kwarg onestep_latent=True`; with your own server, start it that way yourself. "
                          "Chunks are cached separately from the normal mode, so you can A/B on the same seed.")
+    ap.add_argument("--student", default=None,
+                    help="comma-separated student checkpoints for levels 1..N: terrain comes from the cascade, "
+                         "not from the teacher server")
+    ap.add_argument("--student-l0", default="procedural", choices=["procedural", "teacher"],
+                    help="where the coarse starting level comes from: procedural noise (no server) or the teacher "
+                         "(block-averaged; needs the server or --demo)")
+    ap.add_argument("--student-start", type=int, default=0,
+                    help="cascade starts at this level (0 = coarsest). With --student-l0 teacher, 2 gives the best look")
+    ap.add_argument("--student-block", type=int, default=512, help="generation block in finest px (chunks are cut from it)")
+    ap.add_argument("--student-halo", type=int, default=None,
+                    help="context border in finest px (default: the conservative receptive-field margin)")
+    ap.add_argument("--student-dtype", default="fp32", choices=["fp32", "bf16"])
     ap.add_argument("--seed", type=int, default=0, help="world seed (must match the server's --seed)")
     ap.add_argument("--chunk", type=int, default=128, help="chunk size in heightmap pixels")
     ap.add_argument("--radius", type=float, default=6, help="drawn radius in chunks")
@@ -51,11 +65,11 @@ def main():
     from sources import DemoSource, HttpSource
 
     proc = None
-    if a.demo:
-        src = DemoSource(a.seed)
-    else:
-        src = HttpSource(a.url, seed=a.seed, model=os.path.basename(a.model),
-                         variant="_onestep" if a.onestep_latent else "")
+
+    def http_source():
+        nonlocal proc
+        s = HttpSource(a.url, seed=a.seed, model=os.path.basename(a.model),
+                       variant="_onestep" if a.onestep_latent else "")
         if a.onestep_latent and not a.spawn_server:
             print("[main] NOTE: --onestep-latent only labels the cache here; make sure YOUR server was started "
                   "with `--kwarg onestep_latent=True`, otherwise normal-quality chunks get cached as one-step.")
@@ -72,11 +86,29 @@ def main():
             proc = subprocess.Popen(cmd, cwd=os.path.expanduser(a.repo))
             atexit.register(lambda: proc.poll() is None and proc.terminate())
         print(f"[main] waiting for terrain server at {a.url} ...")
-        if not src.wait_ready(timeout=600, alive=(lambda: proc.poll() is None) if proc else (lambda: True)):
+        if not s.wait_ready(timeout=600, alive=(lambda: proc.poll() is None) if proc else (lambda: True)):
             sys.exit(f"Cannot reach terrain server at {a.url}. Start it with:\n"
                      f"  python -m terrain_diffusion api {a.model} --seed {a.seed}\n"
                      f"or run this script with --spawn-server --repo <path to repo>, or use --demo.")
         print("[main] server up; first request loads the model (can take a while)...")
+        return s
+
+    if a.student:
+        from student_source import ProceduralL0, StudentSource, TeacherL0
+        if a.student_l0 == "teacher":
+            l0 = TeacherL0(DemoSource(a.seed) if a.demo else http_source())
+        else:
+            if a.student_start != 0:
+                print("[main] note: a procedural level 0 only makes sense with --student-start 0 (it is sampled "
+                      "from noise, so a later start just samples it finer)")
+            l0 = ProceduralL0(a.seed)
+        ckpts = [os.path.abspath(p.strip()) for p in a.student.split(",") if p.strip()]
+        src = StudentSource(ckpts, l0, start=a.student_start, block=a.student_block, halo=a.student_halo,
+                            dtype="bf16" if a.student_dtype == "bf16" else None, seed=a.seed)
+    elif a.demo:
+        src = DemoSource(a.seed)
+    else:
+        src = http_source()
 
     r_pre = a.radius + a.prefetch
     mgr = ChunkManager(src, chunk=a.chunk, r_active=a.radius, r_prefetch=r_pre,

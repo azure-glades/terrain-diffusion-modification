@@ -2,16 +2,126 @@
 import math
 import time
 
+import numpy as np
 from direct.gui.OnscreenText import OnscreenText
 from direct.showbase.ShowBase import ShowBase
-from panda3d.core import (AntialiasAttrib, Fog, Geom, GeomEnums, GeomNode, GeomTriangles,
-                          GeomVertexData, GeomVertexFormat, KeyboardButton, TextNode,
-                          WindowProperties)
+from panda3d.core import (AntialiasAttrib, CardMaker, Fog, Geom, GeomEnums, GeomNode, GeomTriangles,
+                          GeomVertexData, GeomVertexFormat, KeyboardButton, SamplerState, TextNode,
+                          Texture, TransparencyAttrib, WindowProperties)
 
 import meshing
 from chunks import keys_within
 
 SKY = (0.62, 0.76, 0.90)
+
+# minimap legend: state -> (label, RGBA). Priority when several apply: drawn > RAM > generating > queued > disk > none.
+MM_STATES = [
+    ("drawn", "drawn (loaded)", (70, 200, 90, 255)),
+    ("ram", "loaded, not drawn", (70, 130, 220, 255)),
+    ("gen", "being generated", (255, 150, 30, 255)),
+    ("queued", "queued", (235, 215, 90, 255)),
+    ("disk", "unloaded (on disk)", (105, 105, 118, 255)),
+    ("none", "not generated", (24, 26, 32, 255)),
+]
+
+
+class Minimap:
+    """Top-down chunk map in the corner: one cell per chunk, north up (row index grows downward on screen),
+    drawn into a numpy RGBA buffer and uploaded as a texture ~10x per second."""
+
+    def __init__(self, app, size=0.56):
+        mgr = app.mgr
+        self.app, self.mgr = app, mgr
+        self.R = int(math.ceil(mgr.r_evict)) + 1
+        self.side = 2 * self.R + 1
+        self.cs = max(4, min(14, 230 // self.side))
+        self.px = self.side * self.cs
+        self.col = {k: np.array(c, np.uint8) for k, _, c in MM_STATES}
+        self.tex = Texture("minimap")
+        self.tex.setup2dTexture(self.px, self.px, Texture.T_unsigned_byte, Texture.F_rgba8)
+        self.tex.setMagfilter(SamplerState.FT_nearest)
+        self.tex.setMinfilter(SamplerState.FT_nearest)
+        self.root = app.a2dTopRight.attachNewNode("minimap")
+        cm = CardMaker("mm")
+        cm.setFrame(0, 1, 0, 1)
+        self.card = self.root.attachNewNode(cm.generate())
+        self.card.setScale(size)
+        self.card.setPos(-size - 0.03, 0, -size - 0.03)
+        self.card.setTexture(self.tex)
+        self.card.setTransparency(TransparencyAttrib.MAlpha)
+        self.counts = {}
+        self.labels = {}
+        y = -size - 0.03 - 0.055
+        for key, label, rgba in MM_STATES:
+            sw = CardMaker("sw")
+            sw.setFrame(0, 0.032, 0, 0.032)
+            n = self.root.attachNewNode(sw.generate())
+            n.setColor(*(v / 255 for v in rgba))
+            n.setPos(-size - 0.03, 0, y - 0.006)
+            t = OnscreenText(text="", parent=self.root, pos=(-size - 0.03 + 0.045, y), scale=0.036,
+                             align=TextNode.ALeft, fg=(1, 1, 1, 1), shadow=(0, 0, 0, 1), mayChange=True)
+            self.labels[key] = (t, label)
+            y -= 0.047
+        self.shown = True
+
+    def toggle(self):
+        self.shown = not self.shown
+        (self.root.show if self.shown else self.root.hide)()
+
+    def update(self, center, drawn, pos_ij, heading_deg):
+        if not self.shown:
+            return
+        R, side, cs = self.R, self.side, self.cs
+        snap = self.mgr.snapshot()
+        ci, cj = center
+        cells = np.empty((side, side, 4), np.uint8)
+        counts = dict.fromkeys(self.col, 0)
+        for a in range(side):
+            for b in range(side):
+                k = (ci - R + a, cj - R + b)
+                if k in drawn:
+                    s = "drawn"
+                elif k in snap["ram"]:
+                    s = "ram"
+                elif k in snap["inflight"]:
+                    s = "gen"
+                elif k in snap["pending"]:
+                    s = "queued"
+                elif k in snap["disk"]:
+                    s = "disk"
+                else:
+                    s = "none"
+                cells[a, b] = self.col[s]
+                counts[s] += 1
+        img = np.repeat(np.repeat(cells, cs, axis=0), cs, axis=1)
+        edge = np.zeros(img.shape[:2], bool)                      # darker grid lines
+        edge[::cs, :] = True
+        edge[:, ::cs] = True
+        img[edge] = (img[edge] * 0.62).astype(np.uint8)
+        yy, xx = np.mgrid[0:self.px, 0:self.px]
+        c0 = (R + 0.5) * cs
+        dist = np.hypot(yy - c0, xx - c0)
+        for r, rgba in ((self.mgr.r_active, (255, 255, 255, 255)), (self.mgr.r_prefetch, (120, 220, 255, 255))):
+            ring = np.abs(dist - (r + 0.5) * cs) < 0.75
+            img[ring] = rgba
+        # player + heading (map: right = +col, up = +world y = -row)
+        N = self.app.N
+        py = (pos_ij[0] / N - (ci - R)) * cs
+        px = (pos_ij[1] / N - (cj - R)) * cs
+        h = math.radians(heading_deg)
+        dx, dy = -math.sin(h), -math.cos(h)
+        for t in np.linspace(0, 2.4 * cs, int(2.4 * cs * 2)):
+            self._dot(img, py + dy * t, px + dx * t, (255, 60, 60, 255), 1)
+        self._dot(img, py, px, (255, 255, 255, 255), 2)
+        img[0, :], img[-1, :], img[:, 0], img[:, -1] = 255, 255, 255, 255
+        self.tex.setRamImageAs(np.ascontiguousarray(img[::-1]).tobytes(), "RGBA")   # panda rows start at the bottom
+        for key, (t, label) in self.labels.items():
+            t.setText(f"{label}: {counts[key]}")
+
+    @staticmethod
+    def _dot(img, y, x, rgba, r):
+        y0, x0 = int(round(y)), int(round(x))
+        img[max(y0 - r, 0):max(y0 + r + 1, 0), max(x0 - r, 0):max(x0 + r + 1, 0)] = rgba
 
 
 class Explorer(ShowBase):
@@ -49,9 +159,11 @@ class Explorer(ShowBase):
                                 align=TextNode.ALeft, fg=(1, 1, 1, 1), shadow=(0, 0, 0, 1), mayChange=True)
         self.help = OnscreenText(
             text="WASD move | Space/E up, Q/C down | Shift fast | wheel speed | -/= vert. exaggeration\n"
-                 "Tab mouse capture | F wireframe | P screenshot | H hide HUD | Esc quit",
+                 "Tab mouse capture | F wireframe | P screenshot | H hide HUD | M minimap | Esc quit",
             parent=self.a2dBottomLeft, pos=(0.04, 0.09), scale=0.04, align=TextNode.ALeft,
             fg=(1, 1, 1, 1), shadow=(0, 0, 0, 1))
+
+        self.minimap = Minimap(self)
 
         # ----- initial area (blocking, with progress) -----
         si, sj = start
@@ -63,6 +175,7 @@ class Explorer(ShowBase):
 
         def progress(have, total):
             self.hud.setText(f"Generating terrain around start: {have}/{total} chunks")
+            self._minimap_update()
             self.taskMgr.step()
         mgr.wait_for(ring, progress)
         for k in sorted(ring, key=lambda k: math.hypot(k[0] - c0[0], k[1] - c0[1])):
@@ -80,6 +193,7 @@ class Explorer(ShowBase):
         self.accept("f", self._wire)
         self.accept("h", self._toggle_hud)
         self.accept("p", self._shot)
+        self.accept("m", self.minimap.toggle)
         self.wire = False
         self._set_capture(True)
 
@@ -87,6 +201,7 @@ class Explorer(ShowBase):
         self.taskMgr.add(self._stream_task, "stream")
         self.taskMgr.add(self._build_task, "build")
         self.taskMgr.doMethodLater(0.25, self._hud_task, "hud")
+        self.taskMgr.doMethodLater(0.1, self._minimap_task, "minimap")
         self.last_tick = 0.0
         self.fps_frames = 0
 
@@ -94,6 +209,13 @@ class Explorer(ShowBase):
     def _chunk_of_pos(self):
         i, j = -self.pos[1], self.pos[0]
         return (int(math.floor(i / self.N)), int(math.floor(j / self.N)))
+
+    def _minimap_update(self):
+        self.minimap.update(self._chunk_of_pos(), self.meshes, (-self.pos[1], self.pos[0]), self.heading)
+
+    def _minimap_task(self, task):
+        self._minimap_update()
+        return task.again
 
     def _speed(self, f):
         self.speed = min(max(self.speed * f, 2.0), 4000.0)

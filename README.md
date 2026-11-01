@@ -18,11 +18,15 @@ pip install -r requirements.txt
 python main.py --demo
 
 # 1) real model, app starts the server for you (needs your clone of the repo, deps installed there)
-python main.py --spawn-server --repo ~/terrain-diffusion --seed 42
+python main.py --spawn-server --repo ./terrain-diffusion --seed 42
 
 # 2) or start the server yourself, then the app (seeds must match: it keys the disk cache)
 python -m terrain_diffusion api xandergos/terrain-diffusion-30m --seed 42 --no-compile
 python main.py --seed 42
+```
+To try out the student models:
+```bash
+python main.py --student runs/l1/best.pt,runs/l2/best.pt,runs/l3/best.pt,runs/l4/best.pt --radius 4 --pregen 3
 ```
 
 First launch downloads the model and generates the start area before the window shows terrain.

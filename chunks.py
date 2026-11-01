@@ -37,6 +37,15 @@ class ChunkManager:
             os.makedirs(self.cache_dir, exist_ok=True)
         self._cv = threading.Condition()
         self._heights = {}
+        self._disk = set()                                # keys with a cache file ("unloaded but stored")
+        if self.cache_dir:
+            for fn in os.listdir(self.cache_dir):
+                if fn.startswith("c_") and fn.endswith(".npy"):
+                    try:
+                        _, a, b = fn[:-4].split("_")
+                        self._disk.add((int(a), int(b)))
+                    except ValueError:
+                        pass
         self._pending, self._inflight, self._retry = set(), set(), {}
         self._center, self._heading = (0, 0), (0.0, 0.0)
         self._stop = False
@@ -97,6 +106,12 @@ class ChunkManager:
             return dict(cached=len(self._heights), pending=len(self._pending),
                         inflight=len(self._inflight), generated=self.generated,
                         disk_hits=self.disk_hits, errors=self.errors, avg_ms=ms)
+
+    def snapshot(self):
+        """Chunk states for the minimap: sets of keys in RAM / queued / being generated / stored on disk."""
+        with self._cv:
+            return dict(ram=set(self._heights), pending=set(self._pending),
+                        inflight=set(self._inflight), disk=set(self._disk))
 
     def close(self):
         with self._cv:
@@ -178,4 +193,6 @@ class ChunkManager:
             with open(tmp, "wb") as f:
                 np.save(f, a)
             os.replace(tmp, p)
+            with self._cv:
+                self._disk.add(key)
         return a, False

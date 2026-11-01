@@ -36,7 +36,7 @@ def test_streaming():
         m = ChunkManager(DemoSource(7), chunk=N, r_active=3, r_prefetch=5, r_evict=7, cache_dir=d, workers=2, log=lambda *a: None)
         m.update((0, 0), (0, 1))
         m.wait_for(keys_within((0, 0), 3))
-        time.sleep(0.5)
+        m.wait_for(keys_within((0, 0), 5))                  # prefetch ring fills in the background
         assert all(m.get(k) is not None for k in keys_within((0, 0), 5)), "prefetch ring incomplete"
         n0 = m.stats()["cached"]
         # walk east 30 chunks, maintaining the ring
@@ -54,7 +54,7 @@ def test_streaming():
         m.close()
         print("ok streaming: ring maintained, RAM bounded, evicted chunks reloaded from disk", s)
     finally:
-        shutil.rmtree(d)
+        time.sleep(0.2); shutil.rmtree(d, ignore_errors=True)
 
 def test_http_client():
     src = DemoSource(5)
@@ -77,5 +77,52 @@ def test_http_client():
     srv.shutdown()
     print("ok http client parses documented payload")
 
+def _fake_gens(F=4, rf=6):
+    """Local-only fake students (bilinear up2 + a 3x3 smoothing detail term) so StudentSource logic runs without torch."""
+    from make_pyramid_data import up2
+    def make(L):
+        def g(c, origin=(0, 0)):
+            z = up2(c.astype(np.float32))
+            d = z - 0.25 * (np.roll(z, 1, 0) + np.roll(z, -1, 0) + np.roll(z, 1, 1) + np.roll(z, -1, 1))
+            return (z + 3.0 * d).astype(np.float32)
+        g.cfg = dict(level=L, levels=F + 1, rf=rf)
+        return g
+    return {L: make(L) for L in range(1, F + 1)}
+
+def test_student_source():
+    from student_source import ProceduralL0, StudentSource, TeacherL0
+    l0 = ProceduralL0(2)
+    a = StudentSource(l0=l0, gens=_fake_gens(), block=128, log=lambda *x: None, tag="fa")
+    b = StudentSource(l0=l0, gens=_fake_gens(), block=256, log=lambda *x: None, tag="fb")   # different block grid
+    wa, wb = a.get(-70, 90, 190, 300), b.get(-70, 90, 190, 300)
+    assert wa.shape == (260, 210) and np.abs(wa.astype(int) - wb).max() <= 1, np.abs(wa.astype(int) - wb).max()
+    # chunk windows (N+3, overlapping by construction) agree with each other across a block border
+    c1, c2 = a.get(-1, 125, 132, 258), a.get(-1, 253, 132, 386)
+    assert (c1[:, 128:] == c2[:, :5]).all()
+    assert (a.get(5, 5, 40, 40) == a.get(5, 5, 40, 40)).all()                                # deterministic / cached
+    assert a.blocks_made > 0 and a.margin > 0
+    h = StudentSource(l0=TeacherL0(DemoSource(1)), gens=_fake_gens(), start=2, block=128, log=lambda *x: None, tag="ft")
+    assert h.get(0, 0, 100, 100).shape == (100, 100)
+    print("ok student source: block-size independent, seamless across blocks, teacher hybrid works, margin", a.margin)
+
+def test_snapshot():
+    d = tempfile.mkdtemp()
+    try:
+        m = ChunkManager(DemoSource(9), chunk=N, r_active=2, r_prefetch=3, r_evict=4, cache_dir=d, workers=2, log=lambda *a: None)
+        m.update((0, 0)); m.wait_for(keys_within((0, 0), 2)); time.sleep(0.4)
+        s = m.snapshot()
+        assert set(keys_within((0, 0), 3)) <= s["ram"] and s["ram"] <= s["disk"]
+        m.update((0, 40)); time.sleep(0.2)                       # far away: old ones leave RAM but stay on disk
+        s = m.snapshot()
+        assert (0, 0) not in s["ram"] and (0, 0) in s["disk"]
+        m.close()
+        m2 = ChunkManager(DemoSource(9), chunk=N, cache_dir=d, workers=1, log=lambda *a: None)
+        assert (0, 0) in m2.snapshot()["disk"]                   # disk index rebuilt on restart
+        m2.close()
+        print("ok snapshot: ram / pending / inflight / disk states")
+    finally:
+        time.sleep(0.2); shutil.rmtree(d, ignore_errors=True)
+
 if __name__ == "__main__":
-    test_seams_and_determinism(); test_mesh(); test_streaming(); test_http_client(); print("ALL PASSED")
+    test_seams_and_determinism(); test_mesh(); test_streaming(); test_http_client(); test_student_source(); test_snapshot()
+    print("ALL PASSED")

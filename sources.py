@@ -113,13 +113,16 @@ class DemoSource(TerrainSource):
             wavelength *= 0.5
         return total / norm
 
-    def get(self, i1, j1, i2, j2):
-        ii, jj = np.meshgrid(np.arange(i1, i2, dtype=np.float64),
-                             np.arange(j1, j2, dtype=np.float64), indexing="ij")
+    def sample(self, ii, jj):
+        """Float elevation (metres) on the grid of 1-D coordinate arrays ii (rows) x jj (cols); fractional coords allowed."""
+        ii, jj = np.meshgrid(np.asarray(ii, dtype=np.float64), np.asarray(jj, dtype=np.float64), indexing="ij")
         cont = self._fbm(jj, ii, 1500.0, 4, 1)               # continents
         land = np.clip((cont - 0.47) * 6.0, 0.0, 1.0)         # 0 = ocean
         ridge = self._fbm(jj, ii, 400.0, 6, 100, ridged=True)
         rough = self._fbm(jj, ii, 60.0, 4, 200)
         h = land * (80 + 5200 * ridge ** 1.3 * land ** 0.5 + 300 * rough)
-        h = np.where(cont < 0.47, -20.0 * (0.47 - cont) * 10, h)
+        return np.where(cont < 0.47, -20.0 * (0.47 - cont) * 10, h)
+
+    def get(self, i1, j1, i2, j2):
+        h = self.sample(np.arange(i1, i2), np.arange(j1, j2))
         return np.clip(np.rint(h), -32000, 32000).astype(np.int16)
