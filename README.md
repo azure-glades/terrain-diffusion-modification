@@ -59,3 +59,9 @@ Tab release/capture mouse, F wireframe, P screenshot, H hide HUD, Esc quit.
   queueing while you fly.
 
 `python tests.py` runs headless tests (seams, mesh, streaming/eviction/disk reload, HTTP client).
+
+# Misc
+Best teacher config:
+```claude
+Teacher: your repo pipeline with bf16 and batch list 1,4,8,16, the best setup from your profiling. It times cold N×N requests at far-apart locations, so nothing is cached, and does a warm-up request first.
+```
