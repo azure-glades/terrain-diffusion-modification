@@ -3,5 +3,4 @@ cache/
 backup/
 terrain-diffusion/
 __pycache__/
-runs/
 img/
