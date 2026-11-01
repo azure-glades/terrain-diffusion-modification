@@ -48,7 +48,7 @@ def parse():
     ap.add_argument("--val", default=None, help="default: <repo>/data/val2")
     ap.add_argument("--runs", default=None, help="existing runs dir to resume from (default: <repo>/runs if present)")
     ap.add_argument("--out", default="/kaggle/working/runs", help="where runs are written (must be writable)")
-    ap.add_argument("--hours", type=float, default=20.0, help="training time budget for this session")
+    ap.add_argument("--hours", type=float, default=11.0, help="training time budget for this session")
     ap.add_argument("--steps-l1", type=int, default=30000)
     ap.add_argument("--steps-l2", type=int, default=40000)
     ap.add_argument("--workers", type=int, default=2, help="data-loader workers per job (Kaggle has 4 cores)")
