@@ -1,0 +1,200 @@
+{
+ "version": 1,
+ "patch": 512,
+ "block": 2048,
+ "seed": 0,
+ "data_seed": 1,
+ "levels": 5,
+ "model": "xandergos/terrain-diffusion-30m",
+ "dtype": "bf16",
+ "mpp": 30.0,
+ "with_climate": false,
+ "demo": false,
+ "min_std": 3.0,
+ "max_ocean": 0.6,
+ "span": 200000,
+ "shards": [
+  {
+   "file": "block_000000.npz",
+   "n": 15,
+   "block": 0,
+   "origin": [
+    -10240,
+    4096
+   ]
+  },
+  {
+   "file": "block_000001.npz",
+   "n": 0,
+   "block": 1,
+   "origin": [
+    8192,
+    -67584
+   ]
+  },
+  {
+   "file": "block_000002.npz",
+   "n": 16,
+   "block": 2,
+   "origin": [
+    57344,
+    -20480
+   ]
+  },
+  {
+   "file": "block_000003.npz",
+   "n": 16,
+   "block": 3,
+   "origin": [
+    -20480,
+    -194560
+   ]
+  },
+  {
+   "file": "block_000004.npz",
+   "n": 9,
+   "block": 4,
+   "origin": [
+    40960,
+    -43008
+   ]
+  },
+  {
+   "file": "block_000005.npz",
+   "n": 16,
+   "block": 5,
+   "origin": [
+    129024,
+    -45056
+   ]
+  },
+  {
+   "file": "block_000006.npz",
+   "n": 16,
+   "block": 6,
+   "origin": [
+    90112,
+    -141312
+   ]
+  },
+  {
+   "file": "block_000007.npz",
+   "n": 16,
+   "block": 7,
+   "origin": [
+    110592,
+    -55296
+   ]
+  },
+  {
+   "file": "block_000008.npz",
+   "n": 8,
+   "block": 8,
+   "origin": [
+    -180224,
+    14336
+   ]
+  },
+  {
+   "file": "block_000009.npz",
+   "n": 16,
+   "block": 9,
+   "origin": [
+    -90112,
+    71680
+   ]
+  },
+  {
+   "file": "block_000010.npz",
+   "n": 2,
+   "block": 10,
+   "origin": [
+    -120832,
+    118784
+   ]
+  },
+  {
+   "file": "block_000011.npz",
+   "n": 13,
+   "block": 11,
+   "origin": [
+    161792,
+    -176128
+   ]
+  },
+  {
+   "file": "block_000012.npz",
+   "n": 16,
+   "block": 12,
+   "origin": [
+    149504,
+    69632
+   ]
+  },
+  {
+   "file": "block_000013.npz",
+   "n": 4,
+   "block": 13,
+   "origin": [
+    -88064,
+    178176
+   ]
+  },
+  {
+   "file": "block_000014.npz",
+   "n": 1,
+   "block": 14,
+   "origin": [
+    149504,
+    34816
+   ]
+  },
+  {
+   "file": "block_000015.npz",
+   "n": 10,
+   "block": 15,
+   "origin": [
+    -94208,
+    182272
+   ]
+  },
+  {
+   "file": "block_000016.npz",
+   "n": 16,
+   "block": 16,
+   "origin": [
+    38912,
+    -126976
+   ]
+  },
+  {
+   "file": "block_000017.npz",
+   "n": 10,
+   "block": 17,
+   "origin": [
+    94208,
+    73728
+   ]
+  },
+  {
+   "file": "block_000018.npz",
+   "n": 0,
+   "block": 18,
+   "origin": [
+    -26624,
+    -192512
+   ]
+  },
+  {
+   "file": "block_000019.npz",
+   "n": 1,
+   "block": 19,
+   "origin": [
+    -147456,
+    -10240
+   ]
+  }
+ ],
+ "skipped_patches": 119,
+ "kept_patches": 201
+}

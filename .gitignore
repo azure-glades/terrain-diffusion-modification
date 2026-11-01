@@ -1,7 +1,6 @@
 .venv/
 cache/
 backup/
-data/
 terrain-diffusion/
 __pycache__/
 runs/

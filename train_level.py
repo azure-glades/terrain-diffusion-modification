@@ -69,6 +69,9 @@ def parse():
     ap.add_argument("--val-n", type=int, default=32)
     ap.add_argument("--log-every", type=int, default=100)
     ap.add_argument("--save-every", type=int, default=2000)
+    ap.add_argument("--snapshot-every", type=int, default=0,
+                    help="also keep numbered EMA snapshots snap_<step>.pt every N steps (0 = off). Use for GAN runs: "
+                         "best.pt is chosen by MAE, which favours the smoothest checkpoint")
     ap.add_argument("--workers", type=int, default=2)
     ap.add_argument("--device", default=None)
     ap.add_argument("--no-bf16", action="store_true", help="disable bf16 autocast")
@@ -328,6 +331,9 @@ def main():
                   flush=True)
             logf.write(json.dumps(dict(step=step + 1, **v)) + "\n")
             logf.flush()
+
+        if a.snapshot_every and (step + 1) % a.snapshot_every == 0:
+            sm.save_student(os.path.join(out, f"snap_{step + 1:06d}.pt"), ema, cfg)
 
         if (step + 1) % a.save_every == 0 or step + 1 == a.steps:
             sm.save_student(os.path.join(out, "last.pt"), ema, cfg)
