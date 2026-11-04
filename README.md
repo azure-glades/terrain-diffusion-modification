@@ -65,3 +65,10 @@ Best teacher config:
 ```claude
 Teacher: your repo pipeline with bf16 and batch list 1,4,8,16, the best setup from your profiling. It times cold N×N requests at far-apart locations, so nothing is cached, and does a warm-up request first.
 ```
+
+This gives level-by-level comparision of terrain diffusion model and trained student model
+```bash
+python show_levels.py --data data/val2 \
+  --students runs/l1/best.pt,runs/l2/best.pt,runs/l3/best.pt,runs/l4/best.pt \
+  --sample 0,3 --out levels.png
+```
