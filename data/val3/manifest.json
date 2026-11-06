@@ -1,0 +1,398 @@
+{
+ "version": 1,
+ "patch": 2048,
+ "block": 2048,
+ "seed": 0,
+ "data_seed": 2,
+ "levels": 5,
+ "model": "xandergos/terrain-diffusion-30m",
+ "dtype": "bf16",
+ "mpp": 30.0,
+ "with_climate": false,
+ "demo": false,
+ "min_std": 1.0,
+ "max_ocean": 0.9,
+ "span": 200000,
+ "shards": [
+  {
+   "file": "block_000000.npz",
+   "n": 1,
+   "block": 0,
+   "origin": [
+    135168,
+    -94208
+   ]
+  },
+  {
+   "file": "block_000001.npz",
+   "n": 1,
+   "block": 1,
+   "origin": [
+    -79872,
+    157696
+   ]
+  },
+  {
+   "file": "block_000002.npz",
+   "n": 1,
+   "block": 2,
+   "origin": [
+    4096,
+    139264
+   ]
+  },
+  {
+   "file": "block_000003.npz",
+   "n": 1,
+   "block": 3,
+   "origin": [
+    180224,
+    -59392
+   ]
+  },
+  {
+   "file": "block_000004.npz",
+   "n": 1,
+   "block": 4,
+   "origin": [
+    133120,
+    6144
+   ]
+  },
+  {
+   "file": "block_000005.npz",
+   "n": 1,
+   "block": 5,
+   "origin": [
+    104448,
+    129024
+   ]
+  },
+  {
+   "file": "block_000006.npz",
+   "n": 0,
+   "block": 6,
+   "origin": [
+    -116736,
+    153600
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000007.npz",
+   "n": 1,
+   "block": 7,
+   "origin": [
+    63488,
+    -151552
+   ]
+  },
+  {
+   "file": "block_000008.npz",
+   "n": 1,
+   "block": 8,
+   "origin": [
+    8192,
+    -133120
+   ]
+  },
+  {
+   "file": "block_000009.npz",
+   "n": 0,
+   "block": 9,
+   "origin": [
+    178176,
+    4096
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000010.npz",
+   "n": 1,
+   "block": 10,
+   "origin": [
+    112640,
+    131072
+   ]
+  },
+  {
+   "file": "block_000011.npz",
+   "n": 1,
+   "block": 11,
+   "origin": [
+    14336,
+    -102400
+   ]
+  },
+  {
+   "file": "block_000012.npz",
+   "n": 0,
+   "block": 12,
+   "origin": [
+    26624,
+    124928
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000013.npz",
+   "n": 0,
+   "block": 13,
+   "origin": [
+    120832,
+    139264
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000014.npz",
+   "n": 0,
+   "block": 14,
+   "origin": [
+    145408,
+    -196608
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000015.npz",
+   "n": 0,
+   "block": 15,
+   "origin": [
+    174080,
+    -102400
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000016.npz",
+   "n": 0,
+   "block": 16,
+   "origin": [
+    -196608,
+    -83968
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000017.npz",
+   "n": 0,
+   "block": 17,
+   "origin": [
+    -180224,
+    63488
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000018.npz",
+   "n": 1,
+   "block": 18,
+   "origin": [
+    -59392,
+    -190464
+   ]
+  },
+  {
+   "file": "block_000019.npz",
+   "n": 1,
+   "block": 19,
+   "origin": [
+    178176,
+    18432
+   ]
+  },
+  {
+   "file": "block_000020.npz",
+   "n": 1,
+   "block": 20,
+   "origin": [
+    -77824,
+    -77824
+   ]
+  },
+  {
+   "file": "block_000021.npz",
+   "n": 0,
+   "block": 21,
+   "origin": [
+    -129024,
+    63488
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000022.npz",
+   "n": 1,
+   "block": 22,
+   "origin": [
+    -24576,
+    -131072
+   ]
+  },
+  {
+   "file": "block_000023.npz",
+   "n": 0,
+   "block": 23,
+   "origin": [
+    83968,
+    -14336
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000024.npz",
+   "n": 0,
+   "block": 24,
+   "origin": [
+    18432,
+    -43008
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000025.npz",
+   "n": 0,
+   "block": 25,
+   "origin": [
+    96256,
+    92160
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000026.npz",
+   "n": 1,
+   "block": 26,
+   "origin": [
+    -30720,
+    -36864
+   ]
+  },
+  {
+   "file": "block_000027.npz",
+   "n": 0,
+   "block": 27,
+   "origin": [
+    73728,
+    102400
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000028.npz",
+   "n": 0,
+   "block": 28,
+   "origin": [
+    -88064,
+    -67584
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000029.npz",
+   "n": 1,
+   "block": 29,
+   "origin": [
+    -157696,
+    -122880
+   ]
+  },
+  {
+   "file": "block_000030.npz",
+   "n": 0,
+   "block": 30,
+   "origin": [
+    -90112,
+    43008
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000031.npz",
+   "n": 0,
+   "block": 31,
+   "origin": [
+    -172032,
+    -141312
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000032.npz",
+   "n": 0,
+   "block": 32,
+   "origin": [
+    24576,
+    -108544
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000033.npz",
+   "n": 1,
+   "block": 33,
+   "origin": [
+    -192512,
+    -75776
+   ]
+  },
+  {
+   "file": "block_000034.npz",
+   "n": 0,
+   "block": 34,
+   "origin": [
+    -172032,
+    196608
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000035.npz",
+   "n": 1,
+   "block": 35,
+   "origin": [
+    108544,
+    -55296
+   ]
+  },
+  {
+   "file": "block_000036.npz",
+   "n": 1,
+   "block": 36,
+   "origin": [
+    -151552,
+    -178176
+   ]
+  },
+  {
+   "file": "block_000037.npz",
+   "n": 0,
+   "block": 37,
+   "origin": [
+    188416,
+    126976
+   ]
+  },
+  {
+   "file": "block_000038.npz",
+   "n": 1,
+   "block": 38,
+   "origin": [
+    -12288,
+    22528
+   ]
+  },
+  {
+   "file": "block_000039.npz",
+   "n": 1,
+   "block": 39,
+   "origin": [
+    57344,
+    112640
+   ]
+  }
+ ],
+ "skipped_patches": 19,
+ "kept_patches": 21
+}

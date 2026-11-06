@@ -36,11 +36,16 @@ def parse():
     ap.add_argument("--student-l0", default="procedural", choices=["procedural", "teacher"],
                     help="where the coarse starting level comes from: procedural noise (no server) or the teacher "
                          "(block-averaged; needs the server or --demo)")
+    ap.add_argument("--student-l0-relief", type=float, default=1.0,
+                    help="scale the procedural level-0 heights (e.g. 0.5 = gentler world; the raw noise is very mountainous)")
     ap.add_argument("--student-start", type=int, default=0,
                     help="cascade starts at this level (0 = coarsest). With --student-l0 teacher, 2 gives the best look")
     ap.add_argument("--student-block", type=int, default=512, help="generation block in finest px (chunks are cut from it)")
     ap.add_argument("--student-halo", type=int, default=None,
                     help="context border in finest px (default: the conservative receptive-field margin)")
+    ap.add_argument("--student-reuse-net", default=None,
+                    help="zero-shot test: run this dedicated checkpoint's network at every level (residual scales still "
+                         "come from the --student checkpoints)")
     ap.add_argument("--student-dtype", default="fp32", choices=["fp32", "bf16"])
     ap.add_argument("--seed", type=int, default=0, help="world seed (must match the server's --seed)")
     ap.add_argument("--chunk", type=int, default=128, help="chunk size in heightmap pixels")
@@ -101,10 +106,11 @@ def main():
             if a.student_start != 0:
                 print("[main] note: a procedural level 0 only makes sense with --student-start 0 (it is sampled "
                       "from noise, so a later start just samples it finer)")
-            l0 = ProceduralL0(a.seed)
+            l0 = ProceduralL0(a.seed, a.student_l0_relief)
         ckpts = [os.path.abspath(p.strip()) for p in a.student.split(",") if p.strip()]
         src = StudentSource(ckpts, l0, start=a.student_start, block=a.student_block, halo=a.student_halo,
-                            dtype="bf16" if a.student_dtype == "bf16" else None, seed=a.seed)
+                            dtype="bf16" if a.student_dtype == "bf16" else None, seed=a.seed,
+                            reuse=os.path.abspath(a.student_reuse_net) if a.student_reuse_net else None)
     elif a.demo:
         src = DemoSource(a.seed)
     else:

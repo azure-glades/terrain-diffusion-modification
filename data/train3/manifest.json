@@ -1,0 +1,6688 @@
+{
+ "version": 1,
+ "patch": 2048,
+ "block": 2048,
+ "seed": 0,
+ "data_seed": 3,
+ "levels": 5,
+ "model": "xandergos/terrain-diffusion-30m",
+ "dtype": "bf16",
+ "mpp": 30.0,
+ "with_climate": false,
+ "demo": false,
+ "min_std": 1.0,
+ "max_ocean": 0.9,
+ "span": 200000,
+ "shards": [
+  {
+   "file": "block_000000.npz",
+   "n": 0,
+   "block": 0,
+   "origin": [
+    124928,
+    -165888
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000001.npz",
+   "n": 0,
+   "block": 1,
+   "origin": [
+    190464,
+    -98304
+   ]
+  },
+  {
+   "file": "block_000002.npz",
+   "n": 1,
+   "block": 2,
+   "origin": [
+    137216,
+    -190464
+   ]
+  },
+  {
+   "file": "block_000003.npz",
+   "n": 0,
+   "block": 3,
+   "origin": [
+    -73728,
+    -157696
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000004.npz",
+   "n": 0,
+   "block": 4,
+   "origin": [
+    -196608,
+    159744
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000005.npz",
+   "n": 0,
+   "block": 5,
+   "origin": [
+    -190464,
+    -145408
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000006.npz",
+   "n": 0,
+   "block": 6,
+   "origin": [
+    -30720,
+    -16384
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000007.npz",
+   "n": 1,
+   "block": 7,
+   "origin": [
+    12288,
+    73728
+   ]
+  },
+  {
+   "file": "block_000008.npz",
+   "n": 1,
+   "block": 8,
+   "origin": [
+    -149504,
+    -59392
+   ]
+  },
+  {
+   "file": "block_000009.npz",
+   "n": 0,
+   "block": 9,
+   "origin": [
+    -47104,
+    190464
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000010.npz",
+   "n": 0,
+   "block": 10,
+   "origin": [
+    -172032,
+    108544
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000011.npz",
+   "n": 1,
+   "block": 11,
+   "origin": [
+    -12288,
+    73728
+   ]
+  },
+  {
+   "file": "block_000012.npz",
+   "n": 0,
+   "block": 12,
+   "origin": [
+    -63488,
+    -116736
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000013.npz",
+   "n": 0,
+   "block": 13,
+   "origin": [
+    178176,
+    -24576
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000014.npz",
+   "n": 0,
+   "block": 14,
+   "origin": [
+    45056,
+    174080
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000015.npz",
+   "n": 1,
+   "block": 15,
+   "origin": [
+    61440,
+    -49152
+   ]
+  },
+  {
+   "file": "block_000016.npz",
+   "n": 0,
+   "block": 16,
+   "origin": [
+    188416,
+    174080
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000017.npz",
+   "n": 0,
+   "block": 17,
+   "origin": [
+    -118784,
+    -100352
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000018.npz",
+   "n": 0,
+   "block": 18,
+   "origin": [
+    -12288,
+    -55296
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000019.npz",
+   "n": 1,
+   "block": 19,
+   "origin": [
+    71680,
+    -139264
+   ]
+  },
+  {
+   "file": "block_000020.npz",
+   "n": 0,
+   "block": 20,
+   "origin": [
+    108544,
+    -79872
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000021.npz",
+   "n": 0,
+   "block": 21,
+   "origin": [
+    114688,
+    120832
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000022.npz",
+   "n": 1,
+   "block": 22,
+   "origin": [
+    69632,
+    -124928
+   ]
+  },
+  {
+   "file": "block_000023.npz",
+   "n": 1,
+   "block": 23,
+   "origin": [
+    -73728,
+    -81920
+   ]
+  },
+  {
+   "file": "block_000024.npz",
+   "n": 0,
+   "block": 24,
+   "origin": [
+    -143360,
+    4096
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000025.npz",
+   "n": 1,
+   "block": 25,
+   "origin": [
+    -79872,
+    -126976
+   ]
+  },
+  {
+   "file": "block_000026.npz",
+   "n": 0,
+   "block": 26,
+   "origin": [
+    114688,
+    -143360
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000027.npz",
+   "n": 0,
+   "block": 27,
+   "origin": [
+    86016,
+    133120
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000028.npz",
+   "n": 1,
+   "block": 28,
+   "origin": [
+    -108544,
+    -174080
+   ]
+  },
+  {
+   "file": "block_000029.npz",
+   "n": 1,
+   "block": 29,
+   "origin": [
+    86016,
+    -2048
+   ]
+  },
+  {
+   "file": "block_000030.npz",
+   "n": 1,
+   "block": 30,
+   "origin": [
+    -30720,
+    118784
+   ]
+  },
+  {
+   "file": "block_000031.npz",
+   "n": 0,
+   "block": 31,
+   "origin": [
+    -108544,
+    -55296
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000032.npz",
+   "n": 1,
+   "block": 32,
+   "origin": [
+    -83968,
+    -81920
+   ]
+  },
+  {
+   "file": "block_000033.npz",
+   "n": 0,
+   "block": 33,
+   "origin": [
+    18432,
+    -100352
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000034.npz",
+   "n": 1,
+   "block": 34,
+   "origin": [
+    165888,
+    92160
+   ]
+  },
+  {
+   "file": "block_000035.npz",
+   "n": 1,
+   "block": 35,
+   "origin": [
+    172032,
+    10240
+   ]
+  },
+  {
+   "file": "block_000036.npz",
+   "n": 0,
+   "block": 36,
+   "origin": [
+    40960,
+    40960
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000037.npz",
+   "n": 1,
+   "block": 37,
+   "origin": [
+    141312,
+    -92160
+   ]
+  },
+  {
+   "file": "block_000038.npz",
+   "n": 1,
+   "block": 38,
+   "origin": [
+    -81920,
+    122880
+   ]
+  },
+  {
+   "file": "block_000039.npz",
+   "n": 1,
+   "block": 39,
+   "origin": [
+    -139264,
+    149504
+   ]
+  },
+  {
+   "file": "block_000040.npz",
+   "n": 0,
+   "block": 40,
+   "origin": [
+    122880,
+    -147456
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000041.npz",
+   "n": 1,
+   "block": 41,
+   "origin": [
+    75776,
+    -131072
+   ]
+  },
+  {
+   "file": "block_000042.npz",
+   "n": 1,
+   "block": 42,
+   "origin": [
+    133120,
+    98304
+   ]
+  },
+  {
+   "file": "block_000043.npz",
+   "n": 0,
+   "block": 43,
+   "origin": [
+    -88064,
+    -141312
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000044.npz",
+   "n": 1,
+   "block": 44,
+   "origin": [
+    4096,
+    -6144
+   ]
+  },
+  {
+   "file": "block_000045.npz",
+   "n": 0,
+   "block": 45,
+   "origin": [
+    43008,
+    -174080
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000046.npz",
+   "n": 0,
+   "block": 46,
+   "origin": [
+    -133120,
+    139264
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000047.npz",
+   "n": 0,
+   "block": 47,
+   "origin": [
+    -90112,
+    -126976
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000048.npz",
+   "n": 1,
+   "block": 48,
+   "origin": [
+    -10240,
+    28672
+   ]
+  },
+  {
+   "file": "block_000049.npz",
+   "n": 0,
+   "block": 49,
+   "origin": [
+    141312,
+    135168
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000050.npz",
+   "n": 1,
+   "block": 50,
+   "origin": [
+    26624,
+    30720
+   ]
+  },
+  {
+   "file": "block_000051.npz",
+   "n": 0,
+   "block": 51,
+   "origin": [
+    98304,
+    28672
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000052.npz",
+   "n": 0,
+   "block": 52,
+   "origin": [
+    4096,
+    -88064
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000053.npz",
+   "n": 1,
+   "block": 53,
+   "origin": [
+    100352,
+    4096
+   ]
+  },
+  {
+   "file": "block_000054.npz",
+   "n": 1,
+   "block": 54,
+   "origin": [
+    120832,
+    20480
+   ]
+  },
+  {
+   "file": "block_000055.npz",
+   "n": 1,
+   "block": 55,
+   "origin": [
+    -38912,
+    59392
+   ]
+  },
+  {
+   "file": "block_000056.npz",
+   "n": 1,
+   "block": 56,
+   "origin": [
+    -12288,
+    49152
+   ]
+  },
+  {
+   "file": "block_000057.npz",
+   "n": 1,
+   "block": 57,
+   "origin": [
+    -59392,
+    100352
+   ]
+  },
+  {
+   "file": "block_000058.npz",
+   "n": 0,
+   "block": 58,
+   "origin": [
+    -143360,
+    53248
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000059.npz",
+   "n": 1,
+   "block": 59,
+   "origin": [
+    43008,
+    135168
+   ]
+  },
+  {
+   "file": "block_000060.npz",
+   "n": 1,
+   "block": 60,
+   "origin": [
+    -114688,
+    20480
+   ]
+  },
+  {
+   "file": "block_000061.npz",
+   "n": 1,
+   "block": 61,
+   "origin": [
+    -53248,
+    102400
+   ]
+  },
+  {
+   "file": "block_000062.npz",
+   "n": 0,
+   "block": 62,
+   "origin": [
+    102400,
+    -112640
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000063.npz",
+   "n": 0,
+   "block": 63,
+   "origin": [
+    106496,
+    157696
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000064.npz",
+   "n": 1,
+   "block": 64,
+   "origin": [
+    32768,
+    -90112
+   ]
+  },
+  {
+   "file": "block_000065.npz",
+   "n": 1,
+   "block": 65,
+   "origin": [
+    133120,
+    126976
+   ]
+  },
+  {
+   "file": "block_000066.npz",
+   "n": 0,
+   "block": 66,
+   "origin": [
+    -163840,
+    90112
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000067.npz",
+   "n": 0,
+   "block": 67,
+   "origin": [
+    -110592,
+    6144
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000068.npz",
+   "n": 0,
+   "block": 68,
+   "origin": [
+    -4096,
+    8192
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000069.npz",
+   "n": 1,
+   "block": 69,
+   "origin": [
+    -55296,
+    -47104
+   ]
+  },
+  {
+   "file": "block_000070.npz",
+   "n": 1,
+   "block": 70,
+   "origin": [
+    -151552,
+    86016
+   ]
+  },
+  {
+   "file": "block_000071.npz",
+   "n": 0,
+   "block": 71,
+   "origin": [
+    -88064,
+    -94208
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000072.npz",
+   "n": 0,
+   "block": 72,
+   "origin": [
+    -61440,
+    194560
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000073.npz",
+   "n": 1,
+   "block": 73,
+   "origin": [
+    147456,
+    -147456
+   ]
+  },
+  {
+   "file": "block_000074.npz",
+   "n": 0,
+   "block": 74,
+   "origin": [
+    -34816,
+    -151552
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000075.npz",
+   "n": 0,
+   "block": 75,
+   "origin": [
+    108544,
+    -190464
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000076.npz",
+   "n": 0,
+   "block": 76,
+   "origin": [
+    -116736,
+    94208
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000077.npz",
+   "n": 1,
+   "block": 77,
+   "origin": [
+    -137216,
+    -141312
+   ]
+  },
+  {
+   "file": "block_000078.npz",
+   "n": 1,
+   "block": 78,
+   "origin": [
+    -135168,
+    169984
+   ]
+  },
+  {
+   "file": "block_000079.npz",
+   "n": 0,
+   "block": 79,
+   "origin": [
+    -182272,
+    157696
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000080.npz",
+   "n": 0,
+   "block": 80,
+   "origin": [
+    -28672,
+    -71680
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000081.npz",
+   "n": 1,
+   "block": 81,
+   "origin": [
+    77824,
+    -169984
+   ]
+  },
+  {
+   "file": "block_000082.npz",
+   "n": 0,
+   "block": 82,
+   "origin": [
+    -124928,
+    -8192
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000083.npz",
+   "n": 1,
+   "block": 83,
+   "origin": [
+    -94208,
+    24576
+   ]
+  },
+  {
+   "file": "block_000084.npz",
+   "n": 1,
+   "block": 84,
+   "origin": [
+    -88064,
+    -88064
+   ]
+  },
+  {
+   "file": "block_000085.npz",
+   "n": 1,
+   "block": 85,
+   "origin": [
+    -198656,
+    122880
+   ]
+  },
+  {
+   "file": "block_000086.npz",
+   "n": 1,
+   "block": 86,
+   "origin": [
+    -176128,
+    -110592
+   ]
+  },
+  {
+   "file": "block_000087.npz",
+   "n": 0,
+   "block": 87,
+   "origin": [
+    -6144,
+    176128
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000088.npz",
+   "n": 0,
+   "block": 88,
+   "origin": [
+    18432,
+    -20480
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000089.npz",
+   "n": 0,
+   "block": 89,
+   "origin": [
+    -122880,
+    -8192
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000090.npz",
+   "n": 0,
+   "block": 90,
+   "origin": [
+    149504,
+    -149504
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000091.npz",
+   "n": 0,
+   "block": 91,
+   "origin": [
+    -182272,
+    106496
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000092.npz",
+   "n": 0,
+   "block": 92,
+   "origin": [
+    -6144,
+    145408
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000093.npz",
+   "n": 0,
+   "block": 93,
+   "origin": [
+    -77824,
+    -53248
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000094.npz",
+   "n": 1,
+   "block": 94,
+   "origin": [
+    155648,
+    77824
+   ]
+  },
+  {
+   "file": "block_000095.npz",
+   "n": 1,
+   "block": 95,
+   "origin": [
+    -75776,
+    57344
+   ]
+  },
+  {
+   "file": "block_000096.npz",
+   "n": 0,
+   "block": 96,
+   "origin": [
+    -153600,
+    -120832
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000097.npz",
+   "n": 0,
+   "block": 97,
+   "origin": [
+    -75776,
+    135168
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000098.npz",
+   "n": 0,
+   "block": 98,
+   "origin": [
+    -90112,
+    -129024
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000099.npz",
+   "n": 1,
+   "block": 99,
+   "origin": [
+    14336,
+    -24576
+   ]
+  },
+  {
+   "file": "block_000100.npz",
+   "n": 1,
+   "block": 100,
+   "origin": [
+    -151552,
+    196608
+   ]
+  },
+  {
+   "file": "block_000101.npz",
+   "n": 0,
+   "block": 101,
+   "origin": [
+    86016,
+    -192512
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000102.npz",
+   "n": 1,
+   "block": 102,
+   "origin": [
+    -131072,
+    -38912
+   ]
+  },
+  {
+   "file": "block_000103.npz",
+   "n": 0,
+   "block": 103,
+   "origin": [
+    -22528,
+    106496
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000104.npz",
+   "n": 1,
+   "block": 104,
+   "origin": [
+    -71680,
+    12288
+   ]
+  },
+  {
+   "file": "block_000105.npz",
+   "n": 0,
+   "block": 105,
+   "origin": [
+    38912,
+    -198656
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000106.npz",
+   "n": 0,
+   "block": 106,
+   "origin": [
+    -45056,
+    -12288
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000107.npz",
+   "n": 1,
+   "block": 107,
+   "origin": [
+    69632,
+    -106496
+   ]
+  },
+  {
+   "file": "block_000108.npz",
+   "n": 0,
+   "block": 108,
+   "origin": [
+    10240,
+    180224
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000109.npz",
+   "n": 0,
+   "block": 109,
+   "origin": [
+    -49152,
+    10240
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000110.npz",
+   "n": 1,
+   "block": 110,
+   "origin": [
+    -28672,
+    -4096
+   ]
+  },
+  {
+   "file": "block_000111.npz",
+   "n": 1,
+   "block": 111,
+   "origin": [
+    55296,
+    102400
+   ]
+  },
+  {
+   "file": "block_000112.npz",
+   "n": 1,
+   "block": 112,
+   "origin": [
+    -32768,
+    -38912
+   ]
+  },
+  {
+   "file": "block_000113.npz",
+   "n": 0,
+   "block": 113,
+   "origin": [
+    -122880,
+    -22528
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000114.npz",
+   "n": 0,
+   "block": 114,
+   "origin": [
+    102400,
+    -53248
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000115.npz",
+   "n": 1,
+   "block": 115,
+   "origin": [
+    -75776,
+    -126976
+   ]
+  },
+  {
+   "file": "block_000116.npz",
+   "n": 1,
+   "block": 116,
+   "origin": [
+    34816,
+    92160
+   ]
+  },
+  {
+   "file": "block_000117.npz",
+   "n": 0,
+   "block": 117,
+   "origin": [
+    -6144,
+    -120832
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000118.npz",
+   "n": 0,
+   "block": 118,
+   "origin": [
+    -133120,
+    -61440
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000119.npz",
+   "n": 0,
+   "block": 119,
+   "origin": [
+    153600,
+    -133120
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000120.npz",
+   "n": 1,
+   "block": 120,
+   "origin": [
+    -174080,
+    8192
+   ]
+  },
+  {
+   "file": "block_000121.npz",
+   "n": 0,
+   "block": 121,
+   "origin": [
+    83968,
+    -178176
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000122.npz",
+   "n": 0,
+   "block": 122,
+   "origin": [
+    -18432,
+    180224
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000123.npz",
+   "n": 1,
+   "block": 123,
+   "origin": [
+    114688,
+    -24576
+   ]
+  },
+  {
+   "file": "block_000124.npz",
+   "n": 1,
+   "block": 124,
+   "origin": [
+    180224,
+    -163840
+   ]
+  },
+  {
+   "file": "block_000125.npz",
+   "n": 0,
+   "block": 125,
+   "origin": [
+    106496,
+    151552
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000126.npz",
+   "n": 1,
+   "block": 126,
+   "origin": [
+    -159744,
+    -159744
+   ]
+  },
+  {
+   "file": "block_000127.npz",
+   "n": 0,
+   "block": 127,
+   "origin": [
+    -159744,
+    28672
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000128.npz",
+   "n": 1,
+   "block": 128,
+   "origin": [
+    161792,
+    104448
+   ]
+  },
+  {
+   "file": "block_000129.npz",
+   "n": 1,
+   "block": 129,
+   "origin": [
+    -135168,
+    -114688
+   ]
+  },
+  {
+   "file": "block_000130.npz",
+   "n": 0,
+   "block": 130,
+   "origin": [
+    49152,
+    -176128
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000131.npz",
+   "n": 1,
+   "block": 131,
+   "origin": [
+    -198656,
+    196608
+   ]
+  },
+  {
+   "file": "block_000132.npz",
+   "n": 1,
+   "block": 132,
+   "origin": [
+    -86016,
+    -40960
+   ]
+  },
+  {
+   "file": "block_000133.npz",
+   "n": 0,
+   "block": 133,
+   "origin": [
+    -106496,
+    -165888
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000134.npz",
+   "n": 1,
+   "block": 134,
+   "origin": [
+    -36864,
+    -155648
+   ]
+  },
+  {
+   "file": "block_000135.npz",
+   "n": 0,
+   "block": 135,
+   "origin": [
+    -169984,
+    149504
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000136.npz",
+   "n": 0,
+   "block": 136,
+   "origin": [
+    26624,
+    -86016
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000137.npz",
+   "n": 1,
+   "block": 137,
+   "origin": [
+    -129024,
+    77824
+   ]
+  },
+  {
+   "file": "block_000138.npz",
+   "n": 0,
+   "block": 138,
+   "origin": [
+    100352,
+    67584
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000139.npz",
+   "n": 0,
+   "block": 139,
+   "origin": [
+    90112,
+    77824
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000140.npz",
+   "n": 0,
+   "block": 140,
+   "origin": [
+    -172032,
+    -16384
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000141.npz",
+   "n": 1,
+   "block": 141,
+   "origin": [
+    -28672,
+    32768
+   ]
+  },
+  {
+   "file": "block_000142.npz",
+   "n": 0,
+   "block": 142,
+   "origin": [
+    -104448,
+    161792
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000143.npz",
+   "n": 1,
+   "block": 143,
+   "origin": [
+    -182272,
+    -176128
+   ]
+  },
+  {
+   "file": "block_000144.npz",
+   "n": 0,
+   "block": 144,
+   "origin": [
+    92160,
+    -147456
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000145.npz",
+   "n": 1,
+   "block": 145,
+   "origin": [
+    -186368,
+    26624
+   ]
+  },
+  {
+   "file": "block_000146.npz",
+   "n": 0,
+   "block": 146,
+   "origin": [
+    26624,
+    36864
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000147.npz",
+   "n": 0,
+   "block": 147,
+   "origin": [
+    163840,
+    -131072
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000148.npz",
+   "n": 0,
+   "block": 148,
+   "origin": [
+    -190464,
+    -188416
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000149.npz",
+   "n": 0,
+   "block": 149,
+   "origin": [
+    40960,
+    -106496
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000150.npz",
+   "n": 1,
+   "block": 150,
+   "origin": [
+    -81920,
+    32768
+   ]
+  },
+  {
+   "file": "block_000151.npz",
+   "n": 1,
+   "block": 151,
+   "origin": [
+    -126976,
+    -151552
+   ]
+  },
+  {
+   "file": "block_000152.npz",
+   "n": 1,
+   "block": 152,
+   "origin": [
+    -88064,
+    77824
+   ]
+  },
+  {
+   "file": "block_000153.npz",
+   "n": 1,
+   "block": 153,
+   "origin": [
+    137216,
+    163840
+   ]
+  },
+  {
+   "file": "block_000154.npz",
+   "n": 0,
+   "block": 154,
+   "origin": [
+    -151552,
+    -133120
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000155.npz",
+   "n": 1,
+   "block": 155,
+   "origin": [
+    -83968,
+    -20480
+   ]
+  },
+  {
+   "file": "block_000156.npz",
+   "n": 0,
+   "block": 156,
+   "origin": [
+    -40960,
+    -6144
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000157.npz",
+   "n": 1,
+   "block": 157,
+   "origin": [
+    -147456,
+    55296
+   ]
+  },
+  {
+   "file": "block_000158.npz",
+   "n": 1,
+   "block": 158,
+   "origin": [
+    198656,
+    63488
+   ]
+  },
+  {
+   "file": "block_000159.npz",
+   "n": 1,
+   "block": 159,
+   "origin": [
+    124928,
+    -135168
+   ]
+  },
+  {
+   "file": "block_000160.npz",
+   "n": 1,
+   "block": 160,
+   "origin": [
+    49152,
+    77824
+   ]
+  },
+  {
+   "file": "block_000161.npz",
+   "n": 1,
+   "block": 161,
+   "origin": [
+    6144,
+    -79872
+   ]
+  },
+  {
+   "file": "block_000162.npz",
+   "n": 1,
+   "block": 162,
+   "origin": [
+    -184320,
+    102400
+   ]
+  },
+  {
+   "file": "block_000163.npz",
+   "n": 1,
+   "block": 163,
+   "origin": [
+    153600,
+    53248
+   ]
+  },
+  {
+   "file": "block_000164.npz",
+   "n": 0,
+   "block": 164,
+   "origin": [
+    120832,
+    16384
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000165.npz",
+   "n": 1,
+   "block": 165,
+   "origin": [
+    165888,
+    192512
+   ]
+  },
+  {
+   "file": "block_000166.npz",
+   "n": 0,
+   "block": 166,
+   "origin": [
+    161792,
+    -198656
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000167.npz",
+   "n": 1,
+   "block": 167,
+   "origin": [
+    -34816,
+    -61440
+   ]
+  },
+  {
+   "file": "block_000168.npz",
+   "n": 1,
+   "block": 168,
+   "origin": [
+    71680,
+    49152
+   ]
+  },
+  {
+   "file": "block_000169.npz",
+   "n": 1,
+   "block": 169,
+   "origin": [
+    -198656,
+    124928
+   ]
+  },
+  {
+   "file": "block_000170.npz",
+   "n": 0,
+   "block": 170,
+   "origin": [
+    149504,
+    186368
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000171.npz",
+   "n": 0,
+   "block": 171,
+   "origin": [
+    157696,
+    83968
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000172.npz",
+   "n": 1,
+   "block": 172,
+   "origin": [
+    -110592,
+    118784
+   ]
+  },
+  {
+   "file": "block_000173.npz",
+   "n": 0,
+   "block": 173,
+   "origin": [
+    43008,
+    -18432
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000174.npz",
+   "n": 0,
+   "block": 174,
+   "origin": [
+    -172032,
+    126976
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000175.npz",
+   "n": 1,
+   "block": 175,
+   "origin": [
+    -161792,
+    4096
+   ]
+  },
+  {
+   "file": "block_000176.npz",
+   "n": 0,
+   "block": 176,
+   "origin": [
+    -18432,
+    65536
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000177.npz",
+   "n": 1,
+   "block": 177,
+   "origin": [
+    61440,
+    6144
+   ]
+  },
+  {
+   "file": "block_000178.npz",
+   "n": 0,
+   "block": 178,
+   "origin": [
+    153600,
+    40960
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000179.npz",
+   "n": 1,
+   "block": 179,
+   "origin": [
+    -59392,
+    -55296
+   ]
+  },
+  {
+   "file": "block_000180.npz",
+   "n": 1,
+   "block": 180,
+   "origin": [
+    163840,
+    -165888
+   ]
+  },
+  {
+   "file": "block_000181.npz",
+   "n": 1,
+   "block": 181,
+   "origin": [
+    104448,
+    -57344
+   ]
+  },
+  {
+   "file": "block_000182.npz",
+   "n": 0,
+   "block": 182,
+   "origin": [
+    -120832,
+    -192512
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000183.npz",
+   "n": 0,
+   "block": 183,
+   "origin": [
+    -20480,
+    163840
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000184.npz",
+   "n": 0,
+   "block": 184,
+   "origin": [
+    126976,
+    104448
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000185.npz",
+   "n": 1,
+   "block": 185,
+   "origin": [
+    194560,
+    -16384
+   ]
+  },
+  {
+   "file": "block_000186.npz",
+   "n": 0,
+   "block": 186,
+   "origin": [
+    61440,
+    -12288
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000187.npz",
+   "n": 1,
+   "block": 187,
+   "origin": [
+    69632,
+    157696
+   ]
+  },
+  {
+   "file": "block_000188.npz",
+   "n": 1,
+   "block": 188,
+   "origin": [
+    -126976,
+    -79872
+   ]
+  },
+  {
+   "file": "block_000189.npz",
+   "n": 1,
+   "block": 189,
+   "origin": [
+    145408,
+    -192512
+   ]
+  },
+  {
+   "file": "block_000190.npz",
+   "n": 0,
+   "block": 190,
+   "origin": [
+    63488,
+    -110592
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000191.npz",
+   "n": 0,
+   "block": 191,
+   "origin": [
+    141312,
+    106496
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000192.npz",
+   "n": 0,
+   "block": 192,
+   "origin": [
+    174080,
+    102400
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000193.npz",
+   "n": 1,
+   "block": 193,
+   "origin": [
+    -133120,
+    -10240
+   ]
+  },
+  {
+   "file": "block_000194.npz",
+   "n": 0,
+   "block": 194,
+   "origin": [
+    10240,
+    -18432
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000195.npz",
+   "n": 0,
+   "block": 195,
+   "origin": [
+    -133120,
+    -120832
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000196.npz",
+   "n": 0,
+   "block": 196,
+   "origin": [
+    -190464,
+    -102400
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000197.npz",
+   "n": 1,
+   "block": 197,
+   "origin": [
+    -155648,
+    -174080
+   ]
+  },
+  {
+   "file": "block_000198.npz",
+   "n": 0,
+   "block": 198,
+   "origin": [
+    161792,
+    -57344
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000199.npz",
+   "n": 0,
+   "block": 199,
+   "origin": [
+    32768,
+    -96256
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000200.npz",
+   "n": 1,
+   "block": 200,
+   "origin": [
+    155648,
+    75776
+   ]
+  },
+  {
+   "file": "block_000201.npz",
+   "n": 1,
+   "block": 201,
+   "origin": [
+    -143360,
+    -61440
+   ]
+  },
+  {
+   "file": "block_000202.npz",
+   "n": 0,
+   "block": 202,
+   "origin": [
+    63488,
+    -163840
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000203.npz",
+   "n": 0,
+   "block": 203,
+   "origin": [
+    69632,
+    -157696
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000204.npz",
+   "n": 1,
+   "block": 204,
+   "origin": [
+    -86016,
+    124928
+   ]
+  },
+  {
+   "file": "block_000205.npz",
+   "n": 1,
+   "block": 205,
+   "origin": [
+    163840,
+    -2048
+   ]
+  },
+  {
+   "file": "block_000206.npz",
+   "n": 0,
+   "block": 206,
+   "origin": [
+    -30720,
+    -129024
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000207.npz",
+   "n": 0,
+   "block": 207,
+   "origin": [
+    104448,
+    -157696
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000208.npz",
+   "n": 1,
+   "block": 208,
+   "origin": [
+    194560,
+    -59392
+   ]
+  },
+  {
+   "file": "block_000209.npz",
+   "n": 0,
+   "block": 209,
+   "origin": [
+    143360,
+    149504
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000210.npz",
+   "n": 1,
+   "block": 210,
+   "origin": [
+    26624,
+    -159744
+   ]
+  },
+  {
+   "file": "block_000211.npz",
+   "n": 1,
+   "block": 211,
+   "origin": [
+    -129024,
+    77824
+   ]
+  },
+  {
+   "file": "block_000212.npz",
+   "n": 0,
+   "block": 212,
+   "origin": [
+    -153600,
+    -81920
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000213.npz",
+   "n": 0,
+   "block": 213,
+   "origin": [
+    -133120,
+    16384
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000214.npz",
+   "n": 0,
+   "block": 214,
+   "origin": [
+    57344,
+    163840
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000215.npz",
+   "n": 0,
+   "block": 215,
+   "origin": [
+    -184320,
+    24576
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000216.npz",
+   "n": 0,
+   "block": 216,
+   "origin": [
+    -186368,
+    12288
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000217.npz",
+   "n": 0,
+   "block": 217,
+   "origin": [
+    -151552,
+    -141312
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000218.npz",
+   "n": 0,
+   "block": 218,
+   "origin": [
+    10240,
+    -100352
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000219.npz",
+   "n": 0,
+   "block": 219,
+   "origin": [
+    -102400,
+    -126976
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000220.npz",
+   "n": 0,
+   "block": 220,
+   "origin": [
+    -114688,
+    -96256
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000221.npz",
+   "n": 1,
+   "block": 221,
+   "origin": [
+    -167936,
+    -102400
+   ]
+  },
+  {
+   "file": "block_000222.npz",
+   "n": 0,
+   "block": 222,
+   "origin": [
+    139264,
+    -198656
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000223.npz",
+   "n": 0,
+   "block": 223,
+   "origin": [
+    -147456,
+    139264
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000224.npz",
+   "n": 0,
+   "block": 224,
+   "origin": [
+    -98304,
+    135168
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000225.npz",
+   "n": 0,
+   "block": 225,
+   "origin": [
+    182272,
+    -55296
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000226.npz",
+   "n": 0,
+   "block": 226,
+   "origin": [
+    172032,
+    -151552
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000227.npz",
+   "n": 0,
+   "block": 227,
+   "origin": [
+    -194560,
+    -86016
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000228.npz",
+   "n": 0,
+   "block": 228,
+   "origin": [
+    -94208,
+    165888
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000229.npz",
+   "n": 0,
+   "block": 229,
+   "origin": [
+    100352,
+    75776
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000230.npz",
+   "n": 0,
+   "block": 230,
+   "origin": [
+    -18432,
+    55296
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000231.npz",
+   "n": 1,
+   "block": 231,
+   "origin": [
+    -159744,
+    98304
+   ]
+  },
+  {
+   "file": "block_000232.npz",
+   "n": 1,
+   "block": 232,
+   "origin": [
+    -57344,
+    -182272
+   ]
+  },
+  {
+   "file": "block_000233.npz",
+   "n": 0,
+   "block": 233,
+   "origin": [
+    -77824,
+    -104448
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000234.npz",
+   "n": 1,
+   "block": 234,
+   "origin": [
+    0,
+    141312
+   ]
+  },
+  {
+   "file": "block_000235.npz",
+   "n": 1,
+   "block": 235,
+   "origin": [
+    67584,
+    -96256
+   ]
+  },
+  {
+   "file": "block_000236.npz",
+   "n": 0,
+   "block": 236,
+   "origin": [
+    163840,
+    -90112
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000237.npz",
+   "n": 0,
+   "block": 237,
+   "origin": [
+    12288,
+    -106496
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000238.npz",
+   "n": 0,
+   "block": 238,
+   "origin": [
+    -178176,
+    -73728
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000239.npz",
+   "n": 0,
+   "block": 239,
+   "origin": [
+    155648,
+    135168
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000240.npz",
+   "n": 1,
+   "block": 240,
+   "origin": [
+    86016,
+    30720
+   ]
+  },
+  {
+   "file": "block_000241.npz",
+   "n": 0,
+   "block": 241,
+   "origin": [
+    -24576,
+    -194560
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000242.npz",
+   "n": 1,
+   "block": 242,
+   "origin": [
+    106496,
+    75776
+   ]
+  },
+  {
+   "file": "block_000243.npz",
+   "n": 0,
+   "block": 243,
+   "origin": [
+    -20480,
+    139264
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000244.npz",
+   "n": 0,
+   "block": 244,
+   "origin": [
+    116736,
+    133120
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000245.npz",
+   "n": 0,
+   "block": 245,
+   "origin": [
+    -143360,
+    114688
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000246.npz",
+   "n": 0,
+   "block": 246,
+   "origin": [
+    30720,
+    -45056
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000247.npz",
+   "n": 0,
+   "block": 247,
+   "origin": [
+    -16384,
+    -184320
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000248.npz",
+   "n": 0,
+   "block": 248,
+   "origin": [
+    69632,
+    75776
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000249.npz",
+   "n": 1,
+   "block": 249,
+   "origin": [
+    -40960,
+    176128
+   ]
+  },
+  {
+   "file": "block_000250.npz",
+   "n": 0,
+   "block": 250,
+   "origin": [
+    24576,
+    116736
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000251.npz",
+   "n": 0,
+   "block": 251,
+   "origin": [
+    2048,
+    -61440
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000252.npz",
+   "n": 0,
+   "block": 252,
+   "origin": [
+    -196608,
+    -126976
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000253.npz",
+   "n": 0,
+   "block": 253,
+   "origin": [
+    149504,
+    -126976
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000254.npz",
+   "n": 1,
+   "block": 254,
+   "origin": [
+    61440,
+    -49152
+   ]
+  },
+  {
+   "file": "block_000255.npz",
+   "n": 1,
+   "block": 255,
+   "origin": [
+    139264,
+    -28672
+   ]
+  },
+  {
+   "file": "block_000256.npz",
+   "n": 1,
+   "block": 256,
+   "origin": [
+    92160,
+    108544
+   ]
+  },
+  {
+   "file": "block_000257.npz",
+   "n": 1,
+   "block": 257,
+   "origin": [
+    -67584,
+    43008
+   ]
+  },
+  {
+   "file": "block_000258.npz",
+   "n": 0,
+   "block": 258,
+   "origin": [
+    184320,
+    -10240
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000259.npz",
+   "n": 0,
+   "block": 259,
+   "origin": [
+    53248,
+    43008
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000260.npz",
+   "n": 0,
+   "block": 260,
+   "origin": [
+    20480,
+    194560
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000261.npz",
+   "n": 0,
+   "block": 261,
+   "origin": [
+    94208,
+    92160
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000262.npz",
+   "n": 1,
+   "block": 262,
+   "origin": [
+    139264,
+    -79872
+   ]
+  },
+  {
+   "file": "block_000263.npz",
+   "n": 1,
+   "block": 263,
+   "origin": [
+    122880,
+    -16384
+   ]
+  },
+  {
+   "file": "block_000264.npz",
+   "n": 0,
+   "block": 264,
+   "origin": [
+    188416,
+    -169984
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000265.npz",
+   "n": 0,
+   "block": 265,
+   "origin": [
+    -12288,
+    40960
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000266.npz",
+   "n": 1,
+   "block": 266,
+   "origin": [
+    192512,
+    75776
+   ]
+  },
+  {
+   "file": "block_000267.npz",
+   "n": 0,
+   "block": 267,
+   "origin": [
+    -57344,
+    169984
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000268.npz",
+   "n": 0,
+   "block": 268,
+   "origin": [
+    108544,
+    47104
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000269.npz",
+   "n": 1,
+   "block": 269,
+   "origin": [
+    -161792,
+    -147456
+   ]
+  },
+  {
+   "file": "block_000270.npz",
+   "n": 1,
+   "block": 270,
+   "origin": [
+    81920,
+    -61440
+   ]
+  },
+  {
+   "file": "block_000271.npz",
+   "n": 0,
+   "block": 271,
+   "origin": [
+    -133120,
+    96256
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000272.npz",
+   "n": 0,
+   "block": 272,
+   "origin": [
+    112640,
+    -71680
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000273.npz",
+   "n": 0,
+   "block": 273,
+   "origin": [
+    143360,
+    6144
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000274.npz",
+   "n": 1,
+   "block": 274,
+   "origin": [
+    12288,
+    184320
+   ]
+  },
+  {
+   "file": "block_000275.npz",
+   "n": 1,
+   "block": 275,
+   "origin": [
+    -182272,
+    -16384
+   ]
+  },
+  {
+   "file": "block_000276.npz",
+   "n": 0,
+   "block": 276,
+   "origin": [
+    -194560,
+    6144
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000277.npz",
+   "n": 1,
+   "block": 277,
+   "origin": [
+    -26624,
+    -135168
+   ]
+  },
+  {
+   "file": "block_000278.npz",
+   "n": 0,
+   "block": 278,
+   "origin": [
+    -116736,
+    174080
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000279.npz",
+   "n": 1,
+   "block": 279,
+   "origin": [
+    114688,
+    126976
+   ]
+  },
+  {
+   "file": "block_000280.npz",
+   "n": 1,
+   "block": 280,
+   "origin": [
+    -116736,
+    -104448
+   ]
+  },
+  {
+   "file": "block_000281.npz",
+   "n": 0,
+   "block": 281,
+   "origin": [
+    -174080,
+    -126976
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000282.npz",
+   "n": 0,
+   "block": 282,
+   "origin": [
+    -129024,
+    -137216
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000283.npz",
+   "n": 1,
+   "block": 283,
+   "origin": [
+    -18432,
+    192512
+   ]
+  },
+  {
+   "file": "block_000284.npz",
+   "n": 1,
+   "block": 284,
+   "origin": [
+    112640,
+    169984
+   ]
+  },
+  {
+   "file": "block_000285.npz",
+   "n": 1,
+   "block": 285,
+   "origin": [
+    -192512,
+    -57344
+   ]
+  },
+  {
+   "file": "block_000286.npz",
+   "n": 0,
+   "block": 286,
+   "origin": [
+    -22528,
+    -118784
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000287.npz",
+   "n": 0,
+   "block": 287,
+   "origin": [
+    -55296,
+    49152
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000288.npz",
+   "n": 1,
+   "block": 288,
+   "origin": [
+    16384,
+    -159744
+   ]
+  },
+  {
+   "file": "block_000289.npz",
+   "n": 1,
+   "block": 289,
+   "origin": [
+    -102400,
+    -174080
+   ]
+  },
+  {
+   "file": "block_000290.npz",
+   "n": 1,
+   "block": 290,
+   "origin": [
+    -182272,
+    151552
+   ]
+  },
+  {
+   "file": "block_000291.npz",
+   "n": 0,
+   "block": 291,
+   "origin": [
+    98304,
+    -180224
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000292.npz",
+   "n": 0,
+   "block": 292,
+   "origin": [
+    -10240,
+    -114688
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000293.npz",
+   "n": 0,
+   "block": 293,
+   "origin": [
+    -165888,
+    153600
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000294.npz",
+   "n": 0,
+   "block": 294,
+   "origin": [
+    137216,
+    133120
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000295.npz",
+   "n": 0,
+   "block": 295,
+   "origin": [
+    -104448,
+    110592
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000296.npz",
+   "n": 0,
+   "block": 296,
+   "origin": [
+    -24576,
+    36864
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000297.npz",
+   "n": 0,
+   "block": 297,
+   "origin": [
+    12288,
+    0
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000298.npz",
+   "n": 0,
+   "block": 298,
+   "origin": [
+    -77824,
+    14336
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000299.npz",
+   "n": 0,
+   "block": 299,
+   "origin": [
+    83968,
+    155648
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000300.npz",
+   "n": 1,
+   "block": 300,
+   "origin": [
+    100352,
+    12288
+   ]
+  },
+  {
+   "file": "block_000301.npz",
+   "n": 0,
+   "block": 301,
+   "origin": [
+    -102400,
+    83968
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000302.npz",
+   "n": 0,
+   "block": 302,
+   "origin": [
+    -94208,
+    28672
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000303.npz",
+   "n": 1,
+   "block": 303,
+   "origin": [
+    -112640,
+    32768
+   ]
+  },
+  {
+   "file": "block_000304.npz",
+   "n": 1,
+   "block": 304,
+   "origin": [
+    -120832,
+    -182272
+   ]
+  },
+  {
+   "file": "block_000305.npz",
+   "n": 1,
+   "block": 305,
+   "origin": [
+    169984,
+    30720
+   ]
+  },
+  {
+   "file": "block_000306.npz",
+   "n": 0,
+   "block": 306,
+   "origin": [
+    122880,
+    -100352
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000307.npz",
+   "n": 0,
+   "block": 307,
+   "origin": [
+    -178176,
+    102400
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000308.npz",
+   "n": 1,
+   "block": 308,
+   "origin": [
+    194560,
+    196608
+   ]
+  },
+  {
+   "file": "block_000309.npz",
+   "n": 1,
+   "block": 309,
+   "origin": [
+    -86016,
+    51200
+   ]
+  },
+  {
+   "file": "block_000310.npz",
+   "n": 1,
+   "block": 310,
+   "origin": [
+    -49152,
+    -157696
+   ]
+  },
+  {
+   "file": "block_000311.npz",
+   "n": 0,
+   "block": 311,
+   "origin": [
+    133120,
+    102400
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000312.npz",
+   "n": 0,
+   "block": 312,
+   "origin": [
+    -30720,
+    -182272
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000313.npz",
+   "n": 1,
+   "block": 313,
+   "origin": [
+    -153600,
+    -88064
+   ]
+  },
+  {
+   "file": "block_000314.npz",
+   "n": 1,
+   "block": 314,
+   "origin": [
+    -20480,
+    104448
+   ]
+  },
+  {
+   "file": "block_000315.npz",
+   "n": 1,
+   "block": 315,
+   "origin": [
+    176128,
+    -141312
+   ]
+  },
+  {
+   "file": "block_000316.npz",
+   "n": 0,
+   "block": 316,
+   "origin": [
+    -149504,
+    -184320
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000317.npz",
+   "n": 1,
+   "block": 317,
+   "origin": [
+    -147456,
+    51200
+   ]
+  },
+  {
+   "file": "block_000318.npz",
+   "n": 1,
+   "block": 318,
+   "origin": [
+    147456,
+    -149504
+   ]
+  },
+  {
+   "file": "block_000319.npz",
+   "n": 1,
+   "block": 319,
+   "origin": [
+    96256,
+    120832
+   ]
+  },
+  {
+   "file": "block_000320.npz",
+   "n": 1,
+   "block": 320,
+   "origin": [
+    -43008,
+    -61440
+   ]
+  },
+  {
+   "file": "block_000321.npz",
+   "n": 0,
+   "block": 321,
+   "origin": [
+    -116736,
+    126976
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000322.npz",
+   "n": 0,
+   "block": 322,
+   "origin": [
+    -30720,
+    -88064
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000323.npz",
+   "n": 1,
+   "block": 323,
+   "origin": [
+    71680,
+    24576
+   ]
+  },
+  {
+   "file": "block_000324.npz",
+   "n": 0,
+   "block": 324,
+   "origin": [
+    -198656,
+    -59392
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000325.npz",
+   "n": 1,
+   "block": 325,
+   "origin": [
+    108544,
+    -61440
+   ]
+  },
+  {
+   "file": "block_000326.npz",
+   "n": 0,
+   "block": 326,
+   "origin": [
+    -194560,
+    8192
+   ]
+  },
+  {
+   "file": "block_000327.npz",
+   "n": 0,
+   "block": 327,
+   "origin": [
+    167936,
+    -145408
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000328.npz",
+   "n": 0,
+   "block": 328,
+   "origin": [
+    190464,
+    -180224
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000329.npz",
+   "n": 0,
+   "block": 329,
+   "origin": [
+    -61440,
+    -38912
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000330.npz",
+   "n": 1,
+   "block": 330,
+   "origin": [
+    180224,
+    -151552
+   ]
+  },
+  {
+   "file": "block_000331.npz",
+   "n": 1,
+   "block": 331,
+   "origin": [
+    12288,
+    198656
+   ]
+  },
+  {
+   "file": "block_000332.npz",
+   "n": 0,
+   "block": 332,
+   "origin": [
+    194560,
+    -69632
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000333.npz",
+   "n": 0,
+   "block": 333,
+   "origin": [
+    149504,
+    163840
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000334.npz",
+   "n": 1,
+   "block": 334,
+   "origin": [
+    16384,
+    -151552
+   ]
+  },
+  {
+   "file": "block_000335.npz",
+   "n": 0,
+   "block": 335,
+   "origin": [
+    20480,
+    114688
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000336.npz",
+   "n": 0,
+   "block": 336,
+   "origin": [
+    -4096,
+    -32768
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000337.npz",
+   "n": 0,
+   "block": 337,
+   "origin": [
+    -108544,
+    169984
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000338.npz",
+   "n": 1,
+   "block": 338,
+   "origin": [
+    -81920,
+    -184320
+   ]
+  },
+  {
+   "file": "block_000339.npz",
+   "n": 0,
+   "block": 339,
+   "origin": [
+    -47104,
+    106496
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000340.npz",
+   "n": 1,
+   "block": 340,
+   "origin": [
+    -151552,
+    -73728
+   ]
+  },
+  {
+   "file": "block_000341.npz",
+   "n": 1,
+   "block": 341,
+   "origin": [
+    -169984,
+    -182272
+   ]
+  },
+  {
+   "file": "block_000342.npz",
+   "n": 1,
+   "block": 342,
+   "origin": [
+    -129024,
+    -49152
+   ]
+  },
+  {
+   "file": "block_000343.npz",
+   "n": 0,
+   "block": 343,
+   "origin": [
+    114688,
+    -65536
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000344.npz",
+   "n": 0,
+   "block": 344,
+   "origin": [
+    -131072,
+    14336
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000345.npz",
+   "n": 1,
+   "block": 345,
+   "origin": [
+    161792,
+    133120
+   ]
+  },
+  {
+   "file": "block_000346.npz",
+   "n": 0,
+   "block": 346,
+   "origin": [
+    -104448,
+    -194560
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000347.npz",
+   "n": 1,
+   "block": 347,
+   "origin": [
+    -139264,
+    16384
+   ]
+  },
+  {
+   "file": "block_000348.npz",
+   "n": 0,
+   "block": 348,
+   "origin": [
+    -116736,
+    0
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000349.npz",
+   "n": 0,
+   "block": 349,
+   "origin": [
+    -118784,
+    -65536
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000350.npz",
+   "n": 0,
+   "block": 350,
+   "origin": [
+    71680,
+    -30720
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000351.npz",
+   "n": 1,
+   "block": 351,
+   "origin": [
+    -143360,
+    -118784
+   ]
+  },
+  {
+   "file": "block_000352.npz",
+   "n": 0,
+   "block": 352,
+   "origin": [
+    -67584,
+    -108544
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000353.npz",
+   "n": 0,
+   "block": 353,
+   "origin": [
+    143360,
+    -145408
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000354.npz",
+   "n": 0,
+   "block": 354,
+   "origin": [
+    -75776,
+    -30720
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000355.npz",
+   "n": 0,
+   "block": 355,
+   "origin": [
+    -176128,
+    -86016
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000356.npz",
+   "n": 1,
+   "block": 356,
+   "origin": [
+    -34816,
+    118784
+   ]
+  },
+  {
+   "file": "block_000357.npz",
+   "n": 0,
+   "block": 357,
+   "origin": [
+    -26624,
+    -153600
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000358.npz",
+   "n": 1,
+   "block": 358,
+   "origin": [
+    -57344,
+    196608
+   ]
+  },
+  {
+   "file": "block_000359.npz",
+   "n": 0,
+   "block": 359,
+   "origin": [
+    69632,
+    -98304
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000360.npz",
+   "n": 1,
+   "block": 360,
+   "origin": [
+    -149504,
+    151552
+   ]
+  },
+  {
+   "file": "block_000361.npz",
+   "n": 1,
+   "block": 361,
+   "origin": [
+    49152,
+    69632
+   ]
+  },
+  {
+   "file": "block_000362.npz",
+   "n": 0,
+   "block": 362,
+   "origin": [
+    -188416,
+    2048
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000363.npz",
+   "n": 1,
+   "block": 363,
+   "origin": [
+    -108544,
+    -114688
+   ]
+  },
+  {
+   "file": "block_000364.npz",
+   "n": 0,
+   "block": 364,
+   "origin": [
+    20480,
+    86016
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000365.npz",
+   "n": 0,
+   "block": 365,
+   "origin": [
+    -73728,
+    -167936
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000366.npz",
+   "n": 1,
+   "block": 366,
+   "origin": [
+    59392,
+    -45056
+   ]
+  },
+  {
+   "file": "block_000367.npz",
+   "n": 1,
+   "block": 367,
+   "origin": [
+    -116736,
+    110592
+   ]
+  },
+  {
+   "file": "block_000368.npz",
+   "n": 0,
+   "block": 368,
+   "origin": [
+    28672,
+    -196608
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000369.npz",
+   "n": 0,
+   "block": 369,
+   "origin": [
+    -108544,
+    14336
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000370.npz",
+   "n": 1,
+   "block": 370,
+   "origin": [
+    -174080,
+    -155648
+   ]
+  },
+  {
+   "file": "block_000371.npz",
+   "n": 1,
+   "block": 371,
+   "origin": [
+    98304,
+    -47104
+   ]
+  },
+  {
+   "file": "block_000372.npz",
+   "n": 1,
+   "block": 372,
+   "origin": [
+    165888,
+    196608
+   ]
+  },
+  {
+   "file": "block_000373.npz",
+   "n": 0,
+   "block": 373,
+   "origin": [
+    120832,
+    135168
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000374.npz",
+   "n": 0,
+   "block": 374,
+   "origin": [
+    -133120,
+    -131072
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000375.npz",
+   "n": 1,
+   "block": 375,
+   "origin": [
+    83968,
+    -180224
+   ]
+  },
+  {
+   "file": "block_000376.npz",
+   "n": 0,
+   "block": 376,
+   "origin": [
+    -12288,
+    -77824
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000377.npz",
+   "n": 1,
+   "block": 377,
+   "origin": [
+    8192,
+    -135168
+   ]
+  },
+  {
+   "file": "block_000378.npz",
+   "n": 0,
+   "block": 378,
+   "origin": [
+    12288,
+    180224
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000379.npz",
+   "n": 0,
+   "block": 379,
+   "origin": [
+    178176,
+    -12288
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000380.npz",
+   "n": 0,
+   "block": 380,
+   "origin": [
+    -106496,
+    6144
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000381.npz",
+   "n": 0,
+   "block": 381,
+   "origin": [
+    -18432,
+    -106496
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000382.npz",
+   "n": 1,
+   "block": 382,
+   "origin": [
+    34816,
+    26624
+   ]
+  },
+  {
+   "file": "block_000383.npz",
+   "n": 0,
+   "block": 383,
+   "origin": [
+    38912,
+    51200
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000384.npz",
+   "n": 1,
+   "block": 384,
+   "origin": [
+    94208,
+    34816
+   ]
+  },
+  {
+   "file": "block_000385.npz",
+   "n": 1,
+   "block": 385,
+   "origin": [
+    -90112,
+    16384
+   ]
+  },
+  {
+   "file": "block_000386.npz",
+   "n": 0,
+   "block": 386,
+   "origin": [
+    159744,
+    -36864
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000387.npz",
+   "n": 0,
+   "block": 387,
+   "origin": [
+    112640,
+    -8192
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000388.npz",
+   "n": 0,
+   "block": 388,
+   "origin": [
+    14336,
+    10240
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000389.npz",
+   "n": 0,
+   "block": 389,
+   "origin": [
+    190464,
+    -159744
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000390.npz",
+   "n": 0,
+   "block": 390,
+   "origin": [
+    169984,
+    -184320
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000391.npz",
+   "n": 1,
+   "block": 391,
+   "origin": [
+    -34816,
+    -186368
+   ]
+  },
+  {
+   "file": "block_000392.npz",
+   "n": 1,
+   "block": 392,
+   "origin": [
+    18432,
+    16384
+   ]
+  },
+  {
+   "file": "block_000393.npz",
+   "n": 0,
+   "block": 393,
+   "origin": [
+    69632,
+    186368
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000394.npz",
+   "n": 1,
+   "block": 394,
+   "origin": [
+    18432,
+    45056
+   ]
+  },
+  {
+   "file": "block_000395.npz",
+   "n": 1,
+   "block": 395,
+   "origin": [
+    -149504,
+    118784
+   ]
+  },
+  {
+   "file": "block_000396.npz",
+   "n": 0,
+   "block": 396,
+   "origin": [
+    -124928,
+    -69632
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000397.npz",
+   "n": 1,
+   "block": 397,
+   "origin": [
+    186368,
+    53248
+   ]
+  },
+  {
+   "file": "block_000398.npz",
+   "n": 0,
+   "block": 398,
+   "origin": [
+    102400,
+    90112
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000399.npz",
+   "n": 0,
+   "block": 399,
+   "origin": [
+    -28672,
+    63488
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000400.npz",
+   "n": 0,
+   "block": 400,
+   "origin": [
+    143360,
+    155648
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000401.npz",
+   "n": 1,
+   "block": 401,
+   "origin": [
+    126976,
+    -100352
+   ]
+  },
+  {
+   "file": "block_000402.npz",
+   "n": 1,
+   "block": 402,
+   "origin": [
+    -63488,
+    4096
+   ]
+  },
+  {
+   "file": "block_000403.npz",
+   "n": 1,
+   "block": 403,
+   "origin": [
+    -47104,
+    -157696
+   ]
+  },
+  {
+   "file": "block_000404.npz",
+   "n": 0,
+   "block": 404,
+   "origin": [
+    155648,
+    172032
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000405.npz",
+   "n": 1,
+   "block": 405,
+   "origin": [
+    -143360,
+    -30720
+   ]
+  },
+  {
+   "file": "block_000406.npz",
+   "n": 0,
+   "block": 406,
+   "origin": [
+    24576,
+    -73728
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000407.npz",
+   "n": 0,
+   "block": 407,
+   "origin": [
+    -20480,
+    -124928
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000408.npz",
+   "n": 0,
+   "block": 408,
+   "origin": [
+    -92160,
+    -110592
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000409.npz",
+   "n": 0,
+   "block": 409,
+   "origin": [
+    116736,
+    184320
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000410.npz",
+   "n": 1,
+   "block": 410,
+   "origin": [
+    -2048,
+    -157696
+   ]
+  },
+  {
+   "file": "block_000411.npz",
+   "n": 1,
+   "block": 411,
+   "origin": [
+    153600,
+    112640
+   ]
+  },
+  {
+   "file": "block_000412.npz",
+   "n": 1,
+   "block": 412,
+   "origin": [
+    57344,
+    -159744
+   ]
+  },
+  {
+   "file": "block_000413.npz",
+   "n": 0,
+   "block": 413,
+   "origin": [
+    6144,
+    120832
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000414.npz",
+   "n": 1,
+   "block": 414,
+   "origin": [
+    190464,
+    -45056
+   ]
+  },
+  {
+   "file": "block_000415.npz",
+   "n": 1,
+   "block": 415,
+   "origin": [
+    -194560,
+    139264
+   ]
+  },
+  {
+   "file": "block_000416.npz",
+   "n": 1,
+   "block": 416,
+   "origin": [
+    -114688,
+    -98304
+   ]
+  },
+  {
+   "file": "block_000417.npz",
+   "n": 0,
+   "block": 417,
+   "origin": [
+    -26624,
+    120832
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000418.npz",
+   "n": 0,
+   "block": 418,
+   "origin": [
+    24576,
+    114688
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000419.npz",
+   "n": 1,
+   "block": 419,
+   "origin": [
+    8192,
+    40960
+   ]
+  },
+  {
+   "file": "block_000420.npz",
+   "n": 1,
+   "block": 420,
+   "origin": [
+    88064,
+    190464
+   ]
+  },
+  {
+   "file": "block_000421.npz",
+   "n": 1,
+   "block": 421,
+   "origin": [
+    112640,
+    -2048
+   ]
+  },
+  {
+   "file": "block_000422.npz",
+   "n": 1,
+   "block": 422,
+   "origin": [
+    43008,
+    -26624
+   ]
+  },
+  {
+   "file": "block_000423.npz",
+   "n": 1,
+   "block": 423,
+   "origin": [
+    49152,
+    122880
+   ]
+  },
+  {
+   "file": "block_000424.npz",
+   "n": 1,
+   "block": 424,
+   "origin": [
+    -94208,
+    -59392
+   ]
+  },
+  {
+   "file": "block_000425.npz",
+   "n": 1,
+   "block": 425,
+   "origin": [
+    178176,
+    137216
+   ]
+  },
+  {
+   "file": "block_000426.npz",
+   "n": 0,
+   "block": 426,
+   "origin": [
+    69632,
+    94208
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000427.npz",
+   "n": 1,
+   "block": 427,
+   "origin": [
+    -124928,
+    186368
+   ]
+  },
+  {
+   "file": "block_000428.npz",
+   "n": 1,
+   "block": 428,
+   "origin": [
+    122880,
+    116736
+   ]
+  },
+  {
+   "file": "block_000429.npz",
+   "n": 1,
+   "block": 429,
+   "origin": [
+    71680,
+    32768
+   ]
+  },
+  {
+   "file": "block_000430.npz",
+   "n": 0,
+   "block": 430,
+   "origin": [
+    -163840,
+    2048
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000431.npz",
+   "n": 1,
+   "block": 431,
+   "origin": [
+    -122880,
+    -47104
+   ]
+  },
+  {
+   "file": "block_000432.npz",
+   "n": 1,
+   "block": 432,
+   "origin": [
+    -92160,
+    163840
+   ]
+  },
+  {
+   "file": "block_000433.npz",
+   "n": 0,
+   "block": 433,
+   "origin": [
+    69632,
+    196608
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000434.npz",
+   "n": 1,
+   "block": 434,
+   "origin": [
+    143360,
+    96256
+   ]
+  },
+  {
+   "file": "block_000435.npz",
+   "n": 0,
+   "block": 435,
+   "origin": [
+    -100352,
+    106496
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000436.npz",
+   "n": 1,
+   "block": 436,
+   "origin": [
+    -63488,
+    -96256
+   ]
+  },
+  {
+   "file": "block_000437.npz",
+   "n": 1,
+   "block": 437,
+   "origin": [
+    -116736,
+    176128
+   ]
+  },
+  {
+   "file": "block_000438.npz",
+   "n": 0,
+   "block": 438,
+   "origin": [
+    -57344,
+    -153600
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000439.npz",
+   "n": 1,
+   "block": 439,
+   "origin": [
+    -106496,
+    -137216
+   ]
+  },
+  {
+   "file": "block_000440.npz",
+   "n": 0,
+   "block": 440,
+   "origin": [
+    190464,
+    49152
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000441.npz",
+   "n": 1,
+   "block": 441,
+   "origin": [
+    59392,
+    -16384
+   ]
+  },
+  {
+   "file": "block_000442.npz",
+   "n": 0,
+   "block": 442,
+   "origin": [
+    -83968,
+    141312
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000443.npz",
+   "n": 0,
+   "block": 443,
+   "origin": [
+    -32768,
+    -90112
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000444.npz",
+   "n": 0,
+   "block": 444,
+   "origin": [
+    18432,
+    92160
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000445.npz",
+   "n": 0,
+   "block": 445,
+   "origin": [
+    -81920,
+    61440
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000446.npz",
+   "n": 0,
+   "block": 446,
+   "origin": [
+    30720,
+    69632
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000447.npz",
+   "n": 1,
+   "block": 447,
+   "origin": [
+    145408,
+    88064
+   ]
+  },
+  {
+   "file": "block_000448.npz",
+   "n": 0,
+   "block": 448,
+   "origin": [
+    -20480,
+    49152
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000449.npz",
+   "n": 0,
+   "block": 449,
+   "origin": [
+    139264,
+    20480
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000450.npz",
+   "n": 1,
+   "block": 450,
+   "origin": [
+    -22528,
+    -6144
+   ]
+  },
+  {
+   "file": "block_000451.npz",
+   "n": 1,
+   "block": 451,
+   "origin": [
+    -120832,
+    -159744
+   ]
+  },
+  {
+   "file": "block_000452.npz",
+   "n": 1,
+   "block": 452,
+   "origin": [
+    -188416,
+    34816
+   ]
+  },
+  {
+   "file": "block_000453.npz",
+   "n": 0,
+   "block": 453,
+   "origin": [
+    -63488,
+    -139264
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000454.npz",
+   "n": 0,
+   "block": 454,
+   "origin": [
+    -147456,
+    157696
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000455.npz",
+   "n": 1,
+   "block": 455,
+   "origin": [
+    0,
+    116736
+   ]
+  },
+  {
+   "file": "block_000456.npz",
+   "n": 1,
+   "block": 456,
+   "origin": [
+    22528,
+    143360
+   ]
+  },
+  {
+   "file": "block_000457.npz",
+   "n": 0,
+   "block": 457,
+   "origin": [
+    -100352,
+    196608
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000458.npz",
+   "n": 1,
+   "block": 458,
+   "origin": [
+    -55296,
+    159744
+   ]
+  },
+  {
+   "file": "block_000459.npz",
+   "n": 1,
+   "block": 459,
+   "origin": [
+    -65536,
+    -57344
+   ]
+  },
+  {
+   "file": "block_000460.npz",
+   "n": 1,
+   "block": 460,
+   "origin": [
+    -98304,
+    -65536
+   ]
+  },
+  {
+   "file": "block_000461.npz",
+   "n": 1,
+   "block": 461,
+   "origin": [
+    -118784,
+    -106496
+   ]
+  },
+  {
+   "file": "block_000462.npz",
+   "n": 0,
+   "block": 462,
+   "origin": [
+    120832,
+    124928
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000463.npz",
+   "n": 1,
+   "block": 463,
+   "origin": [
+    -110592,
+    124928
+   ]
+  },
+  {
+   "file": "block_000464.npz",
+   "n": 1,
+   "block": 464,
+   "origin": [
+    -153600,
+    18432
+   ]
+  },
+  {
+   "file": "block_000465.npz",
+   "n": 1,
+   "block": 465,
+   "origin": [
+    96256,
+    -81920
+   ]
+  },
+  {
+   "file": "block_000466.npz",
+   "n": 0,
+   "block": 466,
+   "origin": [
+    -28672,
+    14336
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000467.npz",
+   "n": 0,
+   "block": 467,
+   "origin": [
+    88064,
+    -73728
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000468.npz",
+   "n": 1,
+   "block": 468,
+   "origin": [
+    -190464,
+    92160
+   ]
+  },
+  {
+   "file": "block_000469.npz",
+   "n": 0,
+   "block": 469,
+   "origin": [
+    137216,
+    131072
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000470.npz",
+   "n": 0,
+   "block": 470,
+   "origin": [
+    -88064,
+    59392
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000471.npz",
+   "n": 1,
+   "block": 471,
+   "origin": [
+    -8192,
+    -26624
+   ]
+  },
+  {
+   "file": "block_000472.npz",
+   "n": 0,
+   "block": 472,
+   "origin": [
+    124928,
+    -108544
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000473.npz",
+   "n": 0,
+   "block": 473,
+   "origin": [
+    -65536,
+    92160
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000474.npz",
+   "n": 0,
+   "block": 474,
+   "origin": [
+    129024,
+    120832
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000475.npz",
+   "n": 0,
+   "block": 475,
+   "origin": [
+    194560,
+    -137216
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000476.npz",
+   "n": 1,
+   "block": 476,
+   "origin": [
+    192512,
+    -2048
+   ]
+  },
+  {
+   "file": "block_000477.npz",
+   "n": 0,
+   "block": 477,
+   "origin": [
+    -120832,
+    147456
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000478.npz",
+   "n": 1,
+   "block": 478,
+   "origin": [
+    155648,
+    22528
+   ]
+  },
+  {
+   "file": "block_000479.npz",
+   "n": 1,
+   "block": 479,
+   "origin": [
+    110592,
+    -51200
+   ]
+  },
+  {
+   "file": "block_000480.npz",
+   "n": 0,
+   "block": 480,
+   "origin": [
+    -47104,
+    -24576
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000481.npz",
+   "n": 0,
+   "block": 481,
+   "origin": [
+    -147456,
+    167936
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000482.npz",
+   "n": 0,
+   "block": 482,
+   "origin": [
+    -2048,
+    -135168
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000483.npz",
+   "n": 1,
+   "block": 483,
+   "origin": [
+    53248,
+    40960
+   ]
+  },
+  {
+   "file": "block_000484.npz",
+   "n": 1,
+   "block": 484,
+   "origin": [
+    -24576,
+    157696
+   ]
+  },
+  {
+   "file": "block_000485.npz",
+   "n": 0,
+   "block": 485,
+   "origin": [
+    24576,
+    188416
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000486.npz",
+   "n": 1,
+   "block": 486,
+   "origin": [
+    26624,
+    157696
+   ]
+  },
+  {
+   "file": "block_000487.npz",
+   "n": 0,
+   "block": 487,
+   "origin": [
+    -10240,
+    -98304
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000488.npz",
+   "n": 0,
+   "block": 488,
+   "origin": [
+    -178176,
+    -4096
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000489.npz",
+   "n": 0,
+   "block": 489,
+   "origin": [
+    -186368,
+    -38912
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000490.npz",
+   "n": 0,
+   "block": 490,
+   "origin": [
+    -153600,
+    -145408
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000491.npz",
+   "n": 1,
+   "block": 491,
+   "origin": [
+    -192512,
+    -86016
+   ]
+  },
+  {
+   "file": "block_000492.npz",
+   "n": 0,
+   "block": 492,
+   "origin": [
+    122880,
+    -137216
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000493.npz",
+   "n": 1,
+   "block": 493,
+   "origin": [
+    -157696,
+    194560
+   ]
+  },
+  {
+   "file": "block_000494.npz",
+   "n": 1,
+   "block": 494,
+   "origin": [
+    -131072,
+    -73728
+   ]
+  },
+  {
+   "file": "block_000495.npz",
+   "n": 0,
+   "block": 495,
+   "origin": [
+    -4096,
+    -159744
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000496.npz",
+   "n": 1,
+   "block": 496,
+   "origin": [
+    -57344,
+    -59392
+   ]
+  },
+  {
+   "file": "block_000497.npz",
+   "n": 0,
+   "block": 497,
+   "origin": [
+    59392,
+    141312
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000498.npz",
+   "n": 1,
+   "block": 498,
+   "origin": [
+    147456,
+    22528
+   ]
+  },
+  {
+   "file": "block_000499.npz",
+   "n": 0,
+   "block": 499,
+   "origin": [
+    -67584,
+    -141312
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000500.npz",
+   "n": 0,
+   "block": 500,
+   "origin": [
+    -51200,
+    30720
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000501.npz",
+   "n": 1,
+   "block": 501,
+   "origin": [
+    -73728,
+    -161792
+   ]
+  },
+  {
+   "file": "block_000502.npz",
+   "n": 1,
+   "block": 502,
+   "origin": [
+    -114688,
+    -172032
+   ]
+  },
+  {
+   "file": "block_000503.npz",
+   "n": 1,
+   "block": 503,
+   "origin": [
+    -178176,
+    -114688
+   ]
+  },
+  {
+   "file": "block_000504.npz",
+   "n": 1,
+   "block": 504,
+   "origin": [
+    -18432,
+    -55296
+   ]
+  },
+  {
+   "file": "block_000505.npz",
+   "n": 1,
+   "block": 505,
+   "origin": [
+    104448,
+    -143360
+   ]
+  },
+  {
+   "file": "block_000506.npz",
+   "n": 0,
+   "block": 506,
+   "origin": [
+    77824,
+    -18432
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000507.npz",
+   "n": 1,
+   "block": 507,
+   "origin": [
+    -79872,
+    32768
+   ]
+  },
+  {
+   "file": "block_000508.npz",
+   "n": 0,
+   "block": 508,
+   "origin": [
+    112640,
+    -157696
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000509.npz",
+   "n": 0,
+   "block": 509,
+   "origin": [
+    -163840,
+    153600
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000510.npz",
+   "n": 0,
+   "block": 510,
+   "origin": [
+    -51200,
+    -114688
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000511.npz",
+   "n": 1,
+   "block": 511,
+   "origin": [
+    -106496,
+    -51200
+   ]
+  },
+  {
+   "file": "block_000512.npz",
+   "n": 0,
+   "block": 512,
+   "origin": [
+    -38912,
+    -157696
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000513.npz",
+   "n": 0,
+   "block": 513,
+   "origin": [
+    -180224,
+    69632
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000514.npz",
+   "n": 1,
+   "block": 514,
+   "origin": [
+    139264,
+    182272
+   ]
+  },
+  {
+   "file": "block_000515.npz",
+   "n": 0,
+   "block": 515,
+   "origin": [
+    -124928,
+    -163840
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000516.npz",
+   "n": 0,
+   "block": 516,
+   "origin": [
+    -43008,
+    131072
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000517.npz",
+   "n": 1,
+   "block": 517,
+   "origin": [
+    -106496,
+    79872
+   ]
+  },
+  {
+   "file": "block_000518.npz",
+   "n": 0,
+   "block": 518,
+   "origin": [
+    -122880,
+    -32768
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000519.npz",
+   "n": 1,
+   "block": 519,
+   "origin": [
+    165888,
+    -6144
+   ]
+  },
+  {
+   "file": "block_000520.npz",
+   "n": 0,
+   "block": 520,
+   "origin": [
+    -20480,
+    51200
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000521.npz",
+   "n": 0,
+   "block": 521,
+   "origin": [
+    -6144,
+    -57344
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000522.npz",
+   "n": 0,
+   "block": 522,
+   "origin": [
+    0,
+    8192
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000523.npz",
+   "n": 1,
+   "block": 523,
+   "origin": [
+    36864,
+    -10240
+   ]
+  },
+  {
+   "file": "block_000524.npz",
+   "n": 1,
+   "block": 524,
+   "origin": [
+    -147456,
+    38912
+   ]
+  },
+  {
+   "file": "block_000525.npz",
+   "n": 0,
+   "block": 525,
+   "origin": [
+    190464,
+    83968
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000526.npz",
+   "n": 0,
+   "block": 526,
+   "origin": [
+    -77824,
+    75776
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000527.npz",
+   "n": 0,
+   "block": 527,
+   "origin": [
+    159744,
+    79872
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000528.npz",
+   "n": 0,
+   "block": 528,
+   "origin": [
+    -147456,
+    -114688
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000529.npz",
+   "n": 1,
+   "block": 529,
+   "origin": [
+    -63488,
+    34816
+   ]
+  },
+  {
+   "file": "block_000530.npz",
+   "n": 1,
+   "block": 530,
+   "origin": [
+    22528,
+    172032
+   ]
+  },
+  {
+   "file": "block_000531.npz",
+   "n": 0,
+   "block": 531,
+   "origin": [
+    73728,
+    -100352
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000532.npz",
+   "n": 1,
+   "block": 532,
+   "origin": [
+    -75776,
+    -28672
+   ]
+  },
+  {
+   "file": "block_000533.npz",
+   "n": 0,
+   "block": 533,
+   "origin": [
+    172032,
+    -90112
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000534.npz",
+   "n": 0,
+   "block": 534,
+   "origin": [
+    -151552,
+    -83968
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000535.npz",
+   "n": 0,
+   "block": 535,
+   "origin": [
+    28672,
+    -16384
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000536.npz",
+   "n": 0,
+   "block": 536,
+   "origin": [
+    196608,
+    14336
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000537.npz",
+   "n": 0,
+   "block": 537,
+   "origin": [
+    190464,
+    -83968
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000538.npz",
+   "n": 0,
+   "block": 538,
+   "origin": [
+    -165888,
+    161792
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000539.npz",
+   "n": 0,
+   "block": 539,
+   "origin": [
+    124928,
+    124928
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000540.npz",
+   "n": 1,
+   "block": 540,
+   "origin": [
+    139264,
+    -118784
+   ]
+  },
+  {
+   "file": "block_000541.npz",
+   "n": 1,
+   "block": 541,
+   "origin": [
+    77824,
+    -176128
+   ]
+  },
+  {
+   "file": "block_000542.npz",
+   "n": 1,
+   "block": 542,
+   "origin": [
+    -122880,
+    -126976
+   ]
+  },
+  {
+   "file": "block_000543.npz",
+   "n": 0,
+   "block": 543,
+   "origin": [
+    114688,
+    178176
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000544.npz",
+   "n": 1,
+   "block": 544,
+   "origin": [
+    -100352,
+    67584
+   ]
+  },
+  {
+   "file": "block_000545.npz",
+   "n": 1,
+   "block": 545,
+   "origin": [
+    -92160,
+    184320
+   ]
+  },
+  {
+   "file": "block_000546.npz",
+   "n": 1,
+   "block": 546,
+   "origin": [
+    196608,
+    -57344
+   ]
+  },
+  {
+   "file": "block_000547.npz",
+   "n": 1,
+   "block": 547,
+   "origin": [
+    -174080,
+    -182272
+   ]
+  },
+  {
+   "file": "block_000548.npz",
+   "n": 0,
+   "block": 548,
+   "origin": [
+    98304,
+    -45056
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000549.npz",
+   "n": 0,
+   "block": 549,
+   "origin": [
+    -163840,
+    -108544
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000550.npz",
+   "n": 1,
+   "block": 550,
+   "origin": [
+    157696,
+    -65536
+   ]
+  },
+  {
+   "file": "block_000551.npz",
+   "n": 0,
+   "block": 551,
+   "origin": [
+    -147456,
+    192512
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000552.npz",
+   "n": 0,
+   "block": 552,
+   "origin": [
+    55296,
+    -108544
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000553.npz",
+   "n": 1,
+   "block": 553,
+   "origin": [
+    159744,
+    32768
+   ]
+  },
+  {
+   "file": "block_000554.npz",
+   "n": 1,
+   "block": 554,
+   "origin": [
+    141312,
+    -182272
+   ]
+  },
+  {
+   "file": "block_000555.npz",
+   "n": 1,
+   "block": 555,
+   "origin": [
+    -182272,
+    194560
+   ]
+  },
+  {
+   "file": "block_000556.npz",
+   "n": 1,
+   "block": 556,
+   "origin": [
+    96256,
+    108544
+   ]
+  },
+  {
+   "file": "block_000557.npz",
+   "n": 0,
+   "block": 557,
+   "origin": [
+    28672,
+    6144
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000558.npz",
+   "n": 1,
+   "block": 558,
+   "origin": [
+    -63488,
+    -106496
+   ]
+  },
+  {
+   "file": "block_000559.npz",
+   "n": 1,
+   "block": 559,
+   "origin": [
+    -77824,
+    90112
+   ]
+  },
+  {
+   "file": "block_000560.npz",
+   "n": 1,
+   "block": 560,
+   "origin": [
+    -100352,
+    -184320
+   ]
+  },
+  {
+   "file": "block_000561.npz",
+   "n": 0,
+   "block": 561,
+   "origin": [
+    178176,
+    178176
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000562.npz",
+   "n": 0,
+   "block": 562,
+   "origin": [
+    -186368,
+    65536
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000563.npz",
+   "n": 1,
+   "block": 563,
+   "origin": [
+    -51200,
+    59392
+   ]
+  },
+  {
+   "file": "block_000564.npz",
+   "n": 1,
+   "block": 564,
+   "origin": [
+    100352,
+    -86016
+   ]
+  },
+  {
+   "file": "block_000565.npz",
+   "n": 1,
+   "block": 565,
+   "origin": [
+    -16384,
+    -172032
+   ]
+  },
+  {
+   "file": "block_000566.npz",
+   "n": 0,
+   "block": 566,
+   "origin": [
+    -38912,
+    -18432
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000567.npz",
+   "n": 0,
+   "block": 567,
+   "origin": [
+    -51200,
+    -28672
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000568.npz",
+   "n": 1,
+   "block": 568,
+   "origin": [
+    -75776,
+    -155648
+   ]
+  },
+  {
+   "file": "block_000569.npz",
+   "n": 0,
+   "block": 569,
+   "origin": [
+    145408,
+    16384
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000570.npz",
+   "n": 1,
+   "block": 570,
+   "origin": [
+    143360,
+    157696
+   ]
+  },
+  {
+   "file": "block_000571.npz",
+   "n": 0,
+   "block": 571,
+   "origin": [
+    143360,
+    -159744
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000572.npz",
+   "n": 1,
+   "block": 572,
+   "origin": [
+    51200,
+    -153600
+   ]
+  },
+  {
+   "file": "block_000573.npz",
+   "n": 1,
+   "block": 573,
+   "origin": [
+    126976,
+    -198656
+   ]
+  },
+  {
+   "file": "block_000574.npz",
+   "n": 0,
+   "block": 574,
+   "origin": [
+    -153600,
+    190464
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000575.npz",
+   "n": 0,
+   "block": 575,
+   "origin": [
+    34816,
+    -196608
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000576.npz",
+   "n": 0,
+   "block": 576,
+   "origin": [
+    -126976,
+    141312
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000577.npz",
+   "n": 1,
+   "block": 577,
+   "origin": [
+    71680,
+    -2048
+   ]
+  },
+  {
+   "file": "block_000578.npz",
+   "n": 0,
+   "block": 578,
+   "origin": [
+    -47104,
+    -149504
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000579.npz",
+   "n": 0,
+   "block": 579,
+   "origin": [
+    96256,
+    182272
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000580.npz",
+   "n": 1,
+   "block": 580,
+   "origin": [
+    -57344,
+    -157696
+   ]
+  },
+  {
+   "file": "block_000581.npz",
+   "n": 0,
+   "block": 581,
+   "origin": [
+    59392,
+    155648
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000582.npz",
+   "n": 0,
+   "block": 582,
+   "origin": [
+    14336,
+    -47104
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000583.npz",
+   "n": 1,
+   "block": 583,
+   "origin": [
+    -26624,
+    112640
+   ]
+  },
+  {
+   "file": "block_000584.npz",
+   "n": 0,
+   "block": 584,
+   "origin": [
+    -8192,
+    -59392
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000585.npz",
+   "n": 0,
+   "block": 585,
+   "origin": [
+    69632,
+    -131072
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000586.npz",
+   "n": 0,
+   "block": 586,
+   "origin": [
+    -129024,
+    -26624
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000587.npz",
+   "n": 1,
+   "block": 587,
+   "origin": [
+    2048,
+    55296
+   ]
+  },
+  {
+   "file": "block_000588.npz",
+   "n": 1,
+   "block": 588,
+   "origin": [
+    77824,
+    -196608
+   ]
+  },
+  {
+   "file": "block_000589.npz",
+   "n": 1,
+   "block": 589,
+   "origin": [
+    -73728,
+    -176128
+   ]
+  },
+  {
+   "file": "block_000590.npz",
+   "n": 1,
+   "block": 590,
+   "origin": [
+    -194560,
+    -63488
+   ]
+  },
+  {
+   "file": "block_000591.npz",
+   "n": 1,
+   "block": 591,
+   "origin": [
+    -34816,
+    98304
+   ]
+  },
+  {
+   "file": "block_000592.npz",
+   "n": 1,
+   "block": 592,
+   "origin": [
+    -124928,
+    190464
+   ]
+  },
+  {
+   "file": "block_000593.npz",
+   "n": 1,
+   "block": 593,
+   "origin": [
+    -145408,
+    -57344
+   ]
+  },
+  {
+   "file": "block_000594.npz",
+   "n": 0,
+   "block": 594,
+   "origin": [
+    -69632,
+    -182272
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000595.npz",
+   "n": 1,
+   "block": 595,
+   "origin": [
+    71680,
+    192512
+   ]
+  },
+  {
+   "file": "block_000596.npz",
+   "n": 0,
+   "block": 596,
+   "origin": [
+    100352,
+    186368
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000597.npz",
+   "n": 0,
+   "block": 597,
+   "origin": [
+    -79872,
+    -143360
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000598.npz",
+   "n": 1,
+   "block": 598,
+   "origin": [
+    34816,
+    184320
+   ]
+  },
+  {
+   "file": "block_000599.npz",
+   "n": 1,
+   "block": 599,
+   "origin": [
+    -163840,
+    110592
+   ]
+  },
+  {
+   "file": "block_000600.npz",
+   "n": 1,
+   "block": 600,
+   "origin": [
+    -167936,
+    -10240
+   ]
+  },
+  {
+   "file": "block_000601.npz",
+   "n": 1,
+   "block": 601,
+   "origin": [
+    -59392,
+    106496
+   ]
+  },
+  {
+   "file": "block_000602.npz",
+   "n": 1,
+   "block": 602,
+   "origin": [
+    -112640,
+    55296
+   ]
+  },
+  {
+   "file": "block_000603.npz",
+   "n": 1,
+   "block": 603,
+   "origin": [
+    16384,
+    69632
+   ]
+  },
+  {
+   "file": "block_000604.npz",
+   "n": 1,
+   "block": 604,
+   "origin": [
+    126976,
+    -131072
+   ]
+  },
+  {
+   "file": "block_000605.npz",
+   "n": 0,
+   "block": 605,
+   "origin": [
+    -92160,
+    94208
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000606.npz",
+   "n": 1,
+   "block": 606,
+   "origin": [
+    47104,
+    -104448
+   ]
+  },
+  {
+   "file": "block_000607.npz",
+   "n": 1,
+   "block": 607,
+   "origin": [
+    -16384,
+    139264
+   ]
+  },
+  {
+   "file": "block_000608.npz",
+   "n": 1,
+   "block": 608,
+   "origin": [
+    30720,
+    -196608
+   ]
+  },
+  {
+   "file": "block_000609.npz",
+   "n": 1,
+   "block": 609,
+   "origin": [
+    -40960,
+    30720
+   ]
+  },
+  {
+   "file": "block_000610.npz",
+   "n": 0,
+   "block": 610,
+   "origin": [
+    -118784,
+    -149504
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000611.npz",
+   "n": 1,
+   "block": 611,
+   "origin": [
+    45056,
+    96256
+   ]
+  },
+  {
+   "file": "block_000612.npz",
+   "n": 1,
+   "block": 612,
+   "origin": [
+    24576,
+    -141312
+   ]
+  },
+  {
+   "file": "block_000613.npz",
+   "n": 1,
+   "block": 613,
+   "origin": [
+    176128,
+    -20480
+   ]
+  },
+  {
+   "file": "block_000614.npz",
+   "n": 0,
+   "block": 614,
+   "origin": [
+    -45056,
+    -143360
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000615.npz",
+   "n": 1,
+   "block": 615,
+   "origin": [
+    -43008,
+    10240
+   ]
+  },
+  {
+   "file": "block_000616.npz",
+   "n": 0,
+   "block": 616,
+   "origin": [
+    155648,
+    -102400
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000617.npz",
+   "n": 0,
+   "block": 617,
+   "origin": [
+    -196608,
+    -163840
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000618.npz",
+   "n": 0,
+   "block": 618,
+   "origin": [
+    65536,
+    -145408
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000619.npz",
+   "n": 1,
+   "block": 619,
+   "origin": [
+    -165888,
+    -65536
+   ]
+  },
+  {
+   "file": "block_000620.npz",
+   "n": 1,
+   "block": 620,
+   "origin": [
+    161792,
+    -116736
+   ]
+  },
+  {
+   "file": "block_000621.npz",
+   "n": 0,
+   "block": 621,
+   "origin": [
+    -141312,
+    174080
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000622.npz",
+   "n": 1,
+   "block": 622,
+   "origin": [
+    182272,
+    -178176
+   ]
+  },
+  {
+   "file": "block_000623.npz",
+   "n": 1,
+   "block": 623,
+   "origin": [
+    -4096,
+    -47104
+   ]
+  },
+  {
+   "file": "block_000624.npz",
+   "n": 0,
+   "block": 624,
+   "origin": [
+    -57344,
+    -98304
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000625.npz",
+   "n": 1,
+   "block": 625,
+   "origin": [
+    -116736,
+    -92160
+   ]
+  },
+  {
+   "file": "block_000626.npz",
+   "n": 1,
+   "block": 626,
+   "origin": [
+    -149504,
+    126976
+   ]
+  },
+  {
+   "file": "block_000627.npz",
+   "n": 0,
+   "block": 627,
+   "origin": [
+    32768,
+    141312
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000628.npz",
+   "n": 0,
+   "block": 628,
+   "origin": [
+    55296,
+    178176
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000629.npz",
+   "n": 0,
+   "block": 629,
+   "origin": [
+    -4096,
+    161792
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000630.npz",
+   "n": 0,
+   "block": 630,
+   "origin": [
+    -106496,
+    -24576
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000631.npz",
+   "n": 0,
+   "block": 631,
+   "origin": [
+    -81920,
+    61440
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000632.npz",
+   "n": 0,
+   "block": 632,
+   "origin": [
+    -163840,
+    194560
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000633.npz",
+   "n": 1,
+   "block": 633,
+   "origin": [
+    -172032,
+    -59392
+   ]
+  },
+  {
+   "file": "block_000634.npz",
+   "n": 1,
+   "block": 634,
+   "origin": [
+    149504,
+    -90112
+   ]
+  },
+  {
+   "file": "block_000635.npz",
+   "n": 0,
+   "block": 635,
+   "origin": [
+    -36864,
+    133120
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000636.npz",
+   "n": 0,
+   "block": 636,
+   "origin": [
+    -22528,
+    -14336
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000637.npz",
+   "n": 0,
+   "block": 637,
+   "origin": [
+    198656,
+    -12288
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000638.npz",
+   "n": 1,
+   "block": 638,
+   "origin": [
+    -34816,
+    -176128
+   ]
+  },
+  {
+   "file": "block_000639.npz",
+   "n": 1,
+   "block": 639,
+   "origin": [
+    -65536,
+    -100352
+   ]
+  },
+  {
+   "file": "block_000640.npz",
+   "n": 1,
+   "block": 640,
+   "origin": [
+    139264,
+    43008
+   ]
+  },
+  {
+   "file": "block_000641.npz",
+   "n": 0,
+   "block": 641,
+   "origin": [
+    -65536,
+    155648
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000642.npz",
+   "n": 0,
+   "block": 642,
+   "origin": [
+    75776,
+    -71680
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000643.npz",
+   "n": 1,
+   "block": 643,
+   "origin": [
+    -108544,
+    -28672
+   ]
+  },
+  {
+   "file": "block_000644.npz",
+   "n": 1,
+   "block": 644,
+   "origin": [
+    -147456,
+    118784
+   ]
+  },
+  {
+   "file": "block_000645.npz",
+   "n": 1,
+   "block": 645,
+   "origin": [
+    -163840,
+    -28672
+   ]
+  },
+  {
+   "file": "block_000646.npz",
+   "n": 0,
+   "block": 646,
+   "origin": [
+    -2048,
+    36864
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000647.npz",
+   "n": 1,
+   "block": 647,
+   "origin": [
+    -49152,
+    143360
+   ]
+  },
+  {
+   "file": "block_000648.npz",
+   "n": 1,
+   "block": 648,
+   "origin": [
+    190464,
+    -67584
+   ]
+  },
+  {
+   "file": "block_000649.npz",
+   "n": 1,
+   "block": 649,
+   "origin": [
+    188416,
+    131072
+   ]
+  },
+  {
+   "file": "block_000650.npz",
+   "n": 1,
+   "block": 650,
+   "origin": [
+    53248,
+    6144
+   ]
+  },
+  {
+   "file": "block_000651.npz",
+   "n": 1,
+   "block": 651,
+   "origin": [
+    196608,
+    155648
+   ]
+  },
+  {
+   "file": "block_000652.npz",
+   "n": 0,
+   "block": 652,
+   "origin": [
+    -196608,
+    -196608
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000653.npz",
+   "n": 1,
+   "block": 653,
+   "origin": [
+    -51200,
+    -110592
+   ]
+  },
+  {
+   "file": "block_000654.npz",
+   "n": 0,
+   "block": 654,
+   "origin": [
+    -108544,
+    -178176
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000655.npz",
+   "n": 0,
+   "block": 655,
+   "origin": [
+    36864,
+    -83968
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000656.npz",
+   "n": 1,
+   "block": 656,
+   "origin": [
+    -135168,
+    104448
+   ]
+  },
+  {
+   "file": "block_000657.npz",
+   "n": 0,
+   "block": 657,
+   "origin": [
+    79872,
+    180224
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000658.npz",
+   "n": 0,
+   "block": 658,
+   "origin": [
+    167936,
+    -180224
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000659.npz",
+   "n": 0,
+   "block": 659,
+   "origin": [
+    -34816,
+    -30720
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000660.npz",
+   "n": 0,
+   "block": 660,
+   "origin": [
+    -153600,
+    36864
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000661.npz",
+   "n": 1,
+   "block": 661,
+   "origin": [
+    71680,
+    -104448
+   ]
+  },
+  {
+   "file": "block_000662.npz",
+   "n": 0,
+   "block": 662,
+   "origin": [
+    -71680,
+    -96256
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000663.npz",
+   "n": 0,
+   "block": 663,
+   "origin": [
+    -190464,
+    69632
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000664.npz",
+   "n": 1,
+   "block": 664,
+   "origin": [
+    -139264,
+    32768
+   ]
+  },
+  {
+   "file": "block_000665.npz",
+   "n": 0,
+   "block": 665,
+   "origin": [
+    161792,
+    -100352
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000666.npz",
+   "n": 0,
+   "block": 666,
+   "origin": [
+    -30720,
+    32768
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000667.npz",
+   "n": 0,
+   "block": 667,
+   "origin": [
+    114688,
+    110592
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000668.npz",
+   "n": 0,
+   "block": 668,
+   "origin": [
+    55296,
+    -94208
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000669.npz",
+   "n": 1,
+   "block": 669,
+   "origin": [
+    -180224,
+    79872
+   ]
+  },
+  {
+   "file": "block_000670.npz",
+   "n": 0,
+   "block": 670,
+   "origin": [
+    -12288,
+    155648
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000671.npz",
+   "n": 0,
+   "block": 671,
+   "origin": [
+    -102400,
+    145408
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000672.npz",
+   "n": 1,
+   "block": 672,
+   "origin": [
+    -126976,
+    -102400
+   ]
+  },
+  {
+   "file": "block_000673.npz",
+   "n": 1,
+   "block": 673,
+   "origin": [
+    -96256,
+    26624
+   ]
+  },
+  {
+   "file": "block_000674.npz",
+   "n": 1,
+   "block": 674,
+   "origin": [
+    -90112,
+    -14336
+   ]
+  },
+  {
+   "file": "block_000675.npz",
+   "n": 0,
+   "block": 675,
+   "origin": [
+    192512,
+    69632
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000676.npz",
+   "n": 0,
+   "block": 676,
+   "origin": [
+    10240,
+    145408
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000677.npz",
+   "n": 1,
+   "block": 677,
+   "origin": [
+    47104,
+    159744
+   ]
+  },
+  {
+   "file": "block_000678.npz",
+   "n": 1,
+   "block": 678,
+   "origin": [
+    -184320,
+    -129024
+   ]
+  },
+  {
+   "file": "block_000679.npz",
+   "n": 0,
+   "block": 679,
+   "origin": [
+    -90112,
+    -36864
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000680.npz",
+   "n": 0,
+   "block": 680,
+   "origin": [
+    94208,
+    92160
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000681.npz",
+   "n": 1,
+   "block": 681,
+   "origin": [
+    -2048,
+    0
+   ]
+  },
+  {
+   "file": "block_000682.npz",
+   "n": 1,
+   "block": 682,
+   "origin": [
+    -106496,
+    139264
+   ]
+  },
+  {
+   "file": "block_000683.npz",
+   "n": 0,
+   "block": 683,
+   "origin": [
+    -30720,
+    22528
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000684.npz",
+   "n": 0,
+   "block": 684,
+   "origin": [
+    79872,
+    -163840
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000685.npz",
+   "n": 0,
+   "block": 685,
+   "origin": [
+    -6144,
+    -135168
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000686.npz",
+   "n": 0,
+   "block": 686,
+   "origin": [
+    143360,
+    94208
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000687.npz",
+   "n": 0,
+   "block": 687,
+   "origin": [
+    -45056,
+    55296
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000688.npz",
+   "n": 1,
+   "block": 688,
+   "origin": [
+    -131072,
+    -63488
+   ]
+  },
+  {
+   "file": "block_000689.npz",
+   "n": 1,
+   "block": 689,
+   "origin": [
+    59392,
+    -28672
+   ]
+  },
+  {
+   "file": "block_000690.npz",
+   "n": 1,
+   "block": 690,
+   "origin": [
+    -71680,
+    -120832
+   ]
+  },
+  {
+   "file": "block_000691.npz",
+   "n": 0,
+   "block": 691,
+   "origin": [
+    147456,
+    -4096
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000692.npz",
+   "n": 0,
+   "block": 692,
+   "origin": [
+    20480,
+    -174080
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000693.npz",
+   "n": 0,
+   "block": 693,
+   "origin": [
+    157696,
+    57344
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000694.npz",
+   "n": 0,
+   "block": 694,
+   "origin": [
+    98304,
+    -118784
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000695.npz",
+   "n": 0,
+   "block": 695,
+   "origin": [
+    -157696,
+    26624
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000696.npz",
+   "n": 1,
+   "block": 696,
+   "origin": [
+    -67584,
+    192512
+   ]
+  },
+  {
+   "file": "block_000697.npz",
+   "n": 1,
+   "block": 697,
+   "origin": [
+    -18432,
+    145408
+   ]
+  },
+  {
+   "file": "block_000698.npz",
+   "n": 0,
+   "block": 698,
+   "origin": [
+    88064,
+    30720
+   ],
+   "probed": true
+  },
+  {
+   "file": "block_000699.npz",
+   "n": 1,
+   "block": 699,
+   "origin": [
+    -159744,
+    137216
+   ]
+  }
+ ],
+ "skipped_patches": 370,
+ "kept_patches": 330
+}

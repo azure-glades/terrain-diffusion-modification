@@ -67,37 +67,63 @@ if torch is not None:
         return torch.sign(v) * v * v if space == "sqrt" else v
 
     class ResBlock(nn.Module):
-        def __init__(self, ch):
+        def __init__(self, ch, emb_dim=0):
             super().__init__()
             self.c1 = nn.Conv2d(ch, ch, 3, padding=1)
             self.c2 = nn.Conv2d(ch, ch, 3, padding=1)
             self.act = nn.SiLU()
             with torch.no_grad():
                 self.c2.weight.mul_(0.2)      # start near identity without making gradients vanish
+            self.film = None
+            if emb_dim:                        # per-level scale/shift (same value at every pixel: stays local + stateless)
+                self.film = nn.Linear(emb_dim, 2 * ch)
+                with torch.no_grad():
+                    self.film.weight.zero_()
+                    self.film.bias.zero_()
 
-        def forward(self, x):
-            return x + self.c2(self.act(self.c1(self.act(x))))
+        def forward(self, x, e=None):
+            h = self.c1(self.act(x))
+            if self.film is not None and e is not None:
+                g, b = self.film(e).chunk(2, dim=-1)
+                h = h * (1 + g.view(1, -1, 1, 1)) + b.view(1, -1, 1, 1)
+            return x + self.c2(self.act(h))
+
+    class CondSeq(nn.Sequential):
+        """nn.Sequential of ResBlocks that threads the level embedding through (state-dict keys unchanged)."""
+
+        def forward(self, x, e=None):
+            for m in self:
+                x = m(x, e)
+            return x
 
     class StudentNet(nn.Module):
         """Local-only U-Net: only 3x3 convs, strided convs and nearest upsampling. No attention, no
-        normalisation layers (they would make a pixel depend on the window size and break statelessness)."""
+        normalisation layers (they would make a pixel depend on the window size and break statelessness).
+        n_levels > 0 makes it a SHARED model: forward(x, level) is conditioned on the pyramid level via FiLM."""
 
-        def __init__(self, n_noise=0, base=24, depth=3, blocks=2):
+        def __init__(self, n_noise=0, base=24, depth=3, blocks=2, n_levels=0, emb_dim=32):
             super().__init__()
-            self.n_noise, self.depth = n_noise, depth
+            self.n_noise, self.depth, self.n_levels = n_noise, depth, n_levels
+            ed = emb_dim if n_levels else 0
+            self.emb = nn.Embedding(n_levels, emb_dim) if n_levels else None
             w = [base * (2 ** d) for d in range(depth)]
             self.stem = nn.Conv2d(1 + n_noise, w[0], 3, padding=1)
-            self.enc = nn.ModuleList([nn.Sequential(*[ResBlock(w[d]) for _ in range(blocks)]) for d in range(depth)])
+            self.enc = nn.ModuleList([CondSeq(*[ResBlock(w[d], ed) for _ in range(blocks)]) for d in range(depth)])
             self.down = nn.ModuleList([nn.Conv2d(w[d], w[d + 1], 3, stride=2, padding=1) for d in range(depth - 1)])
             self.up = nn.ModuleList([nn.Conv2d(w[d + 1], w[d], 3, padding=1) for d in range(depth - 1)])
             self.fuse = nn.ModuleList([nn.Conv2d(2 * w[d], w[d], 1) for d in range(depth - 1)])
-            self.dec = nn.ModuleList([nn.Sequential(*[ResBlock(w[d]) for _ in range(blocks)]) for d in range(depth - 1)])
+            self.dec = nn.ModuleList([CondSeq(*[ResBlock(w[d], ed) for _ in range(blocks)]) for d in range(depth - 1)])
             self.out = nn.Conv2d(w[0], 1, 3, padding=1)
             with torch.no_grad():
                 self.out.weight.mul_(0.01)
                 self.out.bias.zero_()
 
-        def forward(self, x):
+        def forward(self, x, level=None):
+            e = None
+            if self.emb is not None:
+                if level is None:
+                    raise ValueError("shared model: pass level=")
+                e = self.emb(torch.as_tensor(int(level), device=x.device))
             H, W = x.shape[-2:]
             m = 2 ** (self.depth - 1)
             ph, pw = (-H) % m, (-W) % m
@@ -106,7 +132,7 @@ if torch is not None:
             h = self.stem(x)
             skips = []
             for d in range(self.depth):
-                h = self.enc[d](h)
+                h = self.enc[d](h, e)
                 if d < self.depth - 1:
                     skips.append(h)
                     h = self.down[d](h)
@@ -114,7 +140,7 @@ if torch is not None:
                 h = F.interpolate(h, scale_factor=2, mode="nearest")
                 h = self.up[d](h)
                 h = self.fuse[d](torch.cat([h, skips[d]], dim=1))
-                h = self.dec[d](h)
+                h = self.dec[d](h, e)
             return self.out(F.silu(h))[..., :H, :W]
 
     class PatchDisc(nn.Module):
@@ -131,14 +157,14 @@ if torch is not None:
         def forward(self, base, res):
             return self.net(torch.cat([base, res], 1))
 
-    def effective_rf(model, size=161, thresh=1e-3):
+    def effective_rf(model, size=161, thresh=1e-3, level=None):
         """Radius (in input pixels) outside of which an input pixel changes the centre output by < thresh x peak.
         Measured on the current weights; use the inference halo >= this."""
         was = model.training
         model.eval()
         dev = next(model.parameters()).device
         x = torch.randn(1, 1 + model.n_noise, size, size, device=dev, requires_grad=True)
-        y = model(x)
+        y = model(x, level) if getattr(model, "n_levels", 0) else model(x)
         c = size // 2
         y[0, 0, c, c].backward()
         g = x.grad.abs().amax(dim=1)[0]
@@ -153,7 +179,8 @@ if torch is not None:
         torch.save({"model": model.state_dict(), "cfg": cfg}, path)
 
     def build_from_cfg(cfg):
-        return StudentNet(cfg["n_noise"], cfg["base"], cfg["depth"], cfg["blocks"])
+        return StudentNet(cfg["n_noise"], cfg["base"], cfg["depth"], cfg["blocks"], cfg.get("n_levels", 0),
+                          cfg.get("emb_dim", 32))
 
     def load_student(path, device="cpu"):
         ck = torch.load(path, map_location=device)
@@ -162,6 +189,17 @@ if torch is not None:
         m.load_state_dict(ck["model"])
         m.eval()
         return m, cfg
+
+    def level_cfgs(cfg):
+        """Per-level configs of a checkpoint: [cfg] for a dedicated student, one entry per trained level for a shared one."""
+        if not cfg.get("shared"):
+            return [cfg]
+        out = []
+        for L in cfg["train_levels"]:
+            c = dict(cfg, level=L, res_std=cfg["res_std_by_level"][L], rf=cfg["rf_by_level"][L],
+                     noise_on=L in cfg["noise_levels"])
+            out.append(c)
+        return out
 
     @torch.no_grad()
     def student_generate(model, cfg, coarse_m, coarse_origin=(0, 0), seed=0, device=None, dtype=None):
@@ -173,9 +211,13 @@ if torch is not None:
         base = up2_t(torch.from_numpy(c)[None, None].to(device))
         x = base
         if cfg["n_noise"]:
-            nz = hash_normal(seed, cfg["level"], 2 * coarse_origin[0], 2 * coarse_origin[1], 2 * h, 2 * w, cfg["n_noise"])
-            x = torch.cat([base, torch.from_numpy(nz)[None].to(device)], 1)
+            if cfg.get("noise_on", True):
+                nz = hash_normal(seed, cfg["level"], 2 * coarse_origin[0], 2 * coarse_origin[1], 2 * h, 2 * w,
+                                 cfg["n_noise"])
+                x = torch.cat([base, torch.from_numpy(nz)[None].to(device)], 1)
+            else:                                   # shared model, deterministic level: noise channels held at zero
+                x = torch.cat([base, torch.zeros(1, cfg["n_noise"], 2 * h, 2 * w, device=device)], 1)
         with torch.autocast(device_type=device.type, dtype=dtype, enabled=dtype is not None):
-            res = model(x)
+            res = model(x, cfg["level"]) if cfg.get("shared") else model(x)
         fine = base + res.float() * cfg["res_std"]
         return decode_elev(fine[0, 0].cpu().numpy(), cfg["space"], cfg["norm"]).astype(np.float32)

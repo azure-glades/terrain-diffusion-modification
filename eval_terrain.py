@@ -123,19 +123,40 @@ def bilinear_candidate():
     return lambda coarse, origin=(0, 0): up2(np.asarray(coarse, np.float32))
 
 
-def student_candidate(path, device=None, seed=0, dtype=None, tf32=False):
+def student_candidates(path, device=None, seed=0, dtype=None, tf32=False, reuse=None):
+    """Loads one checkpoint and returns one generator per level it covers: a single one for a dedicated student,
+    several (sharing one network) for a shared student.
+
+    reuse=<other checkpoint>: ZERO-SHOT test. The network comes from `reuse` (e.g. the level-1 GAN student) while the
+    level number, residual scale (res_std) and space come from `path`; the reused network always gets hashed noise."""
     import student_model as sm
     import torch
     torch.backends.cudnn.allow_tf32 = bool(tf32)          # cuDNN allows TF32 by default on Ampere; off = exact fp32
     torch.backends.cuda.matmul.allow_tf32 = bool(tf32)
     dev = device or ("cuda" if torch.cuda.is_available() else "cpu")
-    model, cfg = sm.load_student(path, dev)
+    model, cfg0 = sm.load_student(path, dev)
     amp = torch.bfloat16 if dtype == "bf16" else None
+    levels_cfg = sm.level_cfgs(cfg0)
+    if reuse:
+        model, ncfg = sm.load_student(reuse, dev)
+        if ncfg.get("shared"):
+            raise ValueError("--reuse-net must be a dedicated (not shared) student")
+        for c in levels_cfg:
+            if (c["space"], c["norm"]) != (ncfg["space"], ncfg["norm"]):
+                raise ValueError(f"{path} and {reuse} use different encodings")
+        levels_cfg = [dict(c, n_noise=ncfg["n_noise"], noise_on=True, shared=False, rf=int(ncfg.get("rf", 15)))
+                      for c in levels_cfg]
+    gens = []
+    for cfg in levels_cfg:
+        def gen(coarse, origin=(0, 0), cfg=cfg):
+            return sm.student_generate(model, cfg, coarse, origin, seed=seed, device=dev, dtype=amp)
+        gen.model, gen.cfg, gen.device = model, cfg, dev
+        gens.append(gen)
+    return gens
 
-    def gen(coarse, origin=(0, 0)):
-        return sm.student_generate(model, cfg, coarse, origin, seed=seed, device=dev, dtype=amp)
-    gen.model, gen.cfg, gen.device = model, cfg, dev
-    return gen
+
+def student_candidate(path, device=None, seed=0, dtype=None, tf32=False):
+    return student_candidates(path, device, seed, dtype, tf32)[0]
 
 
 def make_candidates(spec, a):

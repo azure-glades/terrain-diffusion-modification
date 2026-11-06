@@ -14,7 +14,7 @@ import sys
 
 import numpy as np
 
-from eval_terrain import student_candidate
+from eval_terrain import student_candidates
 from make_pyramid_data import PyramidData, hillshade, load_manifest
 
 
@@ -31,6 +31,9 @@ def parse():
     ap.add_argument("--vexag", type=float, default=2.0)
     ap.add_argument("--noise-seed", type=int, default=0)
     ap.add_argument("--dtype", default="fp32", choices=["fp32", "bf16"])
+    ap.add_argument("--reuse-net", default=None,
+                    help="ZERO-SHOT: run this dedicated checkpoint's network at EVERY level, taking each level's residual "
+                         "scale from the matching --students checkpoint (e.g. runs/l1_gan/last.pt)")
     ap.add_argument("--device", default=None)
     return ap.parse_args()
 
@@ -54,8 +57,8 @@ def main():
     levels = man["levels"]
     gens = {}
     for p in a.students.split(","):
-        g = student_candidate(p.strip(), a.device, a.noise_seed, a.dtype)
-        gens[g.cfg["level"]] = g
+        for g in student_candidates(p.strip(), a.device, a.noise_seed, a.dtype, reuse=a.reuse_net):
+            gens[g.cfg["level"]] = g
     need = list(range(a.start_level + 1, levels))
     if any(L not in gens for L in need):
         sys.exit(f"need a student for every level {need}; got levels {sorted(gens)}")

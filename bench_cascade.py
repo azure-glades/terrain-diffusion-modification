@@ -18,7 +18,7 @@ import time
 
 import numpy as np
 
-from eval_terrain import student_candidate
+from eval_terrain import student_candidates
 
 try:
     import torch
@@ -138,9 +138,9 @@ def run_cascade(gens, levels, x0, oi, oj, per_level):
 def bench_student(a, sizes, dtype):
     gens = {}
     for p in a.students.split(","):
-        g = student_candidate(os.path.abspath(p.strip()) if os.path.exists(p.strip()) else p.strip(),
-                              a.device, a.noise_seed, dtype)
-        gens[g.cfg["level"]] = g
+        for g in student_candidates(os.path.abspath(p.strip()) if os.path.exists(p.strip()) else p.strip(),
+                                    a.device, a.noise_seed, dtype):
+            gens[g.cfg["level"]] = g
     out = {}
     for N in sizes:
         levels, f, h0, n0, margin = plan(gens, N)

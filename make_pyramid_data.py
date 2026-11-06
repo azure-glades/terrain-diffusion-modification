@@ -308,6 +308,19 @@ def cmd_generate(a):
         rng = np.random.default_rng([a.data_seed, k])
         gi, gj = (int(v) for v in rng.integers(-G, G + 1, size=2))
         i0, j0 = gi * B, gj * B
+        if getattr(a, "probe", 0):
+            c0 = a.probe
+            pi, pj = i0 + B // 2 - c0 // 2, j0 + B // 2 - c0 // 2
+            pe, _ = teacher.get(pi, pj, pi + c0, pj + c0, climate=False)
+            if (np.asarray(pe) <= 0).mean() > min(a.max_ocean + a.probe_margin, 0.98):
+                np.savez_compressed(os.path.join(out, f"block_{k:06d}.npz"), elev=np.zeros((0, P, P), np.int16),
+                                    origins=np.zeros((0, 2), np.int64),
+                                    **({"climate": np.zeros((0, 4, P, P), np.float16)} if a.with_climate else {}))
+                man["shards"].append(dict(file=f"block_{k:06d}.npz", n=0, block=k, origin=[i0, j0], probed=True))
+                man["skipped_patches"] += npb
+                save_manifest(out, man)
+                print(f"[gen] block {k + 1}/{a.blocks} at ({i0},{j0}): probe says mostly ocean, skipped", flush=True)
+                continue
         t0 = time.time()
         elev, clim = teacher.get(i0, j0, i0 + B, j0 + B, climate=bool(a.with_climate))
         gen_s = time.time() - t0
@@ -462,6 +475,11 @@ def main():
     g.add_argument("--span", type=int, default=200_000, help="blocks are placed within +-span pixels of the origin")
     g.add_argument("--min-std", type=float, default=3.0, help="drop patches flatter than this (metres std)")
     g.add_argument("--max-ocean", type=float, default=0.6, help="drop patches with more ocean than this fraction")
+    g.add_argument("--probe", type=int, default=0,
+                   help="before generating a block, request a small PxP window at its centre and skip the block if it is "
+                        "mostly ocean (about 15x cheaper than a full block). 0 = off; try 256")
+    g.add_argument("--probe-margin", type=float, default=0.15,
+                   help="the probe skips when its ocean fraction exceeds --max-ocean + this margin (the probe is a noisy sample)")
     g.add_argument("--with-climate", action="store_true", help="also store temperature/precip channels (float16)")
     g.add_argument("--dtype", default="bf16", choices=["fp32", "bf16", "fp16"])
     g.add_argument("--batch", default="1,4,8,16")

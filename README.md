@@ -72,3 +72,11 @@ python show_levels.py --data data/val2 \
   --students runs/l1/best.pt,runs/l2/best.pt,runs/l3/best.pt,runs/l4/best.pt \
   --sample 0,3 --out levels.png
 ```
+
+Beyond the two, there are several other designs. Here are the ones that fit your goals (fast, stateless, random-access, “suitably realistic”) and what we’ve learned so far.
+
+- Replace only the teacher’s decoder. In your profile the decoder took about half the time at 1024². Keep the teacher’s coarse and latent stages (which supply the realistic large-scale structure that the cascade lacks) and distill just the decoder into a small fast network. It’s a smaller step than replacing everything, and its quality ceiling is the teacher’s. The speedup would be modest (about 2×) unless the latent stage also gets faster.
+- Fix the one-step latent with better distillation. You rejected onestep_latent for its quality drop, but that came from plain one-step sampling. Adversarial or distribution-matching distillation (the approaches behind the one-step image models) is designed to close that gap. It’s a research bet, and I haven’t seen it done on terrain.
+- Diffusion or consistency model for the coarse levels only, with regressors for the fine ones. Levels 1–2 are tiny in pixels, so a real generative model there is cheap, and it removes the GAN stability risk. Levels 3–4 stay as they are, since they look good when given real structure.
+- A latent-space generator. Train a high-compression autoencoder on terrain (32×–64× fewer pixels), generate in that latent space with a small model, and decode once. The decoder is convolutional, so it stays stateless with a halo. This is the VAE idea you started with, and it is the largest redesign.
+- A convolutional GAN generator in the style of InfinityGAN. It’s one network that turns a noise grid plus coordinates into terrain, stateless by construction and with no cascade. It avoids exposure bias but depends entirely on adversarial training working.

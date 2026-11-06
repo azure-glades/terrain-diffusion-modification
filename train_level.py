@@ -145,6 +145,12 @@ def slope_loss(pred_m, true_m):
     return (slope_quantiles(pred_m) - slope_quantiles(true_m)).abs().mean()
 
 
+def load_data(spec, **kw):
+    """--train / --val accept one directory or several separated by commas (datasets are concatenated)."""
+    parts = [PyramidData(p.strip(), **kw) for p in spec.split(",") if p.strip()]
+    return parts[0] if len(parts) == 1 else torch.utils.data.ConcatDataset(parts)
+
+
 def forever(loader):
     while True:
         for b in loader:
@@ -194,8 +200,8 @@ def main():
     out = os.path.abspath(a.out)
     os.makedirs(out, exist_ok=True)
 
-    train = PyramidData(a.train, levels=a.levels, crop=a.crop, space=a.space, norm=a.norm, augment=True, preload=True)
-    val = PyramidData(a.val, levels=a.levels, crop=None, space=a.space, norm=a.norm, augment=False, preload=True)
+    train = load_data(a.train, levels=a.levels, crop=a.crop, space=a.space, norm=a.norm, augment=True, preload=True)
+    val = load_data(a.val, levels=a.levels, crop=None, space=a.space, norm=a.norm, augment=False, preload=True)
     if len(train) == 0 or len(val) == 0:
         sys.exit(f"empty dataset (train {len(train)}, val {len(val)} patches)")
     print(f"[data] train {len(train)} patches, val {len(val)} patches; training level {L} of {a.levels}")
