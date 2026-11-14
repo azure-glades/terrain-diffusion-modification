@@ -38,6 +38,9 @@ def parse():
     ap.add_argument("--student-dtypes", default="fp32,bf16", help="student precisions to time")
     ap.add_argument("--walk-chunk", type=int, default=128, help="explorer chunk size for the per-chunk comparison")
     ap.add_argument("--walk-steps", type=int, default=12)
+    ap.add_argument("--halo", type=int, default=None,
+                    help="context border in finest px for the students (default: the receptive-field margin, which is "
+                         "very conservative for the shared model). Same meaning as main.py --student-halo")
     ap.add_argument("--skip-teacher", action="store_true")
     ap.add_argument("--noise-seed", type=int, default=0)
     ap.add_argument("--seed", type=int, default=0, help="teacher world seed")
@@ -114,13 +117,15 @@ def smooth_terrain(n, seed):
     return (800 * z / max(z.std(), 1e-9)).astype(np.float32)
 
 
-def plan(gens, N):
+def plan(gens, N, halo=None):
     levels = sorted(gens)
     margin = 0
     for L in levels:
         margin = 2 * margin + int(gens[L].cfg.get("rf", 32))
     total = gens[levels[0]].cfg["levels"]
     f = 2 ** (total - 1)
+    if halo is not None:                         # manual halo (finest px each side), like main.py --student-halo
+        margin = int(halo)
     h0 = math.ceil(margin / f)
     n0 = math.ceil(N / f) + 2 * h0
     return levels, f, h0, n0, margin
@@ -143,7 +148,7 @@ def bench_student(a, sizes, dtype):
             gens[g.cfg["level"]] = g
     out = {}
     for N in sizes:
-        levels, f, h0, n0, margin = plan(gens, N)
+        levels, f, h0, n0, margin = plan(gens, N, a.halo)
         x0 = smooth_terrain(n0, 1)
         computed = sum((n0 * 2 ** L) ** 2 for L in levels) / 1e6
         try:
@@ -170,7 +175,7 @@ def bench_student(a, sizes, dtype):
               f"  (level-0 window {r['level0_px']}px -> {r['out_px']}px computed at the finest level)", flush=True)
     # per-chunk cost in the explorer: every chunk is its own stateless request
     Nc, W = a.walk_chunk, a.walk_chunk + 3
-    levels, f, h0, n0, margin = plan(gens, W)
+    levels, f, h0, n0, margin = plan(gens, W, a.halo)
     x0 = smooth_terrain(n0, 2)
     run_cascade(gens, levels, x0, 0, 0, {})
     ts = []

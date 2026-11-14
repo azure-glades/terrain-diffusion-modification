@@ -173,3 +173,407 @@
 [model] 0.65M parameters; effective receptive field radius ~8 fine px -> use a halo of >= 8 fine px (4 coarse px) when generating windows
 [resume] from step 20000
 [done] best val MAE 1.34 m. Checkpoints in /home/azureglades/Coding/PyProjects/terrain_explorer_milestone/runs/l3 (best.pt, last.pt).
+[data] train 410 patches, val 27 patches; training level 3 of 5
+[cfg] {'level': 3, 'levels': 5, 'n_noise': 0, 'base': 24, 'depth': 3, 'blocks': 2, 'space': 'sqrt', 'norm': 50.0, 'res_std': 0.002780160866677761, 'rf': 8}
+[model] 0.65M parameters; effective receptive field radius ~8 fine px -> use a halo of >= 8 fine px (4 coarse px) when generating windows
+[resume] from step 20000
+[20100/50000] l1 0.2969 grad 0.7182 spec 0.235 slope 0.030  lr 1.37e-04  4.2 it/s
+[20200/50000] l1 0.3013 grad 0.7297 spec 0.232 slope 0.030  lr 1.37e-04  4.0 it/s
+[20300/50000] l1 0.3032 grad 0.7348 spec 0.222 slope 0.031  lr 1.36e-04  3.6 it/s
+[20400/50000] l1 0.2997 grad 0.7276 spec 0.222 slope 0.030  lr 1.36e-04  3.4 it/s
+[20500/50000] l1 0.2876 grad 0.6968 spec 0.223 slope 0.030  lr 1.35e-04  3.6 it/s
+[20600/50000] l1 0.2936 grad 0.7126 spec 0.223 slope 0.029  lr 1.35e-04  3.7 it/s
+[20700/50000] l1 0.2930 grad 0.7096 spec 0.230 slope 0.030  lr 1.34e-04  3.8 it/s
+[20800/50000] l1 0.2940 grad 0.7112 spec 0.220 slope 0.031  lr 1.33e-04  3.8 it/s
+[20900/50000] l1 0.3032 grad 0.7344 spec 0.225 slope 0.031  lr 1.33e-04  3.8 it/s
+[21000/50000] l1 0.2906 grad 0.7016 spec 0.231 slope 0.029  lr 1.32e-04  3.7 it/s
+[val 21000] MAE 1.51 m (bilinear 2.97)  RMSE 2.64 m (bilinear 5.33)  detail gain 50.5%
+[21100/50000] l1 0.3060 grad 0.7421 spec 0.227 slope 0.031  lr 1.32e-04  3.6 it/s
+Traceback (most recent call last):
+  File "/home/azureglades/Coding/PyProjects/terrain_explorer_milestone/train_level.py", line 363, in <module>
+    main()
+  File "/home/azureglades/Coding/PyProjects/terrain_explorer_milestone/train_level.py", line 281, in main
+    sl = spectrum_loss(pred_n, true_n)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/azureglades/Coding/PyProjects/terrain_explorer_milestone/train_level.py", line 125, in spectrum_loss
+    return (radial_log_spectrum(pred_n) - radial_log_spectrum(true_n)).abs().mean()
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/azureglades/Coding/PyProjects/terrain_explorer_milestone/train_level.py", line 120, in radial_log_spectrum
+    out.append(torch.log(P[m].mean() + 1e-8))
+                         ^^^^^^^^^^^
+KeyboardInterrupt
+[data] train 410 patches, val 27 patches; training level 3 of 5
+[cfg] {'level': 3, 'levels': 5, 'n_noise': 0, 'base': 24, 'depth': 3, 'blocks': 2, 'space': 'sqrt', 'norm': 50.0, 'res_std': 0.002780160866677761, 'rf': 8}
+[model] 0.65M parameters; effective receptive field radius ~8 fine px -> use a halo of >= 8 fine px (4 coarse px) when generating windows
+[resume] from step 20000
+[20100/50000] l1 0.3082 grad 0.7478 spec 0.222 slope 0.031  lr 1.37e-04  2.9 it/s
+Traceback (most recent call last):
+  File "/home/azureglades/Coding/PyProjects/terrain_explorer_milestone/train_level.py", line 363, in <module>
+    main()
+  File "/home/azureglades/Coding/PyProjects/terrain_explorer_milestone/train_level.py", line 263, in main
+    batch = next(it)
+            ^^^^^^^^
+  File "/home/azureglades/Coding/PyProjects/terrain_explorer_milestone/train_level.py", line 156, in forever
+    for b in loader:
+  File "/home/azureglades/Coding/PyProjects/terrain_explorer_milestone/.venv/lib/python3.12/site-packages/torch/utils/data/dataloader.py", line 725, in __next__
+    data = self._next_data()
+           ^^^^^^^^^^^^^^^^^
+  File "/home/azureglades/Coding/PyProjects/terrain_explorer_milestone/.venv/lib/python3.12/site-packages/torch/utils/data/dataloader.py", line 1507, in _next_data
+    idx, data = self._get_data()
+                ^^^^^^^^^^^^^^^^
+  File "/home/azureglades/Coding/PyProjects/terrain_explorer_milestone/.venv/lib/python3.12/site-packages/torch/utils/data/dataloader.py", line 1456, in _get_data
+    success, data = self._try_get_data()
+                    ^^^^^^^^^^^^^^^^^^^^
+  File "/home/azureglades/Coding/PyProjects/terrain_explorer_milestone/.venv/lib/python3.12/site-packages/torch/utils/data/dataloader.py", line 1293, in _try_get_data
+    data = self._data_queue.get(timeout=timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/queue.py", line 180, in get
+    self.not_empty.wait(remaining)
+  File "/usr/lib/python3.12/threading.py", line 359, in wait
+    gotit = waiter.acquire(True, timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+[data] train 410 patches, val 27 patches; training level 3 of 5
+[cfg] {'level': 3, 'levels': 5, 'n_noise': 0, 'base': 24, 'depth': 3, 'blocks': 2, 'space': 'sqrt', 'norm': 50.0, 'res_std': 0.002780160866677761, 'rf': 8}
+[model] 0.65M parameters; effective receptive field radius ~8 fine px -> use a halo of >= 8 fine px (4 coarse px) when generating windows
+[resume] from step 20000
+[20100/50000] l1 0.3009 grad 0.7296 spec 0.227 slope 0.030  lr 1.37e-04  4.3 it/s
+[20200/50000] l1 0.2987 grad 0.7232 spec 0.223 slope 0.030  lr 1.37e-04  4.3 it/s
+[20300/50000] l1 0.2915 grad 0.7059 spec 0.219 slope 0.029  lr 1.36e-04  4.3 it/s
+[20400/50000] l1 0.2897 grad 0.7003 spec 0.217 slope 0.029  lr 1.36e-04  4.3 it/s
+[20500/50000] l1 0.3015 grad 0.7312 spec 0.219 slope 0.031  lr 1.35e-04  4.3 it/s
+[20600/50000] l1 0.2948 grad 0.7139 spec 0.230 slope 0.030  lr 1.35e-04  4.3 it/s
+[20700/50000] l1 0.2941 grad 0.7134 spec 0.232 slope 0.030  lr 1.34e-04  4.3 it/s
+[20800/50000] l1 0.2946 grad 0.7142 spec 0.229 slope 0.030  lr 1.33e-04  4.3 it/s
+[20900/50000] l1 0.3074 grad 0.7467 spec 0.228 slope 0.031  lr 1.33e-04  4.3 it/s
+[21000/50000] l1 0.2945 grad 0.7142 spec 0.226 slope 0.030  lr 1.32e-04  4.3 it/s
+[val 21000] MAE 1.51 m (bilinear 2.97)  RMSE 2.64 m (bilinear 5.33)  detail gain 50.5%
+[21100/50000] l1 0.3016 grad 0.7325 spec 0.219 slope 0.031  lr 1.32e-04  4.3 it/s
+[21200/50000] l1 0.3026 grad 0.7330 spec 0.203 slope 0.030  lr 1.31e-04  4.3 it/s
+[21300/50000] l1 0.2960 grad 0.7164 spec 0.241 slope 0.030  lr 1.31e-04  4.3 it/s
+[21400/50000] l1 0.2929 grad 0.7102 spec 0.227 slope 0.030  lr 1.30e-04  4.3 it/s
+[21500/50000] l1 0.2960 grad 0.7185 spec 0.222 slope 0.030  lr 1.30e-04  4.3 it/s
+[21600/50000] l1 0.2949 grad 0.7144 spec 0.239 slope 0.030  lr 1.29e-04  4.3 it/s
+[21700/50000] l1 0.3056 grad 0.7428 spec 0.216 slope 0.032  lr 1.29e-04  4.3 it/s
+[21800/50000] l1 0.2995 grad 0.7262 spec 0.226 slope 0.030  lr 1.28e-04  4.3 it/s
+[21900/50000] l1 0.2959 grad 0.7171 spec 0.226 slope 0.030  lr 1.27e-04  4.3 it/s
+[22000/50000] l1 0.2934 grad 0.7123 spec 0.229 slope 0.030  lr 1.27e-04  4.3 it/s
+[val 22000] MAE 1.51 m (bilinear 2.97)  RMSE 2.63 m (bilinear 5.33)  detail gain 50.6%
+[22100/50000] l1 0.2953 grad 0.7177 spec 0.219 slope 0.030  lr 1.26e-04  4.3 it/s
+[22200/50000] l1 0.2934 grad 0.7121 spec 0.222 slope 0.031  lr 1.26e-04  4.3 it/s
+[22300/50000] l1 0.2956 grad 0.7180 spec 0.219 slope 0.030  lr 1.25e-04  4.3 it/s
+[22400/50000] l1 0.3043 grad 0.7382 spec 0.225 slope 0.031  lr 1.25e-04  4.3 it/s
+[22500/50000] l1 0.3022 grad 0.7339 spec 0.211 slope 0.030  lr 1.24e-04  4.3 it/s
+[22600/50000] l1 0.3015 grad 0.7319 spec 0.222 slope 0.032  lr 1.24e-04  4.3 it/s
+[22700/50000] l1 0.2876 grad 0.6974 spec 0.223 slope 0.029  lr 1.23e-04  4.3 it/s
+[22800/50000] l1 0.2907 grad 0.7051 spec 0.220 slope 0.030  lr 1.22e-04  4.3 it/s
+[22900/50000] l1 0.3009 grad 0.7304 spec 0.222 slope 0.030  lr 1.22e-04  4.3 it/s
+[23000/50000] l1 0.2876 grad 0.6988 spec 0.221 slope 0.030  lr 1.21e-04  4.3 it/s
+[val 23000] MAE 1.51 m (bilinear 2.97)  RMSE 2.63 m (bilinear 5.33)  detail gain 50.7%
+[23100/50000] l1 0.2945 grad 0.7155 spec 0.231 slope 0.030  lr 1.21e-04  4.3 it/s
+[23200/50000] l1 0.2942 grad 0.7146 spec 0.233 slope 0.030  lr 1.20e-04  4.3 it/s
+[23300/50000] l1 0.2937 grad 0.7127 spec 0.217 slope 0.030  lr 1.20e-04  4.3 it/s
+[23400/50000] l1 0.2871 grad 0.6985 spec 0.212 slope 0.032  lr 1.19e-04  4.3 it/s
+[23500/50000] l1 0.2900 grad 0.7046 spec 0.219 slope 0.030  lr 1.18e-04  4.3 it/s
+[23600/50000] l1 0.3030 grad 0.7362 spec 0.218 slope 0.030  lr 1.18e-04  4.3 it/s
+[23700/50000] l1 0.2972 grad 0.7218 spec 0.214 slope 0.030  lr 1.17e-04  4.3 it/s
+[23800/50000] l1 0.3032 grad 0.7368 spec 0.213 slope 0.030  lr 1.17e-04  4.3 it/s
+[23900/50000] l1 0.2932 grad 0.7136 spec 0.215 slope 0.030  lr 1.16e-04  4.3 it/s
+[24000/50000] l1 0.3025 grad 0.7360 spec 0.214 slope 0.032  lr 1.16e-04  4.3 it/s
+[val 24000] MAE 1.51 m (bilinear 2.97)  RMSE 2.62 m (bilinear 5.33)  detail gain 50.8%
+[24100/50000] l1 0.3061 grad 0.7452 spec 0.218 slope 0.030  lr 1.15e-04  4.3 it/s
+[24200/50000] l1 0.2913 grad 0.7083 spec 0.211 slope 0.031  lr 1.15e-04  4.3 it/s
+[24300/50000] l1 0.2905 grad 0.7062 spec 0.218 slope 0.029  lr 1.14e-04  4.3 it/s
+[24400/50000] l1 0.2966 grad 0.7213 spec 0.214 slope 0.030  lr 1.13e-04  4.3 it/s
+[24500/50000] l1 0.3006 grad 0.7307 spec 0.216 slope 0.030  lr 1.13e-04  4.3 it/s
+[24600/50000] l1 0.3016 grad 0.7332 spec 0.212 slope 0.030  lr 1.12e-04  4.3 it/s
+[24700/50000] l1 0.2918 grad 0.7102 spec 0.206 slope 0.030  lr 1.12e-04  4.3 it/s
+[24800/50000] l1 0.2954 grad 0.7180 spec 0.217 slope 0.029  lr 1.11e-04  4.3 it/s
+[24900/50000] l1 0.2965 grad 0.7222 spec 0.218 slope 0.031  lr 1.11e-04  4.3 it/s
+[25000/50000] l1 0.3003 grad 0.7299 spec 0.219 slope 0.030  lr 1.10e-04  4.3 it/s
+[val 25000] MAE 1.50 m (bilinear 2.97)  RMSE 2.62 m (bilinear 5.33)  detail gain 50.9%
+[25100/50000] l1 0.2884 grad 0.7023 spec 0.210 slope 0.029  lr 1.09e-04  4.3 it/s
+[25200/50000] l1 0.2926 grad 0.7125 spec 0.210 slope 0.029  lr 1.09e-04  4.3 it/s
+[25300/50000] l1 0.2953 grad 0.7189 spec 0.208 slope 0.029  lr 1.08e-04  4.3 it/s
+[25400/50000] l1 0.2948 grad 0.7181 spec 0.207 slope 0.029  lr 1.08e-04  4.3 it/s
+[25500/50000] l1 0.2930 grad 0.7136 spec 0.209 slope 0.029  lr 1.07e-04  4.3 it/s
+[25600/50000] l1 0.2965 grad 0.7221 spec 0.203 slope 0.030  lr 1.07e-04  4.3 it/s
+[25700/50000] l1 0.3017 grad 0.7340 spec 0.205 slope 0.031  lr 1.06e-04  4.3 it/s
+[25800/50000] l1 0.2866 grad 0.6983 spec 0.201 slope 0.029  lr 1.05e-04  4.3 it/s
+[25900/50000] l1 0.3016 grad 0.7342 spec 0.207 slope 0.029  lr 1.05e-04  4.3 it/s
+[26000/50000] l1 0.2923 grad 0.7123 spec 0.216 slope 0.029  lr 1.04e-04  4.3 it/s
+[val 26000] MAE 1.50 m (bilinear 2.97)  RMSE 2.61 m (bilinear 5.33)  detail gain 51.0%
+[26100/50000] l1 0.2882 grad 0.6993 spec 0.225 slope 0.029  lr 1.04e-04  4.3 it/s
+[26200/50000] l1 0.2973 grad 0.7244 spec 0.214 slope 0.030  lr 1.03e-04  4.3 it/s
+[26300/50000] l1 0.2890 grad 0.7040 spec 0.206 slope 0.030  lr 1.03e-04  4.3 it/s
+[26400/50000] l1 0.2984 grad 0.7279 spec 0.217 slope 0.030  lr 1.02e-04  4.3 it/s
+[26500/50000] l1 0.2846 grad 0.6930 spec 0.200 slope 0.030  lr 1.02e-04  4.3 it/s
+[26600/50000] l1 0.2899 grad 0.7064 spec 0.214 slope 0.030  lr 1.01e-04  4.3 it/s
+[26700/50000] l1 0.2844 grad 0.6919 spec 0.216 slope 0.029  lr 1.00e-04  4.3 it/s
+[26800/50000] l1 0.2945 grad 0.7178 spec 0.222 slope 0.030  lr 9.98e-05  4.3 it/s
+[26900/50000] l1 0.2871 grad 0.6983 spec 0.209 slope 0.028  lr 9.93e-05  4.3 it/s
+[27000/50000] l1 0.2933 grad 0.7150 spec 0.207 slope 0.030  lr 9.87e-05  4.3 it/s
+[val 27000] MAE 1.50 m (bilinear 2.97)  RMSE 2.61 m (bilinear 5.33)  detail gain 51.1%
+[27100/50000] l1 0.2848 grad 0.6944 spec 0.209 slope 0.028  lr 9.82e-05  4.3 it/s
+[27200/50000] l1 0.2930 grad 0.7151 spec 0.197 slope 0.029  lr 9.76e-05  4.3 it/s
+[27300/50000] l1 0.2983 grad 0.7280 spec 0.204 slope 0.030  lr 9.70e-05  4.3 it/s
+[27400/50000] l1 0.2757 grad 0.6717 spec 0.208 slope 0.028  lr 9.65e-05  4.3 it/s
+[27500/50000] l1 0.2940 grad 0.7172 spec 0.209 slope 0.028  lr 9.59e-05  4.3 it/s
+[27600/50000] l1 0.2865 grad 0.6971 spec 0.211 slope 0.029  lr 9.54e-05  4.3 it/s
+[27700/50000] l1 0.2878 grad 0.7024 spec 0.209 slope 0.030  lr 9.48e-05  4.3 it/s
+[27800/50000] l1 0.2968 grad 0.7241 spec 0.209 slope 0.029  lr 9.43e-05  4.3 it/s
+[27900/50000] l1 0.2920 grad 0.7109 spec 0.207 slope 0.029  lr 9.37e-05  4.3 it/s
+[28000/50000] l1 0.2910 grad 0.7101 spec 0.203 slope 0.029  lr 9.31e-05  4.3 it/s
+[val 28000] MAE 1.49 m (bilinear 2.97)  RMSE 2.60 m (bilinear 5.33)  detail gain 51.1%
+[28100/50000] l1 0.2940 grad 0.7166 spec 0.201 slope 0.028  lr 9.26e-05  4.3 it/s
+[28200/50000] l1 0.2866 grad 0.6978 spec 0.214 slope 0.029  lr 9.20e-05  4.3 it/s
+[28300/50000] l1 0.2963 grad 0.7229 spec 0.211 slope 0.029  lr 9.15e-05  4.3 it/s
+[28400/50000] l1 0.2962 grad 0.7221 spec 0.199 slope 0.029  lr 9.09e-05  4.3 it/s
+[28500/50000] l1 0.2785 grad 0.6809 spec 0.199 slope 0.028  lr 9.04e-05  4.3 it/s
+[28600/50000] l1 0.2922 grad 0.7123 spec 0.209 slope 0.029  lr 8.98e-05  4.3 it/s
+[28700/50000] l1 0.2881 grad 0.7034 spec 0.205 slope 0.028  lr 8.93e-05  4.3 it/s
+[28800/50000] l1 0.2856 grad 0.6956 spec 0.216 slope 0.027  lr 8.87e-05  4.3 it/s
+[28900/50000] l1 0.2965 grad 0.7243 spec 0.194 slope 0.030  lr 8.82e-05  4.3 it/s
+[29000/50000] l1 0.3010 grad 0.7341 spec 0.191 slope 0.030  lr 8.76e-05  4.3 it/s
+[val 29000] MAE 1.49 m (bilinear 2.97)  RMSE 2.60 m (bilinear 5.33)  detail gain 51.2%
+[29100/50000] l1 0.2877 grad 0.7035 spec 0.205 slope 0.029  lr 8.71e-05  4.3 it/s
+[29200/50000] l1 0.2973 grad 0.7252 spec 0.204 slope 0.029  lr 8.65e-05  4.3 it/s
+[29300/50000] l1 0.2842 grad 0.6953 spec 0.192 slope 0.028  lr 8.60e-05  4.3 it/s
+[29400/50000] l1 0.2865 grad 0.6992 spec 0.206 slope 0.029  lr 8.54e-05  4.3 it/s
+[29500/50000] l1 0.2879 grad 0.7022 spec 0.218 slope 0.028  lr 8.49e-05  4.3 it/s
+[29600/50000] l1 0.2825 grad 0.6882 spec 0.212 slope 0.029  lr 8.44e-05  4.3 it/s
+[29700/50000] l1 0.2946 grad 0.7201 spec 0.194 slope 0.029  lr 8.38e-05  4.3 it/s
+[29800/50000] l1 0.2779 grad 0.6791 spec 0.205 slope 0.029  lr 8.33e-05  4.3 it/s
+[29900/50000] l1 0.2870 grad 0.7023 spec 0.199 slope 0.029  lr 8.27e-05  4.3 it/s
+[30000/50000] l1 0.2951 grad 0.7209 spec 0.205 slope 0.028  lr 8.22e-05  4.3 it/s
+[val 30000] MAE 1.49 m (bilinear 2.97)  RMSE 2.59 m (bilinear 5.33)  detail gain 51.3%
+[30100/50000] l1 0.2897 grad 0.7074 spec 0.204 slope 0.029  lr 8.17e-05  4.3 it/s
+[30200/50000] l1 0.2940 grad 0.7183 spec 0.199 slope 0.029  lr 8.11e-05  4.3 it/s
+[30300/50000] l1 0.2944 grad 0.7193 spec 0.206 slope 0.029  lr 8.06e-05  4.3 it/s
+[30400/50000] l1 0.2901 grad 0.7082 spec 0.203 slope 0.029  lr 8.01e-05  4.3 it/s
+[30500/50000] l1 0.2876 grad 0.7020 spec 0.193 slope 0.028  lr 7.95e-05  4.3 it/s
+[30600/50000] l1 0.2769 grad 0.6777 spec 0.191 slope 0.028  lr 7.90e-05  4.3 it/s
+[30700/50000] l1 0.2948 grad 0.7204 spec 0.196 slope 0.029  lr 7.85e-05  4.3 it/s
+[30800/50000] l1 0.3004 grad 0.7347 spec 0.200 slope 0.029  lr 7.79e-05  4.3 it/s
+[30900/50000] l1 0.2917 grad 0.7131 spec 0.194 slope 0.029  lr 7.74e-05  4.3 it/s
+[31000/50000] l1 0.2795 grad 0.6817 spec 0.196 slope 0.027  lr 7.69e-05  4.3 it/s
+[val 31000] MAE 1.49 m (bilinear 2.97)  RMSE 2.59 m (bilinear 5.33)  detail gain 51.4%
+[31100/50000] l1 0.2934 grad 0.7171 spec 0.195 slope 0.030  lr 7.63e-05  4.3 it/s
+[31200/50000] l1 0.2981 grad 0.7292 spec 0.196 slope 0.029  lr 7.58e-05  4.3 it/s
+[31300/50000] l1 0.2951 grad 0.7217 spec 0.193 slope 0.029  lr 7.53e-05  4.3 it/s
+[31400/50000] l1 0.2987 grad 0.7306 spec 0.192 slope 0.030  lr 7.48e-05  4.3 it/s
+[31500/50000] l1 0.2889 grad 0.7060 spec 0.192 slope 0.029  lr 7.43e-05  4.3 it/s
+[31600/50000] l1 0.2882 grad 0.7045 spec 0.203 slope 0.028  lr 7.37e-05  4.3 it/s
+[31700/50000] l1 0.2958 grad 0.7237 spec 0.201 slope 0.029  lr 7.32e-05  4.3 it/s
+[31800/50000] l1 0.2919 grad 0.7124 spec 0.201 slope 0.028  lr 7.27e-05  4.3 it/s
+[31900/50000] l1 0.2889 grad 0.7051 spec 0.193 slope 0.027  lr 7.22e-05  4.3 it/s
+[32000/50000] l1 0.2939 grad 0.7191 spec 0.208 slope 0.029  lr 7.17e-05  4.3 it/s
+[val 32000] MAE 1.48 m (bilinear 2.97)  RMSE 2.59 m (bilinear 5.33)  detail gain 51.4%
+[32100/50000] l1 0.2795 grad 0.6828 spec 0.204 slope 0.028  lr 7.12e-05  4.3 it/s
+[32200/50000] l1 0.2954 grad 0.7208 spec 0.203 slope 0.029  lr 7.07e-05  4.3 it/s
+[32300/50000] l1 0.2877 grad 0.7025 spec 0.203 slope 0.029  lr 7.02e-05  4.3 it/s
+[32400/50000] l1 0.2897 grad 0.7082 spec 0.193 slope 0.029  lr 6.97e-05  4.3 it/s
+[32500/50000] l1 0.2852 grad 0.6953 spec 0.189 slope 0.028  lr 6.91e-05  4.3 it/s
+[32600/50000] l1 0.2865 grad 0.7019 spec 0.203 slope 0.029  lr 6.86e-05  4.3 it/s
+[32700/50000] l1 0.2955 grad 0.7229 spec 0.195 slope 0.030  lr 6.81e-05  4.3 it/s
+[32800/50000] l1 0.2834 grad 0.6938 spec 0.193 slope 0.027  lr 6.76e-05  4.3 it/s
+[32900/50000] l1 0.2903 grad 0.7098 spec 0.194 slope 0.028  lr 6.71e-05  4.3 it/s
+[33000/50000] l1 0.2846 grad 0.6973 spec 0.194 slope 0.029  lr 6.66e-05  4.3 it/s
+[val 33000] MAE 1.48 m (bilinear 2.97)  RMSE 2.58 m (bilinear 5.33)  detail gain 51.5%
+[33100/50000] l1 0.2795 grad 0.6840 spec 0.196 slope 0.028  lr 6.62e-05  4.3 it/s
+[33200/50000] l1 0.2859 grad 0.6980 spec 0.186 slope 0.028  lr 6.57e-05  4.3 it/s
+[33300/50000] l1 0.2815 grad 0.6888 spec 0.194 slope 0.028  lr 6.52e-05  4.3 it/s
+[33400/50000] l1 0.2823 grad 0.6901 spec 0.190 slope 0.028  lr 6.47e-05  4.3 it/s
+[33500/50000] l1 0.2907 grad 0.7117 spec 0.187 slope 0.028  lr 6.42e-05  4.3 it/s
+[33600/50000] l1 0.2842 grad 0.6949 spec 0.208 slope 0.028  lr 6.37e-05  4.3 it/s
+[33700/50000] l1 0.2981 grad 0.7302 spec 0.207 slope 0.030  lr 6.32e-05  4.3 it/s
+[33800/50000] l1 0.2792 grad 0.6828 spec 0.189 slope 0.027  lr 6.27e-05  4.3 it/s
+[33900/50000] l1 0.2897 grad 0.7092 spec 0.192 slope 0.030  lr 6.23e-05  4.3 it/s
+[34000/50000] l1 0.2831 grad 0.6924 spec 0.205 slope 0.028  lr 6.18e-05  4.3 it/s
+[val 34000] MAE 1.48 m (bilinear 2.97)  RMSE 2.58 m (bilinear 5.33)  detail gain 51.6%
+[34100/50000] l1 0.2940 grad 0.7197 spec 0.191 slope 0.028  lr 6.13e-05  4.3 it/s
+[34200/50000] l1 0.2871 grad 0.7023 spec 0.188 slope 0.028  lr 6.08e-05  4.3 it/s
+[34300/50000] l1 0.2795 grad 0.6847 spec 0.187 slope 0.027  lr 6.04e-05  4.3 it/s
+[34400/50000] l1 0.2941 grad 0.7199 spec 0.197 slope 0.029  lr 5.99e-05  4.3 it/s
+[34500/50000] l1 0.2945 grad 0.7213 spec 0.199 slope 0.029  lr 5.94e-05  4.3 it/s
+[34600/50000] l1 0.2901 grad 0.7108 spec 0.191 slope 0.029  lr 5.90e-05  4.3 it/s
+[34700/50000] l1 0.2870 grad 0.7021 spec 0.193 slope 0.028  lr 5.85e-05  4.3 it/s
+[34800/50000] l1 0.2868 grad 0.7028 spec 0.177 slope 0.028  lr 5.80e-05  4.3 it/s
+[34900/50000] l1 0.2792 grad 0.6837 spec 0.188 slope 0.028  lr 5.76e-05  4.3 it/s
+[35000/50000] l1 0.2882 grad 0.7058 spec 0.198 slope 0.028  lr 5.71e-05  4.3 it/s
+[val 35000] MAE 1.48 m (bilinear 2.97)  RMSE 2.58 m (bilinear 5.33)  detail gain 51.6%
+[35100/50000] l1 0.2888 grad 0.7067 spec 0.196 slope 0.029  lr 5.66e-05  4.3 it/s
+[35200/50000] l1 0.2872 grad 0.7034 spec 0.192 slope 0.029  lr 5.62e-05  4.3 it/s
+[35300/50000] l1 0.2901 grad 0.7096 spec 0.194 slope 0.028  lr 5.57e-05  4.3 it/s
+[35400/50000] l1 0.2924 grad 0.7157 spec 0.187 slope 0.028  lr 5.53e-05  4.3 it/s
+[35500/50000] l1 0.2976 grad 0.7290 spec 0.200 slope 0.030  lr 5.48e-05  4.3 it/s
+[35600/50000] l1 0.2852 grad 0.6993 spec 0.195 slope 0.029  lr 5.44e-05  4.3 it/s
+[35700/50000] l1 0.2910 grad 0.7114 spec 0.192 slope 0.029  lr 5.40e-05  4.3 it/s
+[35800/50000] l1 0.2900 grad 0.7103 spec 0.193 slope 0.028  lr 5.35e-05  4.3 it/s
+[35900/50000] l1 0.2899 grad 0.7101 spec 0.194 slope 0.029  lr 5.31e-05  4.3 it/s
+[36000/50000] l1 0.2815 grad 0.6902 spec 0.182 slope 0.028  lr 5.26e-05  4.3 it/s
+[val 36000] MAE 1.48 m (bilinear 2.97)  RMSE 2.58 m (bilinear 5.33)  detail gain 51.6%
+[36100/50000] l1 0.2837 grad 0.6947 spec 0.195 slope 0.028  lr 5.22e-05  4.3 it/s
+[36200/50000] l1 0.2890 grad 0.7078 spec 0.195 slope 0.028  lr 5.18e-05  4.3 it/s
+[36300/50000] l1 0.2978 grad 0.7312 spec 0.192 slope 0.029  lr 5.13e-05  4.3 it/s
+[36400/50000] l1 0.2878 grad 0.7050 spec 0.193 slope 0.028  lr 5.09e-05  4.3 it/s
+[36500/50000] l1 0.2894 grad 0.7101 spec 0.179 slope 0.028  lr 5.05e-05  4.3 it/s
+[36600/50000] l1 0.2752 grad 0.6734 spec 0.193 slope 0.027  lr 5.01e-05  4.3 it/s
+[36700/50000] l1 0.2890 grad 0.7093 spec 0.196 slope 0.029  lr 4.96e-05  4.3 it/s
+[36800/50000] l1 0.2946 grad 0.7213 spec 0.197 slope 0.028  lr 4.92e-05  4.3 it/s
+[36900/50000] l1 0.2799 grad 0.6856 spec 0.181 slope 0.027  lr 4.88e-05  4.3 it/s
+[37000/50000] l1 0.2854 grad 0.6984 spec 0.197 slope 0.028  lr 4.84e-05  4.3 it/s
+[val 37000] MAE 1.48 m (bilinear 2.97)  RMSE 2.57 m (bilinear 5.33)  detail gain 51.7%
+[37100/50000] l1 0.2899 grad 0.7098 spec 0.189 slope 0.028  lr 4.80e-05  4.3 it/s
+[37200/50000] l1 0.2895 grad 0.7094 spec 0.185 slope 0.028  lr 4.76e-05  4.3 it/s
+[37300/50000] l1 0.2970 grad 0.7291 spec 0.190 slope 0.029  lr 4.72e-05  4.3 it/s
+[37400/50000] l1 0.2907 grad 0.7121 spec 0.188 slope 0.028  lr 4.68e-05  4.3 it/s
+[37500/50000] l1 0.2929 grad 0.7168 spec 0.182 slope 0.028  lr 4.64e-05  4.3 it/s
+[37600/50000] l1 0.2850 grad 0.6976 spec 0.185 slope 0.028  lr 4.60e-05  4.3 it/s
+[37700/50000] l1 0.2886 grad 0.7070 spec 0.198 slope 0.028  lr 4.56e-05  4.3 it/s
+[37800/50000] l1 0.2901 grad 0.7114 spec 0.184 slope 0.028  lr 4.52e-05  4.3 it/s
+[37900/50000] l1 0.2886 grad 0.7076 spec 0.200 slope 0.028  lr 4.48e-05  4.3 it/s
+[38000/50000] l1 0.2828 grad 0.6932 spec 0.187 slope 0.027  lr 4.44e-05  4.3 it/s
+[val 38000] MAE 1.48 m (bilinear 2.97)  RMSE 2.57 m (bilinear 5.33)  detail gain 51.7%
+[38100/50000] l1 0.2899 grad 0.7105 spec 0.192 slope 0.028  lr 4.40e-05  4.3 it/s
+[38200/50000] l1 0.2814 grad 0.6901 spec 0.199 slope 0.028  lr 4.36e-05  4.3 it/s
+[38300/50000] l1 0.2874 grad 0.7044 spec 0.199 slope 0.029  lr 4.32e-05  4.3 it/s
+[38400/50000] l1 0.2806 grad 0.6876 spec 0.187 slope 0.027  lr 4.29e-05  4.3 it/s
+[38500/50000] l1 0.2791 grad 0.6851 spec 0.181 slope 0.027  lr 4.25e-05  4.3 it/s
+[38600/50000] l1 0.2815 grad 0.6894 spec 0.191 slope 0.027  lr 4.21e-05  4.3 it/s
+[38700/50000] l1 0.2812 grad 0.6884 spec 0.186 slope 0.027  lr 4.18e-05  4.3 it/s
+[38800/50000] l1 0.2799 grad 0.6864 spec 0.181 slope 0.027  lr 4.14e-05  4.3 it/s
+[38900/50000] l1 0.2935 grad 0.7186 spec 0.195 slope 0.028  lr 4.10e-05  4.3 it/s
+[39000/50000] l1 0.2823 grad 0.6914 spec 0.186 slope 0.027  lr 4.07e-05  4.3 it/s
+[val 39000] MAE 1.47 m (bilinear 2.97)  RMSE 2.57 m (bilinear 5.33)  detail gain 51.8%
+[39100/50000] l1 0.2879 grad 0.7071 spec 0.189 slope 0.028  lr 4.03e-05  4.3 it/s
+[39200/50000] l1 0.2897 grad 0.7101 spec 0.195 slope 0.028  lr 3.99e-05  4.3 it/s
+[39300/50000] l1 0.2820 grad 0.6915 spec 0.173 slope 0.027  lr 3.96e-05  4.3 it/s
+[39400/50000] l1 0.2956 grad 0.7242 spec 0.192 slope 0.029  lr 3.92e-05  4.2 it/s
+[39500/50000] l1 0.2873 grad 0.7040 spec 0.200 slope 0.028  lr 3.89e-05  4.2 it/s
+[39600/50000] l1 0.2881 grad 0.7057 spec 0.186 slope 0.028  lr 3.85e-05  4.2 it/s
+[39700/50000] l1 0.2842 grad 0.6968 spec 0.179 slope 0.027  lr 3.82e-05  4.2 it/s
+[39800/50000] l1 0.2840 grad 0.6966 spec 0.176 slope 0.028  lr 3.79e-05  4.2 it/s
+[39900/50000] l1 0.2894 grad 0.7105 spec 0.183 slope 0.029  lr 3.75e-05  4.2 it/s
+[40000/50000] l1 0.2855 grad 0.6992 spec 0.188 slope 0.027  lr 3.72e-05  4.2 it/s
+[val 40000] MAE 1.47 m (bilinear 2.97)  RMSE 2.57 m (bilinear 5.33)  detail gain 51.8%
+[40100/50000] l1 0.2908 grad 0.7134 spec 0.182 slope 0.028  lr 3.69e-05  4.2 it/s
+[40200/50000] l1 0.2848 grad 0.6987 spec 0.180 slope 0.028  lr 3.65e-05  4.2 it/s
+[40300/50000] l1 0.2950 grad 0.7239 spec 0.188 slope 0.029  lr 3.62e-05  4.2 it/s
+[40400/50000] l1 0.2821 grad 0.6917 spec 0.187 slope 0.029  lr 3.59e-05  4.2 it/s
+[40500/50000] l1 0.2868 grad 0.7038 spec 0.181 slope 0.029  lr 3.56e-05  4.2 it/s
+[40600/50000] l1 0.2907 grad 0.7127 spec 0.180 slope 0.028  lr 3.52e-05  4.2 it/s
+[40700/50000] l1 0.2843 grad 0.6978 spec 0.190 slope 0.029  lr 3.49e-05  4.2 it/s
+[40800/50000] l1 0.2854 grad 0.6992 spec 0.179 slope 0.027  lr 3.46e-05  4.2 it/s
+[40900/50000] l1 0.2861 grad 0.7030 spec 0.180 slope 0.028  lr 3.43e-05  4.2 it/s
+[41000/50000] l1 0.2806 grad 0.6886 spec 0.181 slope 0.028  lr 3.40e-05  4.2 it/s
+[val 41000] MAE 1.47 m (bilinear 2.97)  RMSE 2.57 m (bilinear 5.33)  detail gain 51.8%
+[41100/50000] l1 0.2825 grad 0.6918 spec 0.186 slope 0.028  lr 3.37e-05  4.2 it/s
+[41200/50000] l1 0.2827 grad 0.6935 spec 0.185 slope 0.028  lr 3.34e-05  4.2 it/s
+[41300/50000] l1 0.2736 grad 0.6706 spec 0.183 slope 0.027  lr 3.31e-05  4.2 it/s
+[41400/50000] l1 0.2911 grad 0.7137 spec 0.191 slope 0.028  lr 3.28e-05  4.2 it/s
+[41500/50000] l1 0.2897 grad 0.7106 spec 0.180 slope 0.028  lr 3.25e-05  4.2 it/s
+[41600/50000] l1 0.2801 grad 0.6877 spec 0.180 slope 0.028  lr 3.22e-05  4.2 it/s
+[41700/50000] l1 0.2777 grad 0.6815 spec 0.191 slope 0.028  lr 3.20e-05  4.2 it/s
+[41800/50000] l1 0.2779 grad 0.6805 spec 0.184 slope 0.027  lr 3.17e-05  4.2 it/s
+[41900/50000] l1 0.2846 grad 0.6986 spec 0.176 slope 0.027  lr 3.14e-05  4.2 it/s
+[42000/50000] l1 0.2940 grad 0.7217 spec 0.172 slope 0.029  lr 3.11e-05  4.2 it/s
+[val 42000] MAE 1.47 m (bilinear 2.97)  RMSE 2.57 m (bilinear 5.33)  detail gain 51.8%
+[42100/50000] l1 0.2893 grad 0.7089 spec 0.186 slope 0.028  lr 3.09e-05  4.2 it/s
+[42200/50000] l1 0.2841 grad 0.6970 spec 0.185 slope 0.027  lr 3.06e-05  4.2 it/s
+[42300/50000] l1 0.2850 grad 0.6999 spec 0.182 slope 0.027  lr 3.03e-05  4.2 it/s
+[42400/50000] l1 0.2839 grad 0.6973 spec 0.184 slope 0.028  lr 3.01e-05  4.2 it/s
+[42500/50000] l1 0.2850 grad 0.6992 spec 0.179 slope 0.028  lr 2.98e-05  4.2 it/s
+[42600/50000] l1 0.2769 grad 0.6804 spec 0.175 slope 0.027  lr 2.96e-05  4.2 it/s
+[42700/50000] l1 0.2900 grad 0.7112 spec 0.187 slope 0.029  lr 2.93e-05  4.2 it/s
+[42800/50000] l1 0.2875 grad 0.7055 spec 0.181 slope 0.027  lr 2.91e-05  4.2 it/s
+[42900/50000] l1 0.2930 grad 0.7185 spec 0.183 slope 0.028  lr 2.88e-05  4.2 it/s
+[43000/50000] l1 0.2914 grad 0.7159 spec 0.182 slope 0.029  lr 2.86e-05  4.2 it/s
+[val 43000] MAE 1.47 m (bilinear 2.97)  RMSE 2.56 m (bilinear 5.33)  detail gain 51.9%
+[43100/50000] l1 0.2818 grad 0.6915 spec 0.182 slope 0.027  lr 2.83e-05  4.2 it/s
+[43200/50000] l1 0.2879 grad 0.7065 spec 0.182 slope 0.028  lr 2.81e-05  4.2 it/s
+[43300/50000] l1 0.2847 grad 0.6989 spec 0.184 slope 0.028  lr 2.79e-05  4.2 it/s
+[43400/50000] l1 0.2931 grad 0.7195 spec 0.178 slope 0.029  lr 2.76e-05  4.2 it/s
+[43500/50000] l1 0.2829 grad 0.6943 spec 0.175 slope 0.028  lr 2.74e-05  4.2 it/s
+[43600/50000] l1 0.2898 grad 0.7115 spec 0.175 slope 0.028  lr 2.72e-05  4.2 it/s
+[43700/50000] l1 0.2908 grad 0.7131 spec 0.178 slope 0.027  lr 2.70e-05  4.2 it/s
+[43800/50000] l1 0.2885 grad 0.7079 spec 0.178 slope 0.027  lr 2.67e-05  4.2 it/s
+[43900/50000] l1 0.2862 grad 0.7020 spec 0.181 slope 0.028  lr 2.65e-05  4.2 it/s
+[44000/50000] l1 0.2945 grad 0.7235 spec 0.172 slope 0.029  lr 2.63e-05  4.2 it/s
+[val 44000] MAE 1.47 m (bilinear 2.97)  RMSE 2.56 m (bilinear 5.33)  detail gain 51.9%
+[44100/50000] l1 0.2877 grad 0.7065 spec 0.184 slope 0.027  lr 2.61e-05  4.2 it/s
+[44200/50000] l1 0.2816 grad 0.6913 spec 0.186 slope 0.028  lr 2.59e-05  4.2 it/s
+[44300/50000] l1 0.2816 grad 0.6904 spec 0.192 slope 0.026  lr 2.57e-05  4.2 it/s
+[44400/50000] l1 0.2864 grad 0.7030 spec 0.175 slope 0.028  lr 2.55e-05  4.2 it/s
+[44500/50000] l1 0.2857 grad 0.7018 spec 0.183 slope 0.028  lr 2.53e-05  4.2 it/s
+[44600/50000] l1 0.2765 grad 0.6776 spec 0.178 slope 0.027  lr 2.51e-05  4.2 it/s
+[44700/50000] l1 0.2947 grad 0.7256 spec 0.173 slope 0.028  lr 2.49e-05  4.2 it/s
+[44800/50000] l1 0.2986 grad 0.7335 spec 0.185 slope 0.030  lr 2.48e-05  4.2 it/s
+[44900/50000] l1 0.2701 grad 0.6632 spec 0.179 slope 0.026  lr 2.46e-05  4.2 it/s
+[45000/50000] l1 0.2828 grad 0.6942 spec 0.181 slope 0.027  lr 2.44e-05  4.2 it/s
+[val 45000] MAE 1.47 m (bilinear 2.97)  RMSE 2.56 m (bilinear 5.33)  detail gain 51.9%
+[45100/50000] l1 0.2882 grad 0.7093 spec 0.179 slope 0.028  lr 2.42e-05  4.2 it/s
+[45200/50000] l1 0.2803 grad 0.6882 spec 0.181 slope 0.027  lr 2.41e-05  4.2 it/s
+[45300/50000] l1 0.2737 grad 0.6716 spec 0.178 slope 0.026  lr 2.39e-05  4.2 it/s
+[45400/50000] l1 0.2887 grad 0.7086 spec 0.181 slope 0.028  lr 2.37e-05  4.2 it/s
+[45500/50000] l1 0.2839 grad 0.6982 spec 0.171 slope 0.028  lr 2.36e-05  4.2 it/s
+[45600/50000] l1 0.2881 grad 0.7070 spec 0.181 slope 0.027  lr 2.34e-05  4.2 it/s
+[45700/50000] l1 0.2796 grad 0.6858 spec 0.175 slope 0.027  lr 2.33e-05  4.2 it/s
+[45800/50000] l1 0.2879 grad 0.7072 spec 0.177 slope 0.028  lr 2.31e-05  4.2 it/s
+[45900/50000] l1 0.2821 grad 0.6937 spec 0.173 slope 0.028  lr 2.30e-05  4.2 it/s
+[46000/50000] l1 0.2956 grad 0.7250 spec 0.184 slope 0.028  lr 2.28e-05  4.2 it/s
+[val 46000] MAE 1.47 m (bilinear 2.97)  RMSE 2.56 m (bilinear 5.33)  detail gain 51.9%
+[46100/50000] l1 0.2841 grad 0.6981 spec 0.172 slope 0.027  lr 2.27e-05  4.2 it/s
+[46200/50000] l1 0.2830 grad 0.6937 spec 0.183 slope 0.027  lr 2.26e-05  4.2 it/s
+[46300/50000] l1 0.2862 grad 0.7036 spec 0.181 slope 0.028  lr 2.24e-05  4.2 it/s
+[46400/50000] l1 0.2881 grad 0.7070 spec 0.179 slope 0.027  lr 2.23e-05  4.2 it/s
+[46500/50000] l1 0.3011 grad 0.7388 spec 0.177 slope 0.028  lr 2.22e-05  4.2 it/s
+[46600/50000] l1 0.2904 grad 0.7139 spec 0.170 slope 0.029  lr 2.20e-05  4.2 it/s
+[46700/50000] l1 0.2892 grad 0.7116 spec 0.180 slope 0.027  lr 2.19e-05  4.2 it/s
+[46800/50000] l1 0.2864 grad 0.7020 spec 0.184 slope 0.027  lr 2.18e-05  4.2 it/s
+[46900/50000] l1 0.2798 grad 0.6869 spec 0.183 slope 0.027  lr 2.17e-05  4.2 it/s
+[47000/50000] l1 0.2854 grad 0.6993 spec 0.179 slope 0.028  lr 2.16e-05  4.2 it/s
+[val 47000] MAE 1.47 m (bilinear 2.97)  RMSE 2.56 m (bilinear 5.33)  detail gain 51.9%
+[47100/50000] l1 0.2888 grad 0.7096 spec 0.190 slope 0.028  lr 2.15e-05  4.2 it/s
+[47200/50000] l1 0.2879 grad 0.7076 spec 0.176 slope 0.027  lr 2.14e-05  4.2 it/s
+[47300/50000] l1 0.2852 grad 0.7007 spec 0.176 slope 0.028  lr 2.13e-05  4.2 it/s
+[47400/50000] l1 0.2789 grad 0.6851 spec 0.174 slope 0.027  lr 2.12e-05  4.2 it/s
+[47500/50000] l1 0.2790 grad 0.6851 spec 0.184 slope 0.027  lr 2.11e-05  4.2 it/s
+[47600/50000] l1 0.2807 grad 0.6888 spec 0.173 slope 0.026  lr 2.10e-05  4.2 it/s
+[47700/50000] l1 0.2789 grad 0.6848 spec 0.178 slope 0.027  lr 2.09e-05  4.2 it/s
+[47800/50000] l1 0.2845 grad 0.6997 spec 0.177 slope 0.028  lr 2.09e-05  4.2 it/s
+[47900/50000] l1 0.2796 grad 0.6872 spec 0.183 slope 0.029  lr 2.08e-05  4.2 it/s
+[48000/50000] l1 0.2835 grad 0.6965 spec 0.180 slope 0.027  lr 2.07e-05  4.2 it/s
+[val 48000] MAE 1.47 m (bilinear 2.97)  RMSE 2.56 m (bilinear 5.33)  detail gain 51.9%
+[48100/50000] l1 0.2874 grad 0.7063 spec 0.188 slope 0.029  lr 2.06e-05  4.2 it/s
+[48200/50000] l1 0.2841 grad 0.6981 spec 0.179 slope 0.027  lr 2.06e-05  4.2 it/s
+[48300/50000] l1 0.2880 grad 0.7084 spec 0.177 slope 0.029  lr 2.05e-05  4.2 it/s
+[48400/50000] l1 0.2945 grad 0.7238 spec 0.170 slope 0.028  lr 2.05e-05  4.2 it/s
+[48500/50000] l1 0.2858 grad 0.7033 spec 0.179 slope 0.029  lr 2.04e-05  4.2 it/s
+[48600/50000] l1 0.2835 grad 0.6969 spec 0.172 slope 0.028  lr 2.03e-05  4.2 it/s
+[48700/50000] l1 0.2905 grad 0.7143 spec 0.175 slope 0.028  lr 2.03e-05  4.2 it/s
+[48800/50000] l1 0.2805 grad 0.6885 spec 0.183 slope 0.026  lr 2.03e-05  4.2 it/s
+[48900/50000] l1 0.2897 grad 0.7114 spec 0.182 slope 0.027  lr 2.02e-05  4.2 it/s
+[49000/50000] l1 0.2808 grad 0.6893 spec 0.173 slope 0.027  lr 2.02e-05  4.2 it/s
+[val 49000] MAE 1.47 m (bilinear 2.97)  RMSE 2.56 m (bilinear 5.33)  detail gain 51.9%
+[49100/50000] l1 0.2794 grad 0.6861 spec 0.175 slope 0.028  lr 2.01e-05  4.2 it/s
+[49200/50000] l1 0.2836 grad 0.6973 spec 0.177 slope 0.027  lr 2.01e-05  4.2 it/s
+[49300/50000] l1 0.2931 grad 0.7189 spec 0.183 slope 0.027  lr 2.01e-05  4.2 it/s
+[49400/50000] l1 0.2855 grad 0.7019 spec 0.178 slope 0.027  lr 2.01e-05  4.2 it/s
+[49500/50000] l1 0.2852 grad 0.7004 spec 0.178 slope 0.028  lr 2.00e-05  4.2 it/s
+[49600/50000] l1 0.2795 grad 0.6874 spec 0.181 slope 0.027  lr 2.00e-05  4.2 it/s
+[49700/50000] l1 0.2887 grad 0.7094 spec 0.185 slope 0.028  lr 2.00e-05  4.2 it/s
+[49800/50000] l1 0.2783 grad 0.6834 spec 0.177 slope 0.027  lr 2.00e-05  4.2 it/s
+[49900/50000] l1 0.2748 grad 0.6762 spec 0.169 slope 0.027  lr 2.00e-05  4.2 it/s
+[50000/50000] l1 0.2846 grad 0.6982 spec 0.178 slope 0.027  lr 2.00e-05  4.2 it/s
+[val 50000] MAE 1.47 m (bilinear 2.97)  RMSE 2.56 m (bilinear 5.33)  detail gain 52.0%
+[done] best val MAE 1.34 m. Checkpoints in /home/azureglades/Coding/PyProjects/terrain_explorer_milestone/runs/l3 (best.pt, last.pt).
+Traceback (most recent call last):
+  File "/home/azureglades/Coding/PyProjects/terrain_explorer_milestone/train_level.py", line 32, in <module>
+    import torch
+ModuleNotFoundError: No module named 'torch'
+[data] train 410 patches, val 27 patches; training level 3 of 5
+[cfg] {'level': 3, 'levels': 5, 'n_noise': 0, 'base': 24, 'depth': 3, 'blocks': 2, 'space': 'sqrt', 'norm': 50.0, 'res_std': 0.002780160866677761, 'rf': 8}
+[model] 0.65M parameters; effective receptive field radius ~8 fine px -> use a halo of >= 8 fine px (4 coarse px) when generating windows
+[resume] from step 50000
+[done] best val MAE 1.34 m. Checkpoints in /home/azureglades/Coding/PyProjects/terrain_explorer_milestone/runs/l3 (best.pt, last.pt).
