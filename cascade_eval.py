@@ -18,6 +18,7 @@ import numpy as np
 
 from eval_terrain import aggregate, fmt, montage, sample_stats, student_candidates
 from make_pyramid_data import PyramidData, load_manifest, up2
+from student_model import stage_chain
 
 
 def parse():
@@ -47,13 +48,17 @@ def main():
     for p in a.students.split(","):
         for g in student_candidates(p.strip(), a.device, a.noise_seed, a.dtype, reuse=a.reuse_net):
             gens[g.cfg["level"]] = g
-    need = list(range(a.start_level + 1, levels))
-    if any(L not in gens for L in need):
-        sys.exit(f"need a student for every level {need}; got levels {sorted(gens)}")
+    try:
+        stages = stage_chain(gens, a.start_level, levels - 1)       # [(src, level, gen)]; merged stages allowed
+    except ValueError as e:
+        sys.exit(str(e))
+    need = [L for _, L, _ in stages]
+    src_of = {L: s for s, L, _ in stages}
     rf = {L: int(gens[L].cfg.get("rf", 32)) for L in need}
     margin = {a.start_level: 0}                      # border (in that level's pixels) contaminated by zero padding
     for L in need:
-        margin[L] = 2 * margin[L - 1] + rf[L]
+        margin[L] = 2 ** (L - src_of[L]) * margin[src_of[L]] + rf[L]
+    print("[cascade] stages: " + ", ".join(f"{s}->{L}" for s, L, _ in stages))
     print(f"[cascade] chain starts from the teacher's level {a.start_level}")
     print("[cascade] receptive-field radius per level (px): " + ", ".join(f"L{L}={rf[L]}" for L in need))
     print("[cascade] border excluded from the scores (px): " + ", ".join(f"L{L}={margin[L]}" for L in need))
@@ -72,8 +77,9 @@ def main():
             t0 = time.time()
             casc = gens[L](casc, (0, 0))                                   # chained: its own output feeds the next level
             t_gen += time.time() - t0
-            orc = gens[L](T[L - 1], (0, 0))
-            bil = up2(bil)
+            orc = gens[L](T[src_of[L]], (0, 0))
+            for _ in range(L - src_of[L]):
+                bil = up2(bil)
             m = margin[L]
             sl = (slice(m, T[L].shape[0] - m), slice(m, T[L].shape[1] - m))
             mpp = man["mpp"] * 2 ** (levels - 1 - L)
@@ -82,7 +88,7 @@ def main():
             outs[L] = (bil, casc)
         mpx += casc.size / 1e6
         if n < 4:
-            keep.append((T[levels - 2], T[levels - 1], outs[levels - 1]))
+            keep.append((T[src_of[levels - 1]], T[levels - 1], outs[levels - 1]))
         print(f"[{n + 1}/{len(idx)}] patch done", flush=True)
 
     print("\n== per level: RMSE (m) vs teacher, and terrain statistics of the cascade output / teacher ==")

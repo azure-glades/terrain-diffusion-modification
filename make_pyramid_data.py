@@ -13,6 +13,13 @@ Usage (run from your project dir; --repo points at the terrain-diffusion clone):
   python make_pyramid_data.py inspect  --out data/pyr --png data/pyr_preview.png
   python make_pyramid_data.py generate --demo --out /tmp/pyr_demo --blocks 3 --block 512 --patch 128   # no GPU/model
   python make_pyramid_data.py selftest                                                                  # sanity checks
+  python make_pyramid_data.py add-coarse --repo terrain-diffusion/ --out data/train3   # teacher coarse maps for existing shards
+
+Coarse conditioning (for the structure model, see structure_model.py / train_structure.py): next to every shard
+block_k.npz a sidecar block_k.coarse.npz holds, per patch, the teacher's own coarse-stage map (6 channels at
+256 finest px = 7.68 km per pixel) over the patch footprint plus a margin of COARSE_MARGIN coarse pixels. `generate`
+writes it for new blocks; `add-coarse` re-derives it for shards made earlier (cheap: only the teacher's coarse stage
+runs, from the stored origins and seed).
 
 Training side:
   from make_pyramid_data import PyramidData
@@ -179,6 +186,63 @@ class PyramidData:
         return item
 
 
+COARSE_PX = 256          # finest (30 m) pixels per teacher coarse pixel
+COARSE_MARGIN = 2        # coarse pixels of context stored around every patch
+COARSE_CH = 6
+
+
+def coarse_file(shard_file):
+    return shard_file[:-len(".npz")] + ".coarse.npz"
+
+
+class StructData:
+    """Training data for the structure model, all in RAM: per patch the level-0 map (teacher output averaged to
+    `down` x 30 m = 480 m, encoded) and the teacher's coarse map around it.
+
+    item = {'x': (1, S, S) encoded level 0, 'coarse': (6, S/cpp + 2*margin, same) raw coarse channels}
+    with S = patch / down and cpp = COARSE_PX / down level-0 px per coarse px. Patches smaller than `min_px`
+    level-0 pixels are skipped (512 px patches are only 32 px at 480 m: too small to learn structure from)."""
+
+    def __init__(self, root, space="sqrt", norm=50.0, augment=True, down=16, min_px=64):
+        man = load_manifest(root)
+        if man is None:
+            raise FileNotFoundError(f"no manifest.json in {root}")
+        if not man.get("coarse"):
+            raise FileNotFoundError(f"{root} has no teacher coarse maps yet; run:  python make_pyramid_data.py "
+                                    f"add-coarse --repo <terrain-diffusion clone> --out {root}")
+        P = man["patch"]
+        if P % COARSE_PX or COARSE_PX % down:
+            raise ValueError(f"patch {P} must be a multiple of {COARSE_PX} and down ({down}) must divide {COARSE_PX}")
+        self.margin, self.cpp, self.S = int(man["coarse"]["margin"]), COARSE_PX // down, P // down
+        self.augment, self.man = augment, man
+        xs, cs = [], []
+        if self.S >= min_px:
+            for s in man["shards"]:
+                if s["n"] == 0:
+                    continue
+                e = np.load(os.path.join(root, s["file"]))["elev"].astype(np.float32)
+                e = e.reshape(len(e), self.S, down, self.S, down).mean(axis=(2, 4))
+                xs.append(encode_elev(e, space, norm).astype(np.float32))
+                cs.append(np.load(os.path.join(root, coarse_file(s["file"])))["coarse"].astype(np.float32))
+        n = self.S // self.cpp + 2 * self.margin
+        self.x = np.concatenate(xs) if xs else np.zeros((0, self.S, self.S), np.float32)
+        self.c = np.concatenate(cs) if cs else np.zeros((0, COARSE_CH, n, n), np.float32)
+        assert len(self.x) == len(self.c) and self.c.shape[1:] == (COARSE_CH, n, n), (self.x.shape, self.c.shape)
+
+    def __len__(self):
+        return len(self.x)
+
+    def __getitem__(self, i):
+        x, c = self.x[i], self.c[i]
+        if self.augment:                                      # the same dihedral symmetry on both grids
+            rng = np.random.default_rng()
+            if rng.random() < 0.5:
+                x, c = x[:, ::-1], c[:, :, ::-1]
+            r = int(rng.integers(0, 4))
+            x, c = np.rot90(x, r), np.rot90(c, r, axes=(1, 2))
+        return {"x": np.ascontiguousarray(x)[None], "coarse": np.ascontiguousarray(c)}
+
+
 # =============================================================== manifest
 
 
@@ -227,9 +291,24 @@ class DemoTeacher:
                           np.full_like(e, 800.0), np.full_like(e, 30.0)])
         return e, c
 
+    def coarse(self, ci1, cj1, ci2, cj2):
+        """Stand-in for the teacher's coarse stage: block statistics of the demo terrain (16 x 16 samples per pixel)."""
+        k, st = 16, COARSE_PX // 16
+        ii = np.arange(ci1 * COARSE_PX, ci2 * COARSE_PX, st) + st / 2
+        jj = np.arange(cj1 * COARSE_PX, cj2 * COARSE_PX, st) + st / 2
+        z = self.src.sample(ii, jj).reshape(ci2 - ci1, k, cj2 - cj1, k).transpose(0, 2, 1, 3).reshape(ci2 - ci1, cj2 - cj1, -1)
+        ssq = lambda v: np.sign(v) * np.sqrt(np.abs(v))        # noqa: E731
+        mean = z.mean(-1)
+        out = np.stack([ssq(mean), ssq(np.percentile(z, 5, axis=-1)), 15 - 6.5 * np.maximum(mean, 0) / 1000,
+                        np.full_like(mean, 600.0), np.full_like(mean, 800.0), np.full_like(mean, 60.0)])
+        return out.astype(np.float32)
+
 
 class PipelineTeacher:
-    def __init__(self, a):
+    def __init__(self, a, coarse_only=False):
+        """coarse_only: keep just the coarse stage (drops the latent and decoder networks; get() must not be used)
+        and restore the working directory afterwards -- this is how the explorer uses the teacher's coarse map."""
+        cwd0 = os.getcwd()
         repo = os.path.abspath(os.path.expanduser(a.repo))
         if not os.path.isdir(os.path.join(repo, "terrain_diffusion")):
             sys.exit(f"--repo {repo} does not look like the terrain-diffusion clone")
@@ -247,6 +326,9 @@ class PipelineTeacher:
             kw = {k: v for k, v in kw.items() if k in sig.parameters}
         t0 = time.time()
         self.pipe = WorldPipeline.from_pretrained(a.model, **kw)
+        if coarse_only:
+            self.pipe.base_model = None
+            self.pipe.decoder_model = None
         dev = a.device or ("cuda" if torch.cuda.is_available() else "cpu")
         try:
             self.pipe = self.pipe.to(dev) or self.pipe
@@ -262,7 +344,15 @@ class PipelineTeacher:
         else:
             if getattr(self.pipe, "residual", None) is None:
                 sys.exit("could not bind the pipeline (see profile_terrain.py ensure_bound for details)")
-        print(f"[teacher] ready on {dev} in {time.time() - t0:.1f}s")
+        if coarse_only:
+            os.chdir(cwd0)
+        print(f"[teacher] {'coarse stage ' if coarse_only else ''}ready on {dev} in {time.time() - t0:.1f}s")
+
+    def coarse(self, ci1, cj1, ci2, cj2):
+        """The teacher's coarse-stage map for coarse pixels [ci1:ci2) x [cj1:cj2) (one pixel = COARSE_PX finest px):
+        (6, h, w) = [elev, p5 elev] in signed-sqrt metres + 4 climate channels. Deterministic in the seed."""
+        w = _np(self.pipe.coarse[:, ci1:ci2, cj1:cj2])
+        return (w[:-1] / w[-1:]).astype(np.float32)
 
     def get(self, i1, j1, i2, j2, climate=False):
         try:
@@ -275,6 +365,67 @@ class PipelineTeacher:
 
 
 # =============================================================== generate
+
+
+def write_coarse(teacher, out, shard_file, origins):
+    """Sidecar with the teacher's coarse map around every patch of a shard (origins: (n, 2) finest px)."""
+    M, hc = COARSE_MARGIN, None
+    maps = []
+    for i0, j0 in np.asarray(origins).reshape(-1, 2):
+        ci, cj = int(i0) // COARSE_PX, int(j0) // COARSE_PX
+        hc = teacher.patch // COARSE_PX
+        maps.append(teacher.coarse(ci - M, cj - M, ci + hc + M, cj + hc + M))
+    n = (hc or 0) + 2 * M
+    arr = np.stack(maps) if maps else np.zeros((0, COARSE_CH, n, n), np.float32)
+    dst = os.path.join(out, coarse_file(shard_file))
+    tmp = dst[:-len(".npz")] + ".tmp.npz"
+    np.savez_compressed(tmp, coarse=arr.astype(np.float32))
+    os.replace(tmp, dst)
+
+
+def cmd_add_coarse(a):
+    out = os.path.abspath(os.path.expanduser(a.out))
+    man = load_manifest(out)
+    if man is None:
+        sys.exit(f"no manifest.json in {out}")
+    if man["patch"] % COARSE_PX:
+        sys.exit(f"patch {man['patch']} is not a multiple of {COARSE_PX}: no coarse grid alignment")
+    redo = getattr(a, "redo", False)
+    todo = [s for s in man["shards"] if s["n"] > 0
+            and (redo or not os.path.exists(os.path.join(out, coarse_file(s["file"]))))]
+    print(f"[coarse] {len(todo)} of {len(man['shards'])} shards need a coarse sidecar "
+          f"(teacher seed {man['seed']}, model {man['model']}, dtype {man['dtype']})")
+    if todo:
+        ns = argparse.Namespace(**{**vars(a), "seed": man["seed"], "model": man["model"], "dtype": man["dtype"]})
+        teacher = DemoTeacher(man["seed"]) if man.get("demo") else PipelineTeacher(ns, coarse_only=True)
+        teacher.patch = man["patch"]
+        t0 = time.time()
+        for k, s in enumerate(todo):
+            write_coarse(teacher, out, s["file"], np.load(os.path.join(out, s["file"]))["origins"])
+            if (k + 1) % 20 == 0 or k + 1 == len(todo):
+                print(f"[coarse] {k + 1}/{len(todo)} shards  ({time.time() - t0:.0f}s)", flush=True)
+    # The coarse maps are only useful if they are the ones this dataset's terrain was generated FROM. The teacher's
+    # coarse stage is a 20-step sampler and does not reproduce across devices / precisions (CPU fp32 and GPU bf16 give
+    # different worlds), so check: the coarse elevation must track the block means of the stored terrain.
+    M, ce, te = COARSE_MARGIN, [], []
+    full = [s for s in man["shards"] if s["n"] > 0]
+    for s in full[::max(1, len(full) // 40)]:
+        c = np.load(os.path.join(out, coarse_file(s["file"])))["coarse"][:, 0, M:-M, M:-M]
+        e = np.load(os.path.join(out, s["file"]))["elev"].astype(np.float32)
+        h = c.shape[-1]
+        ce.append((np.sign(c) * c * c).ravel())
+        te.append(e.reshape(len(e), h, COARSE_PX, h, COARSE_PX).mean(axis=(2, 4)).ravel())
+    corr = float(np.corrcoef(np.concatenate(ce), np.concatenate(te))[0, 1]) if ce else 1.0
+    print(f"[coarse] check: correlation between coarse elevation and the stored terrain's 7.68 km means = {corr:.3f}")
+    if corr < 0.7 and not getattr(a, "force", False):
+        man.pop("coarse", None)
+        save_manifest(out, man)
+        sys.exit(f"[coarse] MISMATCH: this teacher run does not reproduce the world {out} was generated from.\n"
+                 f"  Run add-coarse on the same machine / GPU and settings that generated the data (dtype "
+                 f"{man['dtype']}), then repeat with --redo to overwrite these sidecars. (--force accepts them anyway.)")
+    man["coarse"] = dict(margin=COARSE_MARGIN, px=COARSE_PX, channels=COARSE_CH, check_corr=round(corr, 3))
+    save_manifest(out, man)
+    print(f"[done] coarse maps complete in {out}")
 
 
 def cmd_generate(a):
@@ -299,6 +450,10 @@ def cmd_generate(a):
     done = {s["block"] for s in man["shards"]}
 
     teacher = DemoTeacher(a.seed) if a.demo else PipelineTeacher(a)
+    teacher.patch = P
+    with_coarse = P % COARSE_PX == 0                                 # coarse sidecars need coarse-grid aligned patches
+    if with_coarse and not man["shards"]:
+        man["coarse"] = dict(margin=COARSE_MARGIN, px=COARSE_PX, channels=COARSE_CH)
     G = max(1, a.span // B)
     npb = (B // P) ** 2
     t_start, blocks_run = time.time(), 0
@@ -344,6 +499,8 @@ def cmd_generate(a):
         tmp = os.path.join(out, f"block_{k:06d}.tmp.npz")
         np.savez_compressed(tmp, **arrs)
         os.replace(tmp, os.path.join(out, fname))
+        if with_coarse and keep:
+            write_coarse(teacher, out, fname, arrs["origins"])
         man["shards"].append(dict(file=fname, n=len(keep), block=k, origin=[i0, j0]))
         man["kept_patches"] += len(keep)
         save_manifest(out, man)
@@ -449,6 +606,21 @@ def cmd_selftest(a):
         assert load_manifest(d2)["shards"][0]["origin"] == m1
         shutil.rmtree(d2)
         cmd_inspect(argparse.Namespace(out=d, levels=4, samples=4, png=None))
+        # coarse sidecars: written by generate for coarse-aligned patches, re-derived identically by add-coarse
+        d3 = tempfile.mkdtemp()
+        ns3 = argparse.Namespace(**{**vars(ns), "out": d3, "blocks": 2, "block": 512, "patch": 256, "levels": 5,
+                                    "with_climate": False})
+        cmd_generate(ns3)
+        sd = StructData(d3, min_px=16)
+        assert len(sd) == 8 and sd.cpp == 16, (len(sd), sd.cpp)
+        it = sd[3]
+        assert it["x"].shape == (1, 16, 16) and it["coarse"].shape == (COARSE_CH, 5, 5), (it["x"].shape, it["coarse"].shape)
+        f0 = load_manifest(d3)["shards"][0]["file"]
+        before = np.load(os.path.join(d3, coarse_file(f0)))["coarse"]
+        os.remove(os.path.join(d3, coarse_file(f0)))
+        cmd_add_coarse(argparse.Namespace(out=d3))
+        assert np.array_equal(before, np.load(os.path.join(d3, coarse_file(f0)))["coarse"])
+        shutil.rmtree(d3)
     finally:
         shutil.rmtree(d)
     print("SELFTEST PASSED")
@@ -487,6 +659,17 @@ def main():
     g.add_argument("--cache-gb", type=float, default=1.0, help="teacher tile cache (blocks are far apart; keep it small)")
     g.add_argument("--device", default=None)
     g.set_defaults(fn=cmd_generate)
+
+    c = sub.add_parser("add-coarse", help="write the teacher's coarse maps for the shards of an existing dataset")
+    c.add_argument("--out", required=True, help="dataset directory (its manifest supplies seed, model and dtype)")
+    c.add_argument("--repo", default=".", help="terrain-diffusion clone")
+    c.add_argument("--batch", default="1,4,8,16")
+    c.add_argument("--compile", action="store_true")
+    c.add_argument("--cache-gb", type=float, default=1.0)
+    c.add_argument("--device", default=None)
+    c.add_argument("--redo", action="store_true", help="overwrite existing sidecars")
+    c.add_argument("--force", action="store_true", help="keep the coarse maps even if the consistency check fails")
+    c.set_defaults(fn=cmd_add_coarse)
 
     i = sub.add_parser("inspect", help="stats, pyramid self-check, optional hillshade montage")
     i.add_argument("--out", required=True)

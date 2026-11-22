@@ -19,6 +19,7 @@ import time
 import numpy as np
 
 from eval_terrain import student_candidates
+from student_model import stage_src
 
 try:
     import torch
@@ -120,8 +121,8 @@ def smooth_terrain(n, seed):
 def plan(gens, N, halo=None):
     levels = sorted(gens)
     margin = 0
-    for L in levels:
-        margin = 2 * margin + int(gens[L].cfg.get("rf", 32))
+    for L in levels:                             # sorted target levels = chain order (merged stages allowed)
+        margin = 2 ** (L - stage_src(gens[L].cfg)) * margin + int(gens[L].cfg.get("rf", 32))
     total = gens[levels[0]].cfg["levels"]
     f = 2 ** (total - 1)
     if halo is not None:                         # manual halo (finest px each side), like main.py --student-halo
@@ -135,7 +136,8 @@ def run_cascade(gens, levels, x0, oi, oj, per_level):
     z = x0
     for L in levels:
         t0 = time.perf_counter()
-        z = gens[L](z, (oi * 2 ** (L - 1), oj * 2 ** (L - 1)))
+        s = stage_src(gens[L].cfg)               # origin in stage-input pixels
+        z = gens[L](z, (oi * 2 ** s, oj * 2 ** s))
         per_level.setdefault(L, []).append((time.perf_counter() - t0) * 1000)
     return z
 

@@ -29,6 +29,37 @@ To try out the student models:
 python main.py --student runs/l1/best.pt,runs/l2/best.pt,runs/l3/best.pt,runs/l4/best.pt --radius 4 --pregen 3
 ```
 
+## Three-stage generator (structure model + two merged detail stages)
+
+```
+teacher coarse map (7.68 km) --struct--> level 0 (480 m) --d1--> level 2 (120 m) --d2--> level 4 (30 m)
+```
+
+- **struct** (`structure_model.py`, `train_structure.py`): replaces the procedural level 0. A small conditional
+  flow-matching model (8 Euler steps by default) driven by the teacher's own coarse stage (synthetic map + coarse
+  model; the latent and decoder networks are not loaded). Convolution-only with position-hashed noise, so it is
+  stateless like the students.
+- **d1, d2** (`train_level.py --from-level S --level L`): merged 4x detail stages with noise inputs and an
+  adversarial loss. d2 is trained on d1's output (`--chain`), with a consistency loss instead of pixel-wise losses.
+
+```bash
+# 1) once per dataset: the teacher's coarse maps for the stored patches (runs only the coarse stage).
+#    Run it on the machine/GPU that generated the data: the command checks that the coarse maps match the terrain.
+python make_pyramid_data.py add-coarse --repo terrain-diffusion --out data/train2    # also train3, val2, val3
+# 2) train (struct and d1 in parallel, then d2)
+bash train_v2.sh
+# 3) look
+python show_structure.py --data data/val3 --ckpt runs/struct/best.pt --seam
+python cascade_eval.py --data data/val2 --students runs/d1/last.pt,runs/d2/last.pt
+python main.py --student runs/d1/last.pt,runs/d2/last.pt --structure runs/struct/best.pt --repo terrain-diffusion
+```
+
+Notes: only 2048 px patches are used for the structure model (128 px at 480 m). The existing datasets were filtered
+for relief (`--min-std`, `--max-ocean`), so plains and open ocean are under-represented; generate more with
+`--patch 2048 --min-std 0 --max-ocean 1` (coarse maps are then written automatically). `--structure-steps`,
+`--structure-block` and `--structure-halo` trade start-up time against seam safety; `show_structure.py --seam`
+measures the halo that is really needed. `kaggle_train.py` still only knows the old jobs.
+
 First launch downloads the model and generates the start area before the window shows terrain.
 Useful flags: `--radius 6` (drawn chunks), `--prefetch 2`, `--chunk 128`, `--workers 2`,
 `--vexag 1.5`, `--start row,col`, `--server-args "--dtype bf16"`, `--compile` (torch.compile; off by default

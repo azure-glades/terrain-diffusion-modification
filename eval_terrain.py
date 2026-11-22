@@ -93,9 +93,10 @@ def seam_test(gen, coarse, tol=0.01, frac=0.69, floor_max=0.05):
     full = gen(coarse, (0, 0))
     a = gen(np.ascontiguousarray(coarse[:, :wa]), (0, 0))
     b = gen(np.ascontiguousarray(coarse[:, w - wa:]), (0, w - wa))
-    err_a = np.abs(a - full[:, :2 * wa]).max(axis=0)                # per fine column
-    err_b = np.abs(b - full[:, 2 * (w - wa):]).max(axis=0)
-    d = np.concatenate([np.arange(2 * wa)[::-1], np.arange(2 * wa)])   # distance to the INTERIOR edge of each window
+    f = full.shape[1] // w                                          # 2 for per-level students, 2^k for merged stages
+    err_a = np.abs(a - full[:, :f * wa]).max(axis=0)                # per fine column
+    err_b = np.abs(b - full[:, f * (w - wa):]).max(axis=0)
+    d = np.concatenate([np.arange(f * wa)[::-1], np.arange(f * wa)])   # distance to the INTERIOR edge of each window
     e = np.concatenate([err_a, err_b])
     bands = [(0, 2), (2, 4), (4, 8), (8, 16), (16, 32), (32, 64), (64, 10 ** 9)]
     table = []

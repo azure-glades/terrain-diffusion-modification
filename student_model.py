@@ -8,6 +8,8 @@ Part 2 (needs torch): StudentNet (local-only U-Net, no attention, no global norm
 
 Conventions
   * A level-L student maps  base = up2(x_{L-1})  (+ noise channels)  ->  residual band r_L,  x_L = base + res_std * net(.)
+  * MERGED stages: a student may jump several levels at once, from cfg["src"] to cfg["level"] (default src = level-1).
+    Then base = up2 applied (level - src) times and the output is 2^(level-src) times larger than the input.
   * All elevations inside the network are in "encoded" space (signed sqrt / norm), see make_pyramid_data.encode_elev.
   * Coordinates: level-L pixel grid. A coarse window whose top-left is coarse pixel (ci, cj) covers fine pixels (2ci, 2cj)...
 """
@@ -18,6 +20,28 @@ import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from make_pyramid_data import decode_elev, encode_elev  # noqa: E402
+
+# =============================================================== stages (pure python)
+
+
+def stage_src(cfg):
+    """Input level of a student: cfg["src"] for a merged stage, level-1 for the classic per-level students."""
+    return int(cfg.get("src", int(cfg["level"]) - 1))
+
+
+def stage_chain(gens, start, top):
+    """gens: {target level: generator with .cfg}. Returns [(src, level, gen)] connecting level `start` to `top`."""
+    by_src = {stage_src(g.cfg): g for g in gens.values()}
+    out, cur = [], int(start)
+    while cur < top:
+        g = by_src.get(cur)
+        if g is None or int(g.cfg["level"]) > top:
+            have = sorted((stage_src(g.cfg), int(g.cfg["level"])) for g in gens.values())
+            raise ValueError(f"no student takes level {cur} as input (need a chain {start} -> {top}); have stages {have}")
+        out.append((cur, int(g.cfg["level"]), g))
+        cur = int(g.cfg["level"])
+    return out
+
 
 # =============================================================== hashed noise (numpy)
 
@@ -61,6 +85,28 @@ if torch is not None:
     def up2_t(x):
         """Bilinear 2x upsample, identical to make_pyramid_data.up2 (align_corners=False)."""
         return F.interpolate(x, scale_factor=2, mode="bilinear", align_corners=False)
+
+    def stage_k(cfg):
+        """Number of 2x levels a student jumps (1 for the classic per-level students)."""
+        return int(cfg["level"]) - stage_src(cfg)
+
+    def up_t(x, k=1):
+        """up2_t applied k times: the pyramid's upsampling from level L-k to level L."""
+        for _ in range(k):
+            x = up2_t(x)
+        return x
+
+    def stage_forward(model, cfg, src, generator=None, dtype=None):
+        """Torch-side stage on a batch of ENCODED maps: src (B, 1, h, w) at level cfg['src'] -> (fine, base), both
+        (B, 1, 2^k h, 2^k w) encoded. Noise channels are ordinary random noise (training / chained training input)."""
+        base = up_t(src, stage_k(cfg))
+        x = base
+        if cfg["n_noise"]:
+            nz = torch.randn(base.shape[0], cfg["n_noise"], *base.shape[-2:], device=base.device, generator=generator)
+            x = torch.cat([base, nz if cfg.get("noise_on", True) else torch.zeros_like(nz)], 1)
+        with torch.autocast(device_type=base.device.type, dtype=dtype, enabled=dtype is not None):
+            res = model(x, cfg["level"]) if cfg.get("shared") else model(x)
+        return base + res.float() * cfg["res_std"], base
 
     def decode_t(y, space="sqrt", norm=50.0):
         v = y * norm
@@ -203,20 +249,22 @@ if torch is not None:
 
     @torch.no_grad()
     def student_generate(model, cfg, coarse_m, coarse_origin=(0, 0), seed=0, device=None, dtype=None):
-        """coarse_m: (h, w) metres at level L-1; coarse_origin: its top-left in level L-1 pixels (absolute).
-        Returns (2h, 2w) metres at level L. Stateless: depends only on the window content, seed and absolute origin."""
+        """coarse_m: (h, w) metres at the source level (L-1, or cfg["src"] for a merged stage); coarse_origin: its
+        top-left in source-level pixels (absolute). Returns (f*h, f*w) metres at level L, f = 2^(L - src).
+        Stateless: depends only on the window content, seed and absolute origin."""
         device = torch.device(device) if device is not None else next(model.parameters()).device
         h, w = coarse_m.shape
         c = encode_elev(np.asarray(coarse_m, np.float32), cfg["space"], cfg["norm"]).astype(np.float32)
-        base = up2_t(torch.from_numpy(c)[None, None].to(device))
+        f = 2 ** stage_k(cfg)
+        base = up_t(torch.from_numpy(c)[None, None].to(device), stage_k(cfg))
         x = base
         if cfg["n_noise"]:
             if cfg.get("noise_on", True):
-                nz = hash_normal(seed, cfg["level"], 2 * coarse_origin[0], 2 * coarse_origin[1], 2 * h, 2 * w,
+                nz = hash_normal(seed, cfg["level"], f * coarse_origin[0], f * coarse_origin[1], f * h, f * w,
                                  cfg["n_noise"])
                 x = torch.cat([base, torch.from_numpy(nz)[None].to(device)], 1)
             else:                                   # shared model, deterministic level: noise channels held at zero
-                x = torch.cat([base, torch.zeros(1, cfg["n_noise"], 2 * h, 2 * w, device=device)], 1)
+                x = torch.cat([base, torch.zeros(1, cfg["n_noise"], f * h, f * w, device=device)], 1)
         with torch.autocast(device_type=device.type, dtype=dtype, enabled=dtype is not None):
             res = model(x, cfg["level"]) if cfg.get("shared") else model(x)
         fine = base + res.float() * cfg["res_std"]

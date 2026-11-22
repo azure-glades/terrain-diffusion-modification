@@ -33,7 +33,15 @@ def parse():
     ap.add_argument("--student", default=None,
                     help="comma-separated student checkpoints for levels 1..N: terrain comes from the cascade, "
                          "not from the teacher server")
-    ap.add_argument("--student-l0", default="procedural", choices=["procedural", "teacher"],
+    ap.add_argument("--structure", default=None,
+                    help="structure-model checkpoint (train_structure.py): level 0 = this model on top of the teacher's "
+                         "coarse map (needs --repo; with --demo a procedural coarse map). Implies --student-l0 structure")
+    ap.add_argument("--structure-steps", type=int, default=None, help="sampler steps (default: the checkpoint's)")
+    ap.add_argument("--structure-block", type=int, default=16, help="structure block in coarse px (16 = 123 km)")
+    ap.add_argument("--structure-halo", type=int, default=None,
+                    help="structure halo in coarse px (default: steps x measured receptive field; smaller = faster "
+                         "blocks but possible faint seams at block borders)")
+    ap.add_argument("--student-l0", default="procedural", choices=["procedural", "teacher", "structure"],
                     help="where the coarse starting level comes from: procedural noise (no server) or the teacher "
                          "(block-averaged; needs the server or --demo)")
     ap.add_argument("--student-l0-relief", type=float, default=1.0,
@@ -99,8 +107,17 @@ def main():
         return s
 
     if a.student:
-        from student_source import ProceduralL0, StudentSource, TeacherL0
-        if a.student_l0 == "teacher":
+        from student_source import DemoCoarse, ProceduralL0, StructureL0, StudentSource, TeacherCoarse, TeacherL0
+        sdt = "bf16" if a.student_dtype == "bf16" else None
+        if a.structure or a.student_l0 == "structure":
+            if not a.structure:
+                sys.exit("--student-l0 structure needs --structure <checkpoint>")
+            if a.student_start != 0:
+                sys.exit("the structure model produces level 0: use --student-start 0")
+            csrc = DemoCoarse(a.seed) if a.demo else TeacherCoarse(a.repo, a.seed, a.model)
+            l0 = StructureL0(os.path.abspath(a.structure), csrc, seed=a.seed, steps=a.structure_steps,
+                             block=a.structure_block, halo=a.structure_halo, dtype=sdt)
+        elif a.student_l0 == "teacher":
             l0 = TeacherL0(DemoSource(a.seed) if a.demo else http_source())
         else:
             if a.student_start != 0:
@@ -109,7 +126,7 @@ def main():
             l0 = ProceduralL0(a.seed, a.student_l0_relief)
         ckpts = [os.path.abspath(p.strip()) for p in a.student.split(",") if p.strip()]
         src = StudentSource(ckpts, l0, start=a.student_start, block=a.student_block, halo=a.student_halo,
-                            dtype="bf16" if a.student_dtype == "bf16" else None, seed=a.seed,
+                            dtype=sdt, seed=a.seed,
                             reuse=os.path.abspath(a.student_reuse_net) if a.student_reuse_net else None)
     elif a.demo:
         src = DemoSource(a.seed)

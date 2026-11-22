@@ -59,9 +59,11 @@ def main():
     for p in a.students.split(","):
         for g in student_candidates(p.strip(), a.device, a.noise_seed, a.dtype, reuse=a.reuse_net):
             gens[g.cfg["level"]] = g
-    need = list(range(a.start_level + 1, levels))
-    if any(L not in gens for L in need):
-        sys.exit(f"need a student for every level {need}; got levels {sorted(gens)}")
+    from student_model import stage_chain
+    try:
+        stages = stage_chain(gens, a.start_level, levels - 1)       # merged stages allowed: skipped levels stay grey
+    except ValueError as e:
+        sys.exit(str(e))
     ds = PyramidData(a.data, levels=levels, augment=False, space="metres", norm=1.0)
     tile = a.win * 2 ** (levels - 1)
     base, ext = os.path.splitext(a.out)
@@ -76,9 +78,9 @@ def main():
         if not (0 <= y0 <= h0 - a.win and 0 <= x0 <= w0 - a.win):
             sys.exit(f"window ({y0},{x0}) size {a.win} falls outside the {h0}x{w0} level-0 patch")
         casc, orc = {a.start_level: T[a.start_level]}, {}
-        for L in need:
-            casc[L] = gens[L](casc[L - 1], (0, 0))
-            orc[L] = gens[L](T[L - 1], (0, 0))
+        for s, L, g in stages:
+            casc[L] = g(casc[s], (0, 0))
+            orc[L] = g(T[s], (0, 0))
 
         lab_w, head_h = 120, 30
         sheet = np.full((head_h + levels * tile, lab_w + 3 * tile), 40, np.uint8)

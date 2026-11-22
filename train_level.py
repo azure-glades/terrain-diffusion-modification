@@ -14,6 +14,17 @@ Then stochastic (noise inputs; add an adversarial loss to keep detail sharp inst
 Evaluate:
   python eval_terrain.py compare --data data/val --level 4 --candidates bilinear,student:runs/l4/best.pt --seam --bench
 
+Merged stages (fewer hand-offs between networks): --from-level S trains ONE network for level S -> --level L
+(e.g. 0 -> 2 is 480 m -> 120 m, a 4x stage). Generative stages need noise inputs and the adversarial loss:
+  python train_level.py ... --out runs/d1 --from-level 0 --level 2 --crop 1024 --depth 4 --base 32 --n-noise 2 \
+      --grad-w 0.2 --spec-w 0.1 --slope-w 0.2 --adv-w 0.2 --adv-start 3000 --snapshot-every 5000
+Chained training (removes the train/inference mismatch of a cascade): --chain runs/d1/last.pt feeds this stage the
+OUTPUT of the upstream student(s), run on the fly from the teacher's coarser level, instead of the teacher's own
+level S. The upstream detail is then not the teacher's, so the pixel-wise losses are replaced by a consistency loss
+(the output must average back to its input) and the stage learns from the distribution losses only:
+  python train_level.py ... --out runs/d2 --from-level 2 --level 4 --chain runs/d1/last.pt --n-noise 2 \
+      --spec-w 0.1 --slope-w 0.2 --adv-w 0.2 --adv-start 3000 --snapshot-every 5000
+
 Notes
   * Everything is local (3x3 convs, no attention/global norm) so any window can be generated with a halo >= the
     measured receptive field and cropped; the script prints that radius.
@@ -44,6 +55,18 @@ def parse():
     ap.add_argument("--out", required=True)
     ap.add_argument("--levels", type=int, default=5)
     ap.add_argument("--level", type=int, default=None, help="level to train (default: finest = levels-1)")
+    ap.add_argument("--from-level", type=int, default=None,
+                    help="input level of the stage (default: level-1). Lower = a merged stage that jumps several levels")
+    ap.add_argument("--chain", default=None,
+                    help="comma-separated upstream student checkpoints ending at --from-level: train on THEIR output "
+                         "(computed on the fly from the teacher's coarser level) with unpaired losses")
+    ap.add_argument("--cons-w", type=float, default=1.0,
+                    help="chained training: weight of the consistency loss (output averaged down must equal its input)")
+    ap.add_argument("--best-by", default="auto", choices=["auto", "mae", "spec"],
+                    help="what picks best.pt: 'mae' (favours smooth output) or 'spec' (spectrum distance to the teacher). "
+                         "auto = spec for adversarial / chained runs, mae otherwise")
+    ap.add_argument("--val-crop", type=int, default=1024,
+                    help="validate on the centre crop of this many level-L px (memory; 0 = whole patch)")
     ap.add_argument("--space", default="sqrt", choices=["sqrt", "metres"])
     ap.add_argument("--norm", type=float, default=50.0)
     ap.add_argument("--crop", type=int, default=256, help="training crop in fine pixels (multiple of 2^(levels-1))")
@@ -164,28 +187,70 @@ def make_input(base, n_noise, generator=None):
     return torch.cat([base, nz], 1)
 
 
+def load_chain(spec, src, dev):
+    """Upstream students as [(model, cfg)] ordered coarse -> fine; their last level must be `src`."""
+    chain = sorted((sm.load_student(p.strip(), dev) for p in spec.split(",") if p.strip()), key=lambda mc: mc[1]["level"])
+    for m, c in chain:
+        if c.get("shared"):
+            sys.exit("--chain needs dedicated (not shared) student checkpoints")
+        for q in m.parameters():
+            q.requires_grad_(False)
+    lv = [(c["level"] - sm.stage_k(c), c["level"]) for _, c in chain]
+    if lv[-1][1] != src or any(lv[i][1] != lv[i + 1][0] for i in range(len(lv) - 1)):
+        sys.exit(f"--chain stages {lv} must connect and end at --from-level {src}")
+    return chain
+
+
 @torch.no_grad()
-def validate(model, val, L, cfg, dev, n, use_bf16):
+def chain_input(chain, levels, amp, generator=None):
+    """Runs the upstream students from the teacher's level chain[0].src; returns the encoded map at the last level."""
+    z = levels[chain[0][1]["level"] - sm.stage_k(chain[0][1])]
+    for m, c in chain:
+        z, _ = sm.stage_forward(m, c, z, generator, amp)
+    return z
+
+
+def centre_crop(x, size):
+    n = x.shape[-1]
+    o = (n - size) // 2
+    return x[..., o:o + size, o:o + size]
+
+
+@torch.no_grad()
+def validate(model, val, L, cfg, dev, n, use_bf16, chain=None, val_crop=0):
     model.eval()
+    amp = torch.bfloat16 if use_bf16 else None
+    k = sm.stage_k(cfg)
+    src = L - k
     idx = np.linspace(0, len(val) - 1, min(n, len(val))).astype(int)
-    se = ae = bse = bae = 0.0
-    for k, i in enumerate(idx):
+    se = ae = bse = bae = spec = hf = 0.0
+    for j, i in enumerate(idx):
         item = val[int(i)]
-        coarse = torch.from_numpy(item["levels"][L - 1])[None].to(dev)
-        fine = torch.from_numpy(item["levels"][L])[None].to(dev)
-        base = sm.up2_t(coarse)
-        gen = torch.Generator(device=dev).manual_seed(1234 + k)
+        lv = [torch.from_numpy(x)[None].to(dev) for x in item["levels"]]
+        nL = lv[L].shape[-1]
+        lo = L - k if not chain else chain[0][1]["level"] - sm.stage_k(chain[0][1])
+        if val_crop and val_crop < nL and val_crop % (2 ** (L - lo)) == 0 and ((nL - val_crop) // 2) % (2 ** (L - lo)) == 0:
+            lv = [centre_crop(x, val_crop >> (L - q)) if lo <= q <= L else x for q, x in enumerate(lv)]
+        fine = lv[L]
+        gen = torch.Generator(device=dev).manual_seed(1234 + j)
+        src_in = chain_input(chain, lv, amp, gen) if chain else lv[src]
+        base = sm.up_t(src_in, k)
         with torch.autocast(device_type=dev.type, dtype=torch.bfloat16, enabled=use_bf16):
             r = model(make_input(base, cfg["n_noise"], gen))
-        pred = base + r.float() * cfg["res_std"]
+        pred_n = r.float()
+        true_n = (fine - sm.up_t(lv[src], k)) / cfg["res_std"]
+        pred = base + pred_n * cfg["res_std"]
         pm, fm, bm = (sm.decode_t(t, cfg["space"], cfg["norm"]) for t in (pred, fine, base))
         ae += (pm - fm).abs().mean().item()
         se += ((pm - fm) ** 2).mean().item()
         bae += (bm - fm).abs().mean().item()
         bse += ((bm - fm) ** 2).mean().item()
+        spec += spectrum_loss(pred_n, true_n).item()
+        hf += (pred_n.std() / true_n.std().clamp_min(1e-9)).item()
     n = len(idx)
     rmse, brmse = math.sqrt(se / n), math.sqrt(bse / n)
-    return dict(mae=ae / n, rmse=rmse, base_mae=bae / n, base_rmse=brmse, gain=1.0 - rmse / max(brmse, 1e-9))
+    return dict(mae=ae / n, rmse=rmse, base_mae=bae / n, base_rmse=brmse, gain=1.0 - rmse / max(brmse, 1e-9),
+                spec=spec / n, band=hf / n)
 
 
 def main():
@@ -197,6 +262,10 @@ def main():
     L = a.level if a.level is not None else a.levels - 1
     if not 1 <= L < a.levels:
         sys.exit(f"--level must be in 1..{a.levels - 1}")
+    src = a.from_level if a.from_level is not None else L - 1
+    if not 0 <= src < L:
+        sys.exit(f"--from-level must be in 0..{L - 1}")
+    K = L - src
     out = os.path.abspath(a.out)
     os.makedirs(out, exist_ok=True)
 
@@ -212,10 +281,21 @@ def main():
         cfg = state["cfg"]
     else:
         rng = np.random.default_rng(0)
-        res_std = float(np.mean([train[int(i)]["residuals"][L].std() for i in rng.integers(0, len(train), 64)]))
-        cfg = dict(level=L, levels=a.levels, n_noise=a.n_noise, base=a.base, depth=a.depth, blocks=a.blocks,
+        res_std = float(np.mean([(lv[L] - sm.up_t(torch.from_numpy(lv[src])[None], K)[0].numpy()).std()
+                                 for lv in (train[int(i)]["levels"] for i in rng.integers(0, len(train), 64))]))
+        cfg = dict(level=L, src=src, levels=a.levels, n_noise=a.n_noise, base=a.base, depth=a.depth, blocks=a.blocks,
                    space=a.space, norm=a.norm, res_std=res_std)
+    if sm.stage_k(cfg) != K:
+        sys.exit(f"{state_path} was trained for level {cfg['level'] - sm.stage_k(cfg)} -> {cfg['level']}; use a new --out")
     print(f"[cfg] {cfg}")
+    chain = load_chain(a.chain, src, dev) if a.chain else None
+    best_by = a.best_by if a.best_by != "auto" else ("spec" if (a.adv_w > 0 or chain) else "mae")
+    if chain:
+        print(f"[chain] input = output of {len(chain)} upstream student(s) from the teacher's level "
+              f"{chain[0][1]['level'] - sm.stage_k(chain[0][1])}; pixel-wise losses off, consistency weight {a.cons_w}")
+        if a.adv_w <= 0:
+            print("[chain] WARNING: without --adv-w the stage only has the spectrum/slope/consistency losses to learn from")
+    print(f"[stage] level {src} -> {L} ({2 ** K}x); best.pt chosen by validation '{best_by}'")
 
     G = sm.build_from_cfg(cfg).to(dev)
     ema = copy.deepcopy(G).eval()
@@ -225,7 +305,7 @@ def main():
     rf = sm.effective_rf(G)
     cfg["rf"] = rf
     print(f"[model] {n_par / 1e6:.2f}M parameters; effective receptive field radius ~{rf} fine px "
-          f"-> use a halo of >= {rf} fine px ({math.ceil(rf / 2)} coarse px) when generating windows"
+          f"-> use a halo of >= {rf} fine px ({math.ceil(rf / 2 ** K)} input px) when generating windows"
           + ("  (WARNING: hit the 80px measurement limit)" if rf >= 79 else ""))
 
     opt = torch.optim.AdamW(G.parameters(), lr=a.lr, betas=(0.9, 0.99), weight_decay=0.0)
@@ -257,22 +337,38 @@ def main():
         cos = 0.1 + 0.9 * 0.5 * (1 + math.cos(math.pi * min(step / max(a.steps, 1), 1.0)))
         return a.lr * warm * cos
 
+    amp = torch.bfloat16 if use_bf16 else None
+
+    def save(path):
+        cfg["rf"] = sm.effective_rf(ema)                       # measured on the weights being saved
+        sm.save_student(path, ema, cfg)
+
     for step in range(start, a.steps):
         for g in opt.param_groups:
             g["lr"] = lr_at(step)
         batch = next(it)
-        coarse = batch["levels"][L - 1].to(dev, non_blocking=True)
         fine = batch["levels"][L].to(dev, non_blocking=True)
-        base = sm.up2_t(coarse)
-        true_n = (fine - base) / res_std
+        base_t = sm.up_t(batch["levels"][src].to(dev, non_blocking=True), K)     # the teacher's own coarse, upsampled
+        true_n = (fine - base_t) / res_std
+        if chain:
+            lo = chain[0][1]["level"] - sm.stage_k(chain[0][1])
+            src_in = chain_input(chain, {lo: batch["levels"][lo].to(dev, non_blocking=True)}, amp)
+            base = sm.up_t(src_in, K)
+        else:
+            base = base_t
 
         G.train()
         with torch.autocast(device_type=dev.type, dtype=torch.bfloat16, enabled=use_bf16):
             pred_n = G(make_input(base, cfg["n_noise"]))
         pred_n = pred_n.float()
-        l1 = F.l1_loss(pred_n, true_n)
-        gl = grad_l1(pred_n, true_n)
-        loss = l1 + a.grad_w * gl
+        if chain:                                               # unpaired: only require down(output) == input
+            l1 = F.l1_loss(F.avg_pool2d(base + pred_n * res_std, 2 ** K), src_in) / res_std
+            gl = torch.zeros((), device=dev)
+            loss = a.cons_w * l1
+        else:
+            l1 = F.l1_loss(pred_n, true_n)
+            gl = grad_l1(pred_n, true_n)
+            loss = l1 + a.grad_w * gl
 
         use_tex = (a.spec_w > 0 or a.slope_w > 0) and step >= a.tex_start
         if use_tex:
@@ -291,7 +387,7 @@ def main():
         use_adv = D is not None and step >= a.adv_start
         if use_adv:
             with torch.autocast(device_type=dev.type, dtype=torch.bfloat16, enabled=use_bf16):
-                d_real = D(base, true_n)
+                d_real = D(base_t, true_n)
                 d_fake = D(base, pred_n.detach())
             d_loss = F.relu(1 - d_real.float()).mean() + F.relu(1 + d_fake.float()).mean()
             optD.zero_grad(set_to_none=True)
@@ -321,7 +417,8 @@ def main():
         if (step + 1) % a.log_every == 0:
             n = acc["n"]
             sps = (step + 1 - start) / (time.time() - t0)
-            print(f"[{step + 1}/{a.steps}] l1 {acc['l1'] / n:.4f} grad {acc['grad'] / n:.4f}"
+            print(f"[{step + 1}/{a.steps}] " + (f"cons {acc['l1'] / n:.4f}" if chain else
+                                                f"l1 {acc['l1'] / n:.4f} grad {acc['grad'] / n:.4f}")
                   + (f" spec {acc['spec'] / n:.3f}" if use_tex and a.spec_w > 0 else "")
                   + (f" slope {acc['slope'] / n:.3f}" if use_tex and a.slope_w > 0 else "")
                   + (f" adv {acc['adv'] / n:.3f} D {acc['d'] / n:.3f}" if use_adv else "")
@@ -329,24 +426,25 @@ def main():
             acc = dict(l1=0.0, grad=0.0, spec=0.0, slope=0.0, adv=0.0, d=0.0, n=0)
 
         if (step + 1) % a.val_every == 0 or step + 1 == a.steps:
-            v = validate(ema, val, L, cfg, dev, a.val_n, use_bf16)
+            v = validate(ema, val, L, cfg, dev, a.val_n, use_bf16, chain, a.val_crop)
             tag = ""
-            if v["mae"] < best:
-                best = v["mae"]
-                sm.save_student(os.path.join(out, "best.pt"), ema, cfg)
+            if v[best_by] < best:
+                best = v[best_by]
+                save(os.path.join(out, "best.pt"))
                 tag = "  *best*"
             print(f"[val {step + 1}] MAE {v['mae']:.2f} m (bilinear {v['base_mae']:.2f})  "
-                  f"RMSE {v['rmse']:.2f} m (bilinear {v['base_rmse']:.2f})  detail gain {100 * v['gain']:.1f}%{tag}",
+                  f"RMSE {v['rmse']:.2f} m (bilinear {v['base_rmse']:.2f})  detail gain {100 * v['gain']:.1f}%  "
+                  f"spectrum dist {v['spec']:.3f}  band amplitude {v['band']:.2f}x teacher{tag}",
                   flush=True)
             logf.write(json.dumps(dict(step=step + 1, **v)) + "\n")
             logf.flush()
 
         if a.snapshot_every and (step + 1) % a.snapshot_every == 0:
-            sm.save_student(os.path.join(out, f"snap_{step + 1:06d}.pt"), ema, cfg)
+            save(os.path.join(out, f"snap_{step + 1:06d}.pt"))
 
         stop = bool(a.max_minutes) and (time.time() - t0) / 60.0 >= a.max_minutes
         if (step + 1) % a.save_every == 0 or step + 1 == a.steps or stop:
-            sm.save_student(os.path.join(out, "last.pt"), ema, cfg)
+            save(os.path.join(out, "last.pt"))
             torch.save(dict(G=G.state_dict(), ema=ema.state_dict(), opt=opt.state_dict(),
                             D=D.state_dict() if D is not None else None,
                             optD=optD.state_dict() if optD is not None else None,
@@ -356,7 +454,7 @@ def main():
                   f"state saved in {out} -- run the same command again to resume", flush=True)
             return
 
-    print(f"[done] best val MAE {best:.2f} m. Checkpoints in {out} (best.pt, last.pt).")
+    print(f"[done] best val {best_by} {best:.3f}. Checkpoints in {out} (best.pt, last.pt).")
 
 
 if __name__ == "__main__":
